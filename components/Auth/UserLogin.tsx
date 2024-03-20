@@ -1,30 +1,28 @@
 "use client";
-import Image from "next/image";
-import Link from "next/link";
+import axios, { AxiosError } from "axios";
+import api from "@/services/axios";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { ZodType, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useContext } from "react";
 import { Spinner } from "@/assets/icons/Spinner";
 import { LoginIcon } from "@/assets/icons/loginIcon";
 import { useRouter } from "next/navigation";
-import api from "@/store/axios";
+import { useMutation } from "@tanstack/react-query";
+import useStore from "@/store/useStore";
+import { ILogin } from "@/types/User";
+import { loginUser } from "@/services/auth.services";
 
 type PropType = {
   setLogin: () => void;
 };
 const UserLogin: React.FC<PropType> = ({ setLogin }) => {
   const router = useRouter();
-
+  const setUser = useStore((state) => state.setUser);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  type FormDataType = {
-    email: string;
-    password: string;
-  };
 
-  const schema: ZodType<FormDataType> = z.object({
+  const schema: ZodType<ILogin> = z.object({
     email: z.string().email(),
     password: z.string().min(2).max(30),
   });
@@ -33,33 +31,41 @@ const UserLogin: React.FC<PropType> = ({ setLogin }) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormDataType>({
+  } = useForm<ILogin>({
     resolver: zodResolver(schema),
     defaultValues: {
       email: "admin@gmail.com",
-      password: "pass1234",
+      password: "admin123",
     },
   });
 
-  const submitData = (values: FormDataType) => {
+  const mutation = useMutation({
+    mutationFn: async (values: ILogin) => loginUser(values),
+    onError: (error: unknown, variables, context) => {
+      if (axios.isAxiosError(error)) {
+        setError(error.response?.data.detail);
+        console.log(error.response?.data.detail);
+        setLoading(false);
+      } else {
+        console.log("An unexpected error occurred:", error);
+      }
+    },
+    onSuccess: (data, variables, context) => {
+      setLoading(false);
+      localStorage.setItem("access_token", data.token);
+      setUser(data.user);
+      api.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
+      if (data.user.role == "admin") {
+        router.push("/admin/dashboard");
+      }
+    },
+  });
+
+  const submitData = (values: ILogin) => {
     setError("");
     setLoading(true);
-    api
-      .post("/login", values)
-      .then((res) => {
-        // setUserData(res.data.data.user);
-        localStorage.setItem("token", res?.data?.data?.token);
-        api.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${res?.data?.data?.token}`;
-        router.push("/admin/dashboard");
-      })
-      .catch((err) => {
-        setError(err.response.data.errors.detail[0]);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    console.log(values);
+    mutation.mutate(values);
   };
   return (
     <>

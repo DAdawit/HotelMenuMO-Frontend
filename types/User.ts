@@ -1,9 +1,9 @@
-export interface AuthI {
-  user: User;
+export interface UserOut {
+  user: UserI;
   token: string;
 }
 
-export interface User {
+export interface UserI {
   id: number;
   email: string;
   firstName: string;
@@ -16,7 +16,7 @@ export interface User {
   updated_at: string;
   _profilePicUrl: string;
 }
-export interface LgoinI {
+export interface ILogin {
   email: string;
   password: string;
 }
