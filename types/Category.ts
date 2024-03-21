@@ -1,8 +1,8 @@
-export interface LogoOut {
+export interface CategoryOut {
   id: number;
   name: string;
   image: string;
   created_at: string;
   updated_at: string;
-  _fullImagePath: string;
+  imageUrl: string;
 }

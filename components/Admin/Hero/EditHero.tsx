@@ -32,7 +32,7 @@ const schema: ZodType<FormType> = z.object({
 });
 
 type PropType = {
-  hero: HeroOut | undefined;
+  hero: HeroOut;
   refetch: () => void;
 };
 
@@ -98,12 +98,7 @@ const EditHero: React.FC<PropType> = ({ refetch, hero }) => {
     if (values.image && values.image[0]) {
       formdata.append("image", values.image[0]);
     }
-    if (hero?.id !== undefined) {
-      updateHero.mutate({ id: hero.id, values: formdata });
-    } else {
-      // Handle the undefined case, e.g., set an error message
-      setError("Hero ID is undefined.");
-    } // Handle the undefined case, e.g., set an error message
+    updateHero.mutate({ id: hero.id, values: formdata });
   };
 
   return (

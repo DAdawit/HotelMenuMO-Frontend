@@ -2,7 +2,7 @@
 import { Spinner } from "@/assets/icons/Spinner";
 import PageTitle from "@/common/PageTitle";
 import AddHero from "@/components/Admin/Hero/AddHero";
-import HeroSectionLists from "@/components/Admin/LoopComponents/HeroSectionLists";
+import HeroSectionLists from "@/components/Admin/Hero/HeroSectionLists";
 import { fetchHeroSection } from "@/services/admin.services";
 import { useQuery } from "@tanstack/react-query";
 

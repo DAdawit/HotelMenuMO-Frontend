@@ -1,5 +1,6 @@
 "use client";
 import * as React from "react";
+import axios, { AxiosError } from "axios";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -8,36 +9,35 @@ import { useForm } from "react-hook-form";
 import { ZodType, z } from "zod";
 import { useState } from "react";
 import { notify } from "@/app/toast";
+import EditIcon from "@mui/icons-material/Edit";
 import { Tooltip } from "@mui/material";
 import { Spinner } from "@/assets/icons/Spinner";
-import HomeMaxIcon from "@mui/icons-material/HomeMax";
+import api from "@/services/axios";
+import { HeroCreate, HeroOut } from "@/types/Hero";
 import { useMutation } from "@tanstack/react-query";
-import { addHeroSection } from "@/services/admin.services";
+import { editLogo, updateHeroSection } from "@/services/admin.services";
+import { LogoOut } from "@/types/Logo";
 
 type FormType = {
-  slogan: string;
-  title: string;
-  content: string;
+  name: string;
+
   image?: FileList;
 };
 
 const schema: ZodType<FormType> = z.object({
-  slogan: z.string().min(3, { message: "Slogan is required" }),
-  title: z.string().min(3, { message: "Title is required" }),
-  content: z.string().min(3, { message: "Content is required" }),
-  image: z
-    .instanceof(FileList)
-    .refine((fileList) => fileList.length > 0, "Image is required"),
+  name: z.string().min(3, { message: "name is required" }),
+  image: z.any(),
 });
 
 type PropType = {
+  logo: LogoOut;
   refetch: () => void;
 };
 
-const AddHero: React.FC<PropType> = ({ refetch }) => {
+const EditLogo: React.FC<PropType> = ({ refetch, logo }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-
+  const [data, setData] = useState();
   const {
     register,
     handleSubmit,
@@ -45,6 +45,9 @@ const AddHero: React.FC<PropType> = ({ refetch }) => {
     reset,
   } = useForm<FormType>({
     resolver: zodResolver(schema),
+    defaultValues: {
+      name: logo?.name,
+    },
   });
 
   const [open, setOpen] = React.useState(false);
@@ -57,43 +60,49 @@ const AddHero: React.FC<PropType> = ({ refetch }) => {
     setOpen(false);
   };
 
-  const AddHeroSection = useMutation({
-    mutationFn: (data: any) => addHeroSection(data),
+  const updateHero = useMutation({
+    mutationFn: async ({ id, values }: { id: number; values: any }) =>
+      editLogo(id, values),
     onError: (error: unknown, variables, context) => {
-      setLoading(false);
-      console.log(error);
+      if (axios.isAxiosError(error)) {
+        setError(error.response?.data.detail);
+        console.log(error.response?.data.detail);
+        setLoading(false);
+      } else {
+        console.log("An unexpected error occurred:", error);
+      }
     },
     onSuccess: async (data, variables, context) => {
       setLoading(false);
-      reset();
-      notify("Hero section added successfully !", "success");
       handleClose();
+      reset();
       refetch();
     },
   });
 
-  const submitData = (values: FormType) => {
+  const submitData = async (values: FormType) => {
     setError("");
     setLoading(true);
+    console.log(values);
+
     let formdata = new FormData();
-    formdata.append("slogan", values.slogan);
-    formdata.append("title", values.title);
-    formdata.append("content", values.content);
+
+    if (values.name) formdata.append("name", values.name);
+
     if (values.image && values.image[0]) {
       formdata.append("image", values.image[0]);
     }
-    AddHeroSection.mutate(formdata);
+
+    updateHero.mutate({ id: logo.id, values: formdata });
   };
 
   return (
     <div>
-      <button
-        className="text-white bg-primary rounded-full px-4 py-2 flex items-center justify-center gap-x-2"
-        onClick={handleClickOpen}
-      >
-        <span>Add Hero Section</span>
-        <HomeMaxIcon fontSize="small" />
-      </button>
+      <Tooltip title="Edit" placement="top">
+        <button className="text-primary" onClick={handleClickOpen}>
+          <EditIcon fontSize="small" />
+        </button>
+      </Tooltip>
 
       <Dialog
         open={open}
@@ -101,7 +110,7 @@ const AddHero: React.FC<PropType> = ({ refetch }) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Add Hero Section"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{"Edit Logo"}</DialogTitle>
         <DialogContent>
           <form
             onSubmit={handleSubmit(submitData)}
@@ -111,64 +120,31 @@ const AddHero: React.FC<PropType> = ({ refetch }) => {
             <section className="grid gap-x-5 gap-y-1">
               <div>
                 <label
-                  htmlFor="slogan"
+                  htmlFor="name"
                   className="capitalize pl-3 text-gray-600 text-sm"
                 >
-                  Slogan *
+                  Name *
                 </label>
                 <input
-                  {...register("slogan")}
-                  placeholder="Slogan"
-                  name="slogan"
-                  id="slogan"
+                  {...register("name")}
+                  placeholder="Name"
+                  name="name"
+                  id="name"
                   className="w-full"
                 />
-                {errors?.slogan && (
+                {errors?.name && (
                   <small className="text-red-500 pl-2">
-                    {errors.slogan.message}
+                    {errors.name.message}
                   </small>
                 )}
               </div>
-              <div>
-                <label
-                  htmlFor="title"
-                  className="capitalize pl-3 text-gray-600 text-sm"
-                >
-                  Title *
-                </label>
-                <input
-                  {...register("title")}
-                  placeholder="Title"
-                  name="title"
-                  id="title"
-                  className="w-full"
-                />
-                {errors?.title && (
-                  <small className="text-red-500 pl-2">
-                    {errors.title.message}
-                  </small>
-                )}
-              </div>
-              <div className="grid gap-y-1 mt-2">
-                <label
-                  htmlFor="content"
-                  className="capitalize pl-3 text-gray-600 text-sm"
-                >
-                  Content *
-                </label>
-                <textarea id="description" {...register("content")}></textarea>
-                {errors?.content && (
-                  <small className="text-red-500 pl-2">
-                    {errors.content.message}
-                  </small>
-                )}
-              </div>
+
               <div className="grid gap-y-1 mt-2">
                 <label
                   htmlFor="account_number"
                   className="capitalize pl-3 text-gray-600 text-sm"
                 >
-                  Hero Image *
+                  Logo *
                 </label>
                 <input
                   {...register("image")}
@@ -203,4 +179,4 @@ const AddHero: React.FC<PropType> = ({ refetch }) => {
   );
 };
 
-export default AddHero;
+export default EditLogo;
