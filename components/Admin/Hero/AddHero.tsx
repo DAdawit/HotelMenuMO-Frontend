@@ -4,16 +4,13 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, Resolver } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { ZodType, z } from "zod";
 import { useState } from "react";
 import { notify } from "@/app/toast";
-import EditIcon from "@mui/icons-material/Edit";
 import { Tooltip } from "@mui/material";
 import { Spinner } from "@/assets/icons/Spinner";
-import { min } from "moment";
 import HomeMaxIcon from "@mui/icons-material/HomeMax";
-import api from "@/services/axios";
 import { useMutation } from "@tanstack/react-query";
 import { addHeroSection } from "@/services/admin.services";
 
@@ -28,7 +25,9 @@ const schema: ZodType<FormType> = z.object({
   slogan: z.string().min(3, { message: "Slogan is required" }),
   title: z.string().min(3, { message: "Title is required" }),
   content: z.string().min(3, { message: "Content is required" }),
-  image: z.any(),
+  image: z
+    .instanceof(FileList)
+    .refine((fileList) => fileList.length > 0, "Image is required"),
 });
 
 type PropType = {
@@ -38,7 +37,7 @@ type PropType = {
 const AddHero: React.FC<PropType> = ({ refetch }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  const [data, setData] = useState();
+
   const {
     register,
     handleSubmit,
@@ -61,13 +60,14 @@ const AddHero: React.FC<PropType> = ({ refetch }) => {
   const AddHeroSection = useMutation({
     mutationFn: (data: any) => addHeroSection(data),
     onError: (error: unknown, variables, context) => {
+      setLoading(false);
       console.log(error);
     },
     onSuccess: async (data, variables, context) => {
       setLoading(false);
       reset();
-      handleClose();
       notify("Hero section added successfully !", "success");
+      handleClose();
       refetch();
     },
   });
@@ -75,7 +75,6 @@ const AddHero: React.FC<PropType> = ({ refetch }) => {
   const submitData = (values: FormType) => {
     setError("");
     setLoading(true);
-
     let formdata = new FormData();
     formdata.append("slogan", values.slogan);
     formdata.append("title", values.title);
@@ -113,7 +112,10 @@ const AddHero: React.FC<PropType> = ({ refetch }) => {
           >
             <section className="grid gap-x-5 gap-y-1">
               <div>
-                <label htmlFor="slogan" className="capitalize pl-3 lightText">
+                <label
+                  htmlFor="slogan"
+                  className="capitalize pl-3 text-gray-600 text-sm"
+                >
                   Slogan *
                 </label>
                 <input
@@ -130,7 +132,10 @@ const AddHero: React.FC<PropType> = ({ refetch }) => {
                 )}
               </div>
               <div>
-                <label htmlFor="title" className="capitalize pl-3 lightText">
+                <label
+                  htmlFor="title"
+                  className="capitalize pl-3 text-gray-600 text-sm"
+                >
                   Title *
                 </label>
                 <input
@@ -147,7 +152,10 @@ const AddHero: React.FC<PropType> = ({ refetch }) => {
                 )}
               </div>
               <div className="grid gap-y-1 mt-2">
-                <label htmlFor="content" className="capitalize pl-3 lightText">
+                <label
+                  htmlFor="content"
+                  className="capitalize pl-3 text-gray-600 text-sm"
+                >
                   Content *
                 </label>
                 <textarea id="description" {...register("content")}></textarea>
@@ -160,7 +168,7 @@ const AddHero: React.FC<PropType> = ({ refetch }) => {
               <div className="grid gap-y-1 mt-2">
                 <label
                   htmlFor="account_number"
-                  className="capitalize pl-3 lightText"
+                  className="capitalize pl-3 text-gray-600 text-sm"
                 >
                   Hero Image *
                 </label>
@@ -171,7 +179,6 @@ const AddHero: React.FC<PropType> = ({ refetch }) => {
                   id="image"
                   className="w-full"
                   type="file"
-                  required
                 />
                 {errors?.image && (
                   <small className="text-red-500 pl-2">

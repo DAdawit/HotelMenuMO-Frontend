@@ -40,7 +40,7 @@ const HeroSectionLists: React.FC<PropType> = ({ hero, refetch }) => {
   };
   return (
     <>
-      <tr className="border-b capitalize text-gray-500 text-sm mb-2 bg-white">
+      <tr className="border-b text-gray-500 text-sm mb-2 bg-white text-start">
         <td className="px-6 py-4 gap-2 ">
           <Image
             loading="lazy"
@@ -53,8 +53,8 @@ const HeroSectionLists: React.FC<PropType> = ({ hero, refetch }) => {
         </td>
         <td className="px-6 py-4">{hero?.slogan}</td>
 
-        <td className="px-6 py-4">{hero?.title}</td>
-        <td className="px-6 py-4">{hero?.content}</td>
+        <td className="px-6 py-4 ">{hero?.title}</td>
+        <td className="px-6 py-4 text-start">{hero?.content}</td>
         <td className="px-6 py-4">
           {dayjs(hero?.created_at).format("MMM-D-YYYY")}
         </td>

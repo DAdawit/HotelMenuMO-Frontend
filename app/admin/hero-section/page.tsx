@@ -16,31 +16,49 @@ const Page = () => {
   return (
     <div className="container mx-auto  p-5 ">
       {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
-      <PageTitle title="Hero Sections" />
-      <div className="flex justify-end py-6">
+      <div className="flex justify-between py-6">
+        <PageTitle title="Hero Sections" />
         <AddHero refetch={() => refetch()} />
       </div>
       <div className="relative overflow-x-auto">
-        <table className="text-center w-full mt-8 overflow-x-auto">
-          <thead className="text-sm text-gray-500 uppercase border-b font-base bg-white">
-            <tr>
-              <th scope="col" className="px-6 py-3 whitespace-nowrap">
+        <table className="w-full mt-8 overflow-x-auto">
+          <thead className="text-start text-gray-500 uppercase border-b font-base bg-white">
+            <tr className="text-start">
+              <th
+                scope="col"
+                className="px-6 py-3 whitespace-nowrap  text-start"
+              >
                 Image
               </th>
-              <th scope="col" className="px-6 py-3 whitespace-nowrap">
+              <th
+                scope="col"
+                className="px-6 py-3 whitespace-nowrap text-start"
+              >
                 slogan
               </th>
-              <th scope="col" className="px-6 py-3 whitespace-nowrap">
+              <th
+                scope="col"
+                className="px-6 py-3 whitespace-nowrap text-start"
+              >
                 title
               </th>
 
-              <th scope="col" className="px-6 py-3 whitespace-nowrap">
+              <th
+                scope="col"
+                className="px-6 py-3 whitespace-nowrap text-start"
+              >
                 content
               </th>
-              <th scope="col" className="px-6 py-3 whitespace-nowrap">
+              <th
+                scope="col"
+                className="px-6 py-3 whitespace-nowrap text-start"
+              >
                 created-at
               </th>
-              <th scope="col" className="px-6 py-3 whitespace-nowrap">
+              <th
+                scope="col"
+                className="px-6 py-3 whitespace-nowrap text-start"
+              >
                 Action
               </th>
             </tr>
