@@ -14,16 +14,20 @@ import { Spinner } from "@/assets/icons/Spinner";
 import { min } from "moment";
 import HomeMaxIcon from "@mui/icons-material/HomeMax";
 import api from "@/services/axios";
+import { useMutation } from "@tanstack/react-query";
+import { addHeroSection } from "@/services/admin.services";
 
 type FormType = {
+  slogan: string;
   title: string;
-  description: string;
+  content: string;
   image?: FileList;
 };
 
 const schema: ZodType<FormType> = z.object({
+  slogan: z.string().min(3, { message: "Slogan is required" }),
   title: z.string().min(3, { message: "Title is required" }),
-  description: z.string().min(3, { message: "Description is required" }),
+  content: z.string().min(3, { message: "Content is required" }),
   image: z.any(),
 });
 
@@ -54,33 +58,32 @@ const AddHero: React.FC<PropType> = ({ refetch }) => {
     setOpen(false);
   };
 
+  const AddHeroSection = useMutation({
+    mutationFn: (data: any) => addHeroSection(data),
+    onError: (error: unknown, variables, context) => {
+      console.log(error);
+    },
+    onSuccess: async (data, variables, context) => {
+      setLoading(false);
+      reset();
+      handleClose();
+      notify("Hero section added successfully !", "success");
+      refetch();
+    },
+  });
+
   const submitData = (values: FormType) => {
     setError("");
     setLoading(true);
-    console.log(values);
 
     let formdata = new FormData();
+    formdata.append("slogan", values.slogan);
     formdata.append("title", values.title);
-    formdata.append("description", values.description);
+    formdata.append("content", values.content);
     if (values.image && values.image[0]) {
       formdata.append("image", values.image[0]);
     }
-
-    api
-      .post(`/hero`, formdata)
-      .then((res) => {
-        refetch();
-        handleClose();
-        notify("Hero section added successfully !", "success");
-        reset();
-      })
-      .catch((err) => {
-        setLoading(false);
-        console.log(err.message);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    AddHeroSection.mutate(formdata);
   };
 
   return (
@@ -103,15 +106,36 @@ const AddHero: React.FC<PropType> = ({ refetch }) => {
       >
         <DialogTitle id="alert-dialog-title">{"Add Hero Section"}</DialogTitle>
         <DialogContent>
-          <form onSubmit={handleSubmit(submitData)} className="max-w-sm">
+          <form
+            onSubmit={handleSubmit(submitData)}
+            className="max-w-sm"
+            encType="multipart/form-data"
+          >
             <section className="grid gap-x-5 gap-y-1">
+              <div>
+                <label htmlFor="slogan" className="capitalize pl-3 lightText">
+                  Slogan *
+                </label>
+                <input
+                  {...register("slogan")}
+                  placeholder="Slogan"
+                  name="slogan"
+                  id="slogan"
+                  className="w-full"
+                />
+                {errors?.slogan && (
+                  <small className="text-red-500 pl-2">
+                    {errors.slogan.message}
+                  </small>
+                )}
+              </div>
               <div>
                 <label htmlFor="title" className="capitalize pl-3 lightText">
                   Title *
                 </label>
                 <input
                   {...register("title")}
-                  placeholder="Name"
+                  placeholder="Title"
                   name="title"
                   id="title"
                   className="w-full"
@@ -123,20 +147,13 @@ const AddHero: React.FC<PropType> = ({ refetch }) => {
                 )}
               </div>
               <div className="grid gap-y-1 mt-2">
-                <label
-                  htmlFor="description"
-                  className="capitalize pl-3 lightText"
-                >
-                  Description *
+                <label htmlFor="content" className="capitalize pl-3 lightText">
+                  Content *
                 </label>
-                <textarea
-                  id="description"
-                  {...register("description")}
-                  className="h-36"
-                ></textarea>
-                {errors?.description && (
+                <textarea id="description" {...register("content")}></textarea>
+                {errors?.content && (
                   <small className="text-red-500 pl-2">
-                    {errors.description.message}
+                    {errors.content.message}
                   </small>
                 )}
               </div>
@@ -170,7 +187,7 @@ const AddHero: React.FC<PropType> = ({ refetch }) => {
                 type="submit"
                 className="px-10 py-2 bg-primary text-white rounded-full flex items-center gap-x-2"
               >
-                <span>Submit</span>
+                <span>Update</span>
                 <span>{loading ? <Spinner /> : null}</span>
               </button>
             </div>

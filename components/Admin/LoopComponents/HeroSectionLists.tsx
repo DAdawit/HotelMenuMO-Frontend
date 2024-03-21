@@ -43,6 +43,7 @@ const HeroSectionLists: React.FC<PropType> = ({ hero, refetch }) => {
       <tr className="border-b capitalize text-gray-500 text-sm mb-2 bg-white">
         <td className="px-6 py-4 gap-2 ">
           <Image
+            loading="lazy"
             height={1000}
             width={1000}
             src={`${hero?.imageUrl}`}

@@ -12,6 +12,15 @@ export async function fetchLogos(): Promise<LogoI[]> {
   }
 }
 
+export async function addHeroSection(data: any): Promise<HeroOut[]> {
+  try {
+    const response = await api.post<HeroOut[]>("/admin/heros", data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function fetchHeroSection(): Promise<HeroOut[]> {
   try {
     const response = await api.get<HeroOut[]>("/admin/heros");
