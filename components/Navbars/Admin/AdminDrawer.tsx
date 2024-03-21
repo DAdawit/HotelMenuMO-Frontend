@@ -131,6 +131,16 @@ export default function AdminDrawer() {
                       </div>
                     </Link>
                     <Link
+                      href="/admin/sub-categories"
+                      className="mt-1 shadow-sm py-2 h-min"
+                      onClick={toggleDrawer("left", false)}
+                    >
+                      <div className="flex gap-x-3 items-center border-b-[1] border-gray-400 px-7 gap-3">
+                        <CategoryIcon />
+                        <h3>Sub Categories</h3>
+                      </div>
+                    </Link>
+                    <Link
                       href="/admin/social-media"
                       className="mt-1 shadow-sm py-2 h-min"
                       onClick={toggleDrawer("left", false)}

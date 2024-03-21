@@ -10,16 +10,23 @@ import { useState } from "react";
 import { notify } from "@/app/toast";
 import { Spinner } from "@/assets/icons/Spinner";
 import { useMutation } from "@tanstack/react-query";
-import { addCategory } from "@/services/admin.services";
+import {
+  addCategory,
+  addSubCategory,
+  fetchCategories,
+} from "@/services/admin.services";
 import DiamondIcon from "@mui/icons-material/Diamond";
 import CategoryIcon from "@mui/icons-material/Category";
+import { useQuery } from "@tanstack/react-query";
 
 type FormType = {
+  categoryId: string;
   name: string;
   image?: FileList;
 };
 
 const schema: ZodType<FormType> = z.object({
+  categoryId: z.string().min(1, "category required!"),
   name: z.string().min(3, { message: "name is required" }),
   image: z
     .instanceof(FileList)
@@ -30,7 +37,7 @@ type PropType = {
   refetch: () => void;
 };
 
-const AddCategory: React.FC<PropType> = ({ refetch }) => {
+const AddSubCategory: React.FC<PropType> = ({ refetch }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
@@ -53,14 +60,24 @@ const AddCategory: React.FC<PropType> = ({ refetch }) => {
     setOpen(false);
   };
 
-  const AddCategory = useMutation({
-    mutationFn: (data: any) => addCategory(data),
+  const {
+    data,
+    isLoading,
+    error: subcatError,
+    refetch: refetchSubcategory,
+  } = useQuery({
+    queryKey: ["fetchCategories"],
+    queryFn: fetchCategories,
+  });
+
+  const AddSubCategory = useMutation({
+    mutationFn: (data: any) => addSubCategory(data),
     onError: (error: unknown, variables, context) => {
       setLoading(false);
       console.log(error);
     },
     onSuccess: async (data, variables, context) => {
-      notify("Category added successfully !", "success");
+      notify("SubCategory added successfully !", "success");
       setLoading(false);
       reset();
       handleClose();
@@ -73,10 +90,11 @@ const AddCategory: React.FC<PropType> = ({ refetch }) => {
     setLoading(true);
     let formdata = new FormData();
     formdata.append("name", values.name);
+    formdata.append("categoryId", values.categoryId);
     if (values.image && values.image[0]) {
       formdata.append("image", values.image[0]);
     }
-    AddCategory.mutate(formdata);
+    AddSubCategory.mutate(formdata);
   };
 
   return (
@@ -85,7 +103,7 @@ const AddCategory: React.FC<PropType> = ({ refetch }) => {
         className="text-white bg-primary rounded-full px-4 py-2 flex items-center justify-center gap-x-2"
         onClick={handleClickOpen}
       >
-        <span>Add Category</span>
+        <span>Add SubCategory</span>
         <CategoryIcon fontSize="small" />
       </button>
 
@@ -110,6 +128,7 @@ const AddCategory: React.FC<PropType> = ({ refetch }) => {
                 >
                   Name *
                 </label>
+
                 <input
                   {...register("name")}
                   placeholder="Name"
@@ -123,7 +142,35 @@ const AddCategory: React.FC<PropType> = ({ refetch }) => {
                   </small>
                 )}
               </div>
+              <div className="grid gap-y-1">
+                <label
+                  htmlFor="categoryId"
+                  className="capitalize pl-3 font-semibold"
+                >
+                  Category *
+                </label>
 
+                <select
+                  id="categoryId"
+                  {...register("categoryId")}
+                  className="w-full"
+                >
+                  <option value="" selected disabled>
+                    select option
+                  </option>
+                  {data &&
+                    data.map((category) => (
+                      <option key={category?.id} value={category?.id}>
+                        {category?.name}
+                      </option>
+                    ))}
+                </select>
+                {errors?.categoryId && (
+                  <small className="text-red-500 pl-2">
+                    {errors.categoryId.message}
+                  </small>
+                )}
+              </div>
               <div className="grid gap-y-1 mt-2">
                 <label
                   htmlFor="account_number"
@@ -164,4 +211,4 @@ const AddCategory: React.FC<PropType> = ({ refetch }) => {
   );
 };
 
-export default AddCategory;
+export default AddSubCategory;
