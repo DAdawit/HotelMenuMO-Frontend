@@ -81,7 +81,7 @@ export async function deleteHeroById(id: number): Promise<any> {
 
 export async function fetchCategories(): Promise<CategoryOut[]> {
   try {
-    const response = await api.get<CategoryOut[]>("/admin/logos");
+    const response = await api.get<CategoryOut[]>("/admin/categories");
     return response.data;
   } catch (error) {
     throw error;
@@ -90,19 +90,19 @@ export async function fetchCategories(): Promise<CategoryOut[]> {
 
 export async function addCategory(data: any): Promise<CategoryOut[]> {
   try {
-    const res = await api.post<CategoryOut[]>("/admin/logos", data);
+    const res = await api.post<CategoryOut[]>("/admin/categories", data);
     return res.data;
   } catch (error) {
     throw error;
   }
 }
 
-export async function editCategory(
+export async function updateCategory(
   id: number,
   data: any
 ): Promise<CategoryOut> {
   try {
-    const res = await api.put(`/admin/logos/${id}`, data);
+    const res = await api.put(`/admin/categories/${id}`, data);
     return res.data;
   } catch (error) {
     throw error;
@@ -111,7 +111,7 @@ export async function editCategory(
 
 export async function deleteCategory(id: number): Promise<any> {
   try {
-    const res = await api.delete(`/admin/logos/${id}`);
+    const res = await api.delete(`/admin/categories/${id}`);
     return res.data;
   } catch (error) {
     throw error;

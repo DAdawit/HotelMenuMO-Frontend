@@ -8,12 +8,12 @@ import { useForm } from "react-hook-form";
 import { ZodType, z } from "zod";
 import { useState } from "react";
 import { notify } from "@/app/toast";
-import { Tooltip } from "@mui/material";
 import { Spinner } from "@/assets/icons/Spinner";
-import HomeMaxIcon from "@mui/icons-material/HomeMax";
 import { useMutation } from "@tanstack/react-query";
-import { addHeroSection, addLogo } from "@/services/admin.services";
+import { addCategory } from "@/services/admin.services";
 import DiamondIcon from "@mui/icons-material/Diamond";
+import CategoryIcon from "@mui/icons-material/Category";
+
 type FormType = {
   name: string;
   image?: FileList;
@@ -30,7 +30,7 @@ type PropType = {
   refetch: () => void;
 };
 
-const AddLogo: React.FC<PropType> = ({ refetch }) => {
+const AddCategory: React.FC<PropType> = ({ refetch }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
@@ -53,16 +53,16 @@ const AddLogo: React.FC<PropType> = ({ refetch }) => {
     setOpen(false);
   };
 
-  const AddLogo = useMutation({
-    mutationFn: (data: any) => addLogo(data),
+  const AddCategory = useMutation({
+    mutationFn: (data: any) => addCategory(data),
     onError: (error: unknown, variables, context) => {
       setLoading(false);
       console.log(error);
     },
     onSuccess: async (data, variables, context) => {
+      notify("Category added successfully !", "success");
       setLoading(false);
       reset();
-      notify("Hero section added successfully !", "success");
       handleClose();
       refetch();
     },
@@ -76,7 +76,7 @@ const AddLogo: React.FC<PropType> = ({ refetch }) => {
     if (values.image && values.image[0]) {
       formdata.append("image", values.image[0]);
     }
-    AddLogo.mutate(formdata);
+    AddCategory.mutate(formdata);
   };
 
   return (
@@ -85,8 +85,8 @@ const AddLogo: React.FC<PropType> = ({ refetch }) => {
         className="text-white bg-primary rounded-full px-4 py-2 flex items-center justify-center gap-x-2"
         onClick={handleClickOpen}
       >
-        <span>Add Logos</span>
-        <DiamondIcon fontSize="small" />
+        <span>Add Category</span>
+        <CategoryIcon fontSize="small" />
       </button>
 
       <Dialog
@@ -164,4 +164,4 @@ const AddLogo: React.FC<PropType> = ({ refetch }) => {
   );
 };
 
-export default AddLogo;
+export default AddCategory;

@@ -1,33 +1,31 @@
 "use client";
 import Image from "next/image";
-import Link from "next/link";
 import React from "react";
 import { useState } from "react";
-import { notify } from "@/app/toast";
-import api from "@/services/axios";
-import EditHero from "./EditLogo";
 import ConfirmDelete from "@/common/Alerts/ConfirmDelete";
-import { HeroOut } from "@/types/Hero";
 import dayjs from "dayjs";
 import { useMutation } from "@tanstack/react-query";
-import { deleteHeroById, deleteLogo } from "@/services/admin.services";
-import { LogoOut } from "@/types/Logo";
+import { deleteCategory } from "@/services/admin.services";
+import EditCategory from "./EditCategory";
+import { CategoryOut } from "@/types/Category";
+import { notify } from "@/app/toast";
 type PropType = {
-  logo: LogoOut;
+  category: CategoryOut;
   index: number;
   refetch: () => void;
 };
 
-const LogoLists: React.FC<PropType> = ({ logo, refetch }) => {
+const CategoryLists: React.FC<PropType> = ({ category, refetch }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [deleteError, setdeleteError] = useState<string>("");
 
-  const deleteHeroSection = useMutation({
-    mutationFn: async (id: number) => deleteLogo(id), // Assuming deleteHeroById is the correct function to call
+  const DeleteCategory = useMutation({
+    mutationFn: async (id: number) => deleteCategory(id), // Assuming deleteHeroById is the correct function to call
     onError: (error: unknown) => {
       setLoading(false);
     },
     onSuccess: async (data) => {
+      notify("Category deleted successfully !", "success");
       setLoading(true);
       refetch();
     },
@@ -36,8 +34,7 @@ const LogoLists: React.FC<PropType> = ({ logo, refetch }) => {
   const confirm = (id: number) => {
     setdeleteError("");
     setLoading(true);
-
-    deleteHeroSection.mutate(id);
+    DeleteCategory.mutate(id);
   };
   return (
     <>
@@ -47,28 +44,28 @@ const LogoLists: React.FC<PropType> = ({ logo, refetch }) => {
             loading="lazy"
             height={1000}
             width={1000}
-            src={`${logo?._fullImagePath}`}
-            alt={`${logo?.name}`}
-            className="h-12 w-16 object-contain rounded-md "
+            src={`${category?.imageUrl}`}
+            alt={`${category?.name}`}
+            className="h-12 w-12 object-cover rounded-md shadow-md"
           />
         </td>
-        <td className="px-6 py-4">{logo?.name}</td>
+        <td className="px-6 py-4">{category?.name}</td>
 
         <td className="px-6 py-4">
-          {dayjs(logo?.created_at).format("MMM-D-YYYY")}
+          {dayjs(category?.created_at).format("MMM-D-YYYY")}
         </td>
         <td className="px-6 py-4 text-start   gap-2 flex items-center gap-x-3">
           <ConfirmDelete
             confirm={confirm}
-            id={logo && logo?.id}
+            id={category && category?.id}
             text="Are you sure you went to delete !"
             loading={loading}
           />
-          <EditHero logo={logo} refetch={() => refetch()} />
+          <EditCategory category={category} refetch={() => refetch()} />
         </td>
       </tr>
     </>
   );
 };
 
-export default LogoLists;
+export default CategoryLists;

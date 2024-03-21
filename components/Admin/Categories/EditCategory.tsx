@@ -8,19 +8,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { ZodType, z } from "zod";
 import { useState } from "react";
-import { notify } from "@/app/toast";
 import EditIcon from "@mui/icons-material/Edit";
 import { Tooltip } from "@mui/material";
 import { Spinner } from "@/assets/icons/Spinner";
-import api from "@/services/axios";
-import { HeroCreate, HeroOut } from "@/types/Hero";
 import { useMutation } from "@tanstack/react-query";
-import { editLogo, updateHeroSection } from "@/services/admin.services";
-import { LogoOut } from "@/types/Logo";
+import { updateCategory } from "@/services/admin.services";
+import { CategoryOut } from "@/types/Category";
 
 type FormType = {
   name: string;
-
   image?: FileList;
 };
 
@@ -30,11 +26,11 @@ const schema: ZodType<FormType> = z.object({
 });
 
 type PropType = {
-  logo: LogoOut;
+  category: CategoryOut;
   refetch: () => void;
 };
 
-const EditLogo: React.FC<PropType> = ({ refetch, logo }) => {
+const EditCategory: React.FC<PropType> = ({ refetch, category }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [data, setData] = useState();
@@ -46,7 +42,7 @@ const EditLogo: React.FC<PropType> = ({ refetch, logo }) => {
   } = useForm<FormType>({
     resolver: zodResolver(schema),
     defaultValues: {
-      name: logo?.name,
+      name: category?.name,
     },
   });
 
@@ -60,10 +56,11 @@ const EditLogo: React.FC<PropType> = ({ refetch, logo }) => {
     setOpen(false);
   };
 
-  const updateHero = useMutation({
+  const UpdateCategory = useMutation({
     mutationFn: async ({ id, values }: { id: number; values: any }) =>
-      editLogo(id, values),
+      updateCategory(id, values),
     onError: (error: unknown, variables, context) => {
+      setLoading(false);
       if (axios.isAxiosError(error)) {
         setError(error.response?.data.detail);
         console.log(error.response?.data.detail);
@@ -92,8 +89,7 @@ const EditLogo: React.FC<PropType> = ({ refetch, logo }) => {
     if (values.image && values.image[0]) {
       formdata.append("image", values.image[0]);
     }
-
-    updateHero.mutate({ id: logo.id, values: formdata });
+    UpdateCategory.mutate({ id: category.id, values: formdata });
   };
 
   return (
@@ -179,4 +175,4 @@ const EditLogo: React.FC<PropType> = ({ refetch, logo }) => {
   );
 };
 
-export default EditLogo;
+export default EditCategory;

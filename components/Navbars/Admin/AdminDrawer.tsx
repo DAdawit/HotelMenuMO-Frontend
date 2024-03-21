@@ -23,6 +23,8 @@ import AddLinkIcon from "@mui/icons-material/AddLink";
 import BadgeIcon from "@mui/icons-material/Badge";
 import { useQuery } from "@tanstack/react-query";
 import { fetchLogos } from "@/services/admin.services";
+import DiamondIcon from "@mui/icons-material/Diamond";
+
 type Anchor = "left";
 export default function AdminDrawer() {
   const [state, setState] = React.useState({
@@ -114,8 +116,18 @@ export default function AdminDrawer() {
                       onClick={toggleDrawer("left", false)}
                     >
                       <div className="flex gap-x-3 items-center border-b-[1] border-gray-400 px-7 gap-3">
-                        <HomeMaxIcon />
+                        <DiamondIcon />
                         <h3>Logos</h3>
+                      </div>
+                    </Link>
+                    <Link
+                      href="/admin/categories"
+                      className="mt-1 shadow-sm py-2 h-min"
+                      onClick={toggleDrawer("left", false)}
+                    >
+                      <div className="flex gap-x-3 items-center border-b-[1] border-gray-400 px-7 gap-3">
+                        <CategoryIcon />
+                        <h3>Categories</h3>
                       </div>
                     </Link>
                     <Link
@@ -159,16 +171,6 @@ export default function AdminDrawer() {
                       </div>
                     </Link>
 
-                    <Link
-                      href="/admin/training-categories"
-                      className="mt-1 shadow-sm py-2 h-min"
-                      onClick={toggleDrawer("left", false)}
-                    >
-                      <div className="flex gap-x-3 items-center border-b-[1] border-gray-400 px-7 gap-3">
-                        <CategoryIcon />
-                        <h3>Training Categories</h3>
-                      </div>
-                    </Link>
                     <Link
                       href="/admin/trainings"
                       className="mt-1 shadow-sm py-2 h-min"
