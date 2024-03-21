@@ -1,5 +1,5 @@
 import api from "@/services/axios";
-import { ILogin, UserOut } from "@/types/User";
+import { ILogin, UserI, UserOut } from "@/types/User";
 
 export async function loginUser(data: ILogin): Promise<UserOut> {
   try {
@@ -10,9 +10,9 @@ export async function loginUser(data: ILogin): Promise<UserOut> {
   }
 }
 
-export async function verifToken(): Promise<UserOut> {
+export async function verifToken(): Promise<UserI> {
   try {
-    const response = await api.get<UserOut>("/verifyToken");
+    const response = await api.get<UserI>("/verifyToken");
     return response.data;
   } catch (error) {
     throw error;

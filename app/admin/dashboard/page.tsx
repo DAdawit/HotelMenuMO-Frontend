@@ -8,7 +8,10 @@ import PlaceIcon from "@mui/icons-material/Place";
 import CategoryIcon from "@mui/icons-material/Category";
 import ClassIcon from "@mui/icons-material/Class";
 import SchoolIcon from "@mui/icons-material/School";
+import useStore from "@/store/useStore";
 const Page = () => {
+  const auth = useStore((state) => state.auth);
+
   // const { data, isLoading, error, refetch } = useQuery({
   //   queryKey: ["fetchStatistics"],
   //   queryFn: fetchStatistics,
@@ -18,6 +21,8 @@ const Page = () => {
     <>
       {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
       {/* <MyEditor /> */}
+      {/* <pre>{JSON.stringify(auth, null, 2)}</pre> */}
+
       <div className="container mx-auto px-5 pb-16 min-h-screen">
         <div className="px-7 py-5">
           <PageTitle title="Dashboard" />

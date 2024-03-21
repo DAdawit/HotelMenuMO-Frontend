@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { IUser } from "../types";
+import { IUser } from "./types";
 import { CreateAuthSlice } from "./slice/AuthSlice";
 type StoreState = IUser;
 

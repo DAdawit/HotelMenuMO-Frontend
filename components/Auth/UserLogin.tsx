@@ -13,12 +13,14 @@ import useStore from "@/store/useStore";
 import { ILogin } from "@/types/User";
 import { loginUser } from "@/services/auth.services";
 
-type PropType = {
-  setLogin: () => void;
-};
-const UserLogin: React.FC<PropType> = ({ setLogin }) => {
+// type PropType = {
+//   setLogin: () => void;
+// };
+const UserLogin = () => {
   const router = useRouter();
   const setUser = useStore((state) => state.setUser);
+  const auth = useStore((state) => state.auth);
+  const setAuthTrue = useStore((state) => state.setAuthTrue);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
@@ -50,12 +52,13 @@ const UserLogin: React.FC<PropType> = ({ setLogin }) => {
         console.log("An unexpected error occurred:", error);
       }
     },
-    onSuccess: (data, variables, context) => {
+    onSuccess: async (data, variables, context) => {
       setLoading(false);
       localStorage.setItem("access_token", data.token);
       setUser(data.user);
       api.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
-      if (data.user.role == "admin") {
+      await setAuthTrue();
+      if (data.user.role === "admin") {
         router.push("/admin/dashboard");
       }
     },
@@ -64,15 +67,16 @@ const UserLogin: React.FC<PropType> = ({ setLogin }) => {
   const submitData = (values: ILogin) => {
     setError("");
     setLoading(true);
-    console.log(values);
+    // console.log(values);
     mutation.mutate(values);
   };
+
   return (
     <>
-      {/* <pre>{JSON.stringify(user, null, 2)}</pre>
-      <pre>{JSON.stringify(auth, null, 2)}</pre> */}
+      {/* <pre>{JSON.stringify(user, null, 2)}</pre> */}
 
       <section className=" shadow-lg max-w-3xl px-10 py-8">
+        <pre>{JSON.stringify(auth, null, 2)}</pre>
         <h1 className="text-3xl font-semibold text-gray-800 text-center tracking-wide mx-auto mb-3">
           Wellcome <span className="text-sm text-gray-500">(Admin)</span>
         </h1>
@@ -119,7 +123,9 @@ const UserLogin: React.FC<PropType> = ({ setLogin }) => {
           </div>
           <small className="text-red-500 pl-2">{error}</small>
           <button
-            className="mt-5 w-full bg-tprime text-white  py-2 flex justify-center items-center gap-x-2 hover:-translate-y-px rounded-full"
+            className={`mt-5 w-full bg-tprime text-white py-2 flex justify-center items-center gap-x-2 ${
+              loading ? "disabled" : "hover:-translate-y-px"
+            } rounded-full`}
             disabled={loading}
           >
             <span className="">Login</span>
