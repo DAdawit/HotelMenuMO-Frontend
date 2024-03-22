@@ -15,3 +15,21 @@ export interface SubCategoryOut {
   category: CategoryOut;
   imageUrl: string;
 }
+export interface CategoriesWithSubCategoriesOut {
+  id: number;
+  name: string;
+  image: string;
+  created_at: string;
+  updated_at: string;
+  subCategory: SubCategory[];
+  imageUrl: string;
+}
+
+export interface SubCategory {
+  id: number;
+  name: string;
+  image: string;
+  created_at: string;
+  updated_at: string;
+  imageUrl: string;
+}

@@ -1,8 +1,13 @@
 import api from "@/services/axios";
-import { CategoryOut, SubCategoryOut } from "@/types/Category";
+import {
+  CategoriesWithSubCategoriesOut,
+  CategoryOut,
+  SubCategoryOut,
+} from "@/types/Category";
 import { HeroCreate, HeroOut } from "@/types/Hero";
 import { LogoOut } from "@/types/Logo";
-import { MenuOut } from "@/types/Menu";
+import { MealTimeOut } from "@/types/MealTime";
+import { MenuInput, MenuOut } from "@/types/Menu";
 import { ILogin, UserI, UserOut } from "@/types/User";
 
 export async function fetchLogos(): Promise<LogoOut[]> {
@@ -89,6 +94,19 @@ export async function fetchCategories(): Promise<CategoryOut[]> {
   }
 }
 
+export async function fetchCategoriesWithSubcategory(): Promise<
+  CategoriesWithSubCategoriesOut[]
+> {
+  try {
+    const response = await api.get<CategoriesWithSubCategoriesOut[]>(
+      "/admin/categories-with-subcategories"
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function addCategory(data: any): Promise<CategoryOut[]> {
   try {
     const res = await api.post<CategoryOut[]>("/admin/categories", data);
@@ -167,9 +185,9 @@ export async function fetchMenus(): Promise<MenuOut[]> {
   }
 }
 
-export async function addMenus(data: any): Promise<MenuOut[]> {
+export async function addMenus(data: MenuInput): Promise<MenuOut[]> {
   try {
-    const res = await api.post<MenuOut[]>("/admin/menus", data);
+    const res = await api.post<MenuOut[]>("/admin/menu", data);
     return res.data;
   } catch (error) {
     throw error;
@@ -201,6 +219,15 @@ export async function deleteMenus(id: number): Promise<any> {
   try {
     const res = await api.delete(`/admin/menus/${id}`);
     return res.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function fetchMealTimes(): Promise<MealTimeOut[]> {
+  try {
+    const response = await api.get<MealTimeOut[]>("/admin/mealtimes");
+    return response.data;
   } catch (error) {
     throw error;
   }
