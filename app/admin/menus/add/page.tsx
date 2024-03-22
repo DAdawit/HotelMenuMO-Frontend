@@ -18,7 +18,8 @@ import Link from "next/link";
 import PageTitle from "@/common/PageTitle";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import { MenuInput } from "@/types/Menu";
+import { MenuInput, MenuOut } from "@/types/Menu";
+import AddImage from "@/components/Admin/Menus/AddImage";
 type Option = {
   value: number;
   label?: string; // Include other properties as needed, like label
@@ -31,7 +32,7 @@ const schema: ZodType<MenuInput> = z.object({
   ingredients: z.string().min(3, "Ingredients is required"),
   categoryId: z.string().min(1, "Category required!"),
   available_meal_times: z.array(z.number()).optional(),
-  subCategoryId: z.string().optional(),
+  subCategoryId: z.string().optional().nullable(),
   special: z.boolean().optional(),
   avaliable_all_day: z.boolean().optional(),
 });
@@ -43,7 +44,16 @@ const Page = () => {
     { id: number; name: string }[]
   >([]);
 
+  const [result, setResult] = useState<MenuOut>();
   const [selectedOption, setSelectedOption] = useState<Option[]>([]);
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   const {
     register,
     handleSubmit,
@@ -100,6 +110,9 @@ const Page = () => {
       console.log(error);
     },
     onSuccess: (data) => {
+      console.log(data);
+      setResult(data);
+      setOpen(true);
       notify("Menu added successfully!", "success");
       setLoading(false);
       reset();
@@ -120,12 +133,21 @@ const Page = () => {
       values.available_meal_times?.push(item.value);
     });
     setLoading(false);
+    console.log(values);
+    console.log(typeof values);
 
     AddMenu.mutate(values);
   };
 
   return (
     <div className="container mx-auto p-5">
+      <AddImage
+        menu={result && result}
+        open={open}
+        handleClickOpen={handleClickOpen}
+        handleClose={handleClose}
+      />
+
       <div className="flex items-center ">
         <Link
           href="/admin/menus"
@@ -238,7 +260,7 @@ const Page = () => {
                 id="subCategoryId"
                 className="w-full rounded-md"
               >
-                <option value="">Select a subcategory</option>
+                <option value={0}>Select a subcategory</option>
                 {subCategories.map((subCategory) => (
                   <option key={subCategory.id} value={subCategory.id}>
                     {subCategory.name}

@@ -28,6 +28,6 @@ export interface MenuInput {
   ingredients: string;
   avaliable_all_day?: boolean;
   categoryId: string;
-  subCategoryId?: string;
+  subCategoryId?: string | null;
   available_meal_times?: number[];
 }

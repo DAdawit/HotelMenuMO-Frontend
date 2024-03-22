@@ -8,19 +8,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { ZodType, z } from "zod";
 import { useState } from "react";
-import EditIcon from "@mui/icons-material/Edit";
-import { Tooltip } from "@mui/material";
 import { Spinner } from "@/assets/icons/Spinner";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import {
-  addOrUpdateMenuImage,
-  fetchCategories,
-  updateSubCategory,
-} from "@/services/admin.services";
-import { SubCategoryOut } from "@/types/Category";
+import { addOrUpdateMenuImage } from "@/services/admin.services";
 import { MenuOut } from "@/types/Menu";
-import Image from "next/image";
-import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import { useRouter } from "next/navigation";
 
 type FormType = {
   image?: FileList;
@@ -31,11 +23,19 @@ const schema: ZodType<FormType> = z.object({
 });
 
 type PropType = {
-  menu: MenuOut;
-  refetch: () => void;
+  menu: MenuOut | undefined;
+  open: boolean;
+  handleClose: () => void;
+  handleClickOpen: () => void;
 };
 
-const AddImage: React.FC<PropType> = ({ refetch, menu }) => {
+const AddImage: React.FC<PropType> = ({
+  menu,
+  open,
+  handleClose,
+  handleClickOpen,
+}) => {
+  const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const {
@@ -46,16 +46,6 @@ const AddImage: React.FC<PropType> = ({ refetch, menu }) => {
   } = useForm<FormType>({
     resolver: zodResolver(schema),
   });
-
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   const AddOrUpdateMenuImage = useMutation({
     mutationFn: async ({ id, values }: { id: number; values: any }) =>
@@ -74,7 +64,9 @@ const AddImage: React.FC<PropType> = ({ refetch, menu }) => {
       setLoading(false);
       handleClose();
       reset();
-      refetch();
+      notify("Menu added successfully!", "success");
+
+      router.push("/admin/menus");
     },
   });
 
@@ -88,31 +80,15 @@ const AddImage: React.FC<PropType> = ({ refetch, menu }) => {
     if (values.image && values.image[0]) {
       formdata.append("image", values.image[0]);
     }
-    AddOrUpdateMenuImage.mutate({ id: menu.id, values: formdata });
+    if (menu?.id !== undefined) {
+      AddOrUpdateMenuImage.mutate({ id: menu.id, values: formdata });
+    } else {
+      console.error("Menu ID is undefined.");
+    }
   };
 
   return (
     <div>
-      {menu.image ? (
-        <Tooltip title="Change Image" placement="top">
-          <Image
-            onClick={handleClickOpen}
-            loading="lazy"
-            height={1000}
-            width={1000}
-            src={menu._imageUrl}
-            alt={`${menu?.name}`}
-            className="h-12 w-12 object-cover rounded-md shadow-md"
-          />
-        </Tooltip>
-      ) : (
-        <Tooltip title="Add Image" placement="top">
-          <button className="text-primary" onClick={handleClickOpen}>
-            <AddPhotoAlternateIcon fontSize="large" />
-          </button>
-        </Tooltip>
-      )}
-
       <Dialog
         open={open}
         onClose={handleClose}
@@ -121,18 +97,6 @@ const AddImage: React.FC<PropType> = ({ refetch, menu }) => {
       >
         <DialogTitle id="alert-dialog-title">{"Menu Image"}</DialogTitle>
         <DialogContent>
-          <div className="">
-            {menu.image ? (
-              <Image
-                loading="lazy"
-                height={1000}
-                width={1000}
-                src={menu._imageUrl}
-                alt={`${menu?.name}`}
-                className="h-28 w-full object-contain rounded-md "
-              />
-            ) : null}
-          </div>
           <form
             onSubmit={handleSubmit(submitData)}
             className="max-w-sm"

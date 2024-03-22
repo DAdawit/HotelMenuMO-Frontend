@@ -185,9 +185,13 @@ export async function fetchMenus(): Promise<MenuOut[]> {
   }
 }
 
-export async function addMenus(data: MenuInput): Promise<MenuOut[]> {
+export async function addMenus(data: MenuInput): Promise<MenuOut> {
   try {
-    const res = await api.post<MenuOut[]>("/admin/menu", data);
+    const res = await api.post<MenuOut>("/admin/add-menu", data, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     return res.data;
   } catch (error) {
     throw error;
