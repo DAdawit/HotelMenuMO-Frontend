@@ -17,7 +17,7 @@ const Page = () => {
   return (
     <div className="container mx-auto  p-5 ">
       {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
-      <div className="flex justify-between py-6">
+      <div className="flex justify-between items-center py-6">
         <PageTitle title="Categories" />
         <AddCategory refetch={() => refetch()} />
       </div>

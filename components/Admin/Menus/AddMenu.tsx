@@ -8,19 +8,27 @@ import { useForm } from "react-hook-form";
 import { ZodType, z } from "zod";
 import { useState } from "react";
 import { notify } from "@/app/toast";
-import { Tooltip } from "@mui/material";
 import { Spinner } from "@/assets/icons/Spinner";
-import HomeMaxIcon from "@mui/icons-material/HomeMax";
 import { useMutation } from "@tanstack/react-query";
-import { addHeroSection, addLogo } from "@/services/admin.services";
+import {
+  addCategory,
+  addSubCategory,
+  fetchCategories,
+} from "@/services/admin.services";
+import DiamondIcon from "@mui/icons-material/Diamond";
+import CategoryIcon from "@mui/icons-material/Category";
+import { useQuery } from "@tanstack/react-query";
 import AddIcon from "@mui/icons-material/Add";
+
 type FormType = {
+  categoryId: string;
   name: string;
   image?: FileList;
 };
 const isBrowser = () => typeof window !== "undefined";
 
 const schema: ZodType<FormType> = z.object({
+  categoryId: z.string().min(1, "category required!"),
   name: z.string().min(3, { message: "name is required" }),
   image: isBrowser()
     ? z
@@ -33,7 +41,7 @@ type PropType = {
   refetch: () => void;
 };
 
-const AddLogo: React.FC<PropType> = ({ refetch }) => {
+const AddMenu: React.FC<PropType> = ({ refetch }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
@@ -56,16 +64,26 @@ const AddLogo: React.FC<PropType> = ({ refetch }) => {
     setOpen(false);
   };
 
-  const AddLogo = useMutation({
-    mutationFn: (data: any) => addLogo(data),
+  const {
+    data,
+    isLoading,
+    error: subcatError,
+    refetch: refetchSubcategory,
+  } = useQuery({
+    queryKey: ["fetchCategories"],
+    queryFn: fetchCategories,
+  });
+
+  const AddSubCategory = useMutation({
+    mutationFn: (data: any) => addSubCategory(data),
     onError: (error: unknown, variables, context) => {
       setLoading(false);
       console.log(error);
     },
     onSuccess: async (data, variables, context) => {
+      notify("SubCategory added successfully !", "success");
       setLoading(false);
       reset();
-      notify("Hero section added successfully !", "success");
       handleClose();
       refetch();
     },
@@ -76,10 +94,11 @@ const AddLogo: React.FC<PropType> = ({ refetch }) => {
     setLoading(true);
     let formdata = new FormData();
     formdata.append("name", values.name);
+    formdata.append("categoryId", values.categoryId);
     if (values.image && values.image[0]) {
       formdata.append("image", values.image[0]);
     }
-    AddLogo.mutate(formdata);
+    AddSubCategory.mutate(formdata);
   };
 
   return (
@@ -88,7 +107,7 @@ const AddLogo: React.FC<PropType> = ({ refetch }) => {
         className="text-white bg-primary rounded-full px-4 py-2 flex items-center justify-center gap-x-2"
         onClick={handleClickOpen}
       >
-        <span>Add Logos</span>
+        <span>Add Menu</span>
         <AddIcon fontSize="small" />
       </button>
 
@@ -98,7 +117,7 @@ const AddLogo: React.FC<PropType> = ({ refetch }) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Add Logo"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{"Add Menu"}</DialogTitle>
         <DialogContent>
           <form
             onSubmit={handleSubmit(submitData)}
@@ -113,6 +132,7 @@ const AddLogo: React.FC<PropType> = ({ refetch }) => {
                 >
                   Name *
                 </label>
+
                 <input
                   {...register("name")}
                   placeholder="Name"
@@ -126,13 +146,41 @@ const AddLogo: React.FC<PropType> = ({ refetch }) => {
                   </small>
                 )}
               </div>
+              <div className="grid gap-y-1">
+                <label
+                  htmlFor="categoryId"
+                  className="capitalize pl-3 font-semibold"
+                >
+                  Category *
+                </label>
 
+                <select
+                  id="categoryId"
+                  {...register("categoryId")}
+                  className="w-full"
+                >
+                  <option value="" selected disabled>
+                    select option
+                  </option>
+                  {data &&
+                    data.map((category) => (
+                      <option key={category?.id} value={category?.id}>
+                        {category?.name}
+                      </option>
+                    ))}
+                </select>
+                {errors?.categoryId && (
+                  <small className="text-red-500 pl-2">
+                    {errors.categoryId.message}
+                  </small>
+                )}
+              </div>
               <div className="grid gap-y-1 mt-2">
                 <label
                   htmlFor="account_number"
-                  className="capitalize pl-3 text-gray-600 text-sm"
+                  className="capitalize text-gray-600 text-sm"
                 >
-                  Logo *
+                  Image *
                 </label>
                 <input
                   {...register("image")}
@@ -167,4 +215,4 @@ const AddLogo: React.FC<PropType> = ({ refetch }) => {
   );
 };
 
-export default AddLogo;
+export default AddMenu;

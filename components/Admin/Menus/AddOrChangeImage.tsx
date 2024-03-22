@@ -1,5 +1,6 @@
 "use client";
 import * as React from "react";
+import axios, { AxiosError } from "axios";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -7,36 +8,36 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { ZodType, z } from "zod";
 import { useState } from "react";
-import { notify } from "@/app/toast";
+import EditIcon from "@mui/icons-material/Edit";
 import { Tooltip } from "@mui/material";
 import { Spinner } from "@/assets/icons/Spinner";
-import HomeMaxIcon from "@mui/icons-material/HomeMax";
-import { useMutation } from "@tanstack/react-query";
-import { addHeroSection, addLogo } from "@/services/admin.services";
-import AddIcon from "@mui/icons-material/Add";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+  addOrUpdateMenuImage,
+  fetchCategories,
+  updateSubCategory,
+} from "@/services/admin.services";
+import { SubCategoryOut } from "@/types/Category";
+import { MenuOut } from "@/types/Menu";
+import Image from "next/image";
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+
 type FormType = {
-  name: string;
   image?: FileList;
 };
-const isBrowser = () => typeof window !== "undefined";
 
 const schema: ZodType<FormType> = z.object({
-  name: z.string().min(3, { message: "name is required" }),
-  image: isBrowser()
-    ? z
-        .instanceof(FileList)
-        .refine((fileList) => fileList.length > 0, "Image is required")
-    : z.any(),
+  image: z.any(),
 });
 
 type PropType = {
+  menu: MenuOut;
   refetch: () => void;
 };
 
-const AddLogo: React.FC<PropType> = ({ refetch }) => {
+const AddOrChangeImage: React.FC<PropType> = ({ refetch, menu }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-
   const {
     register,
     handleSubmit,
@@ -56,41 +57,61 @@ const AddLogo: React.FC<PropType> = ({ refetch }) => {
     setOpen(false);
   };
 
-  const AddLogo = useMutation({
-    mutationFn: (data: any) => addLogo(data),
+  const AddOrUpdateMenuImage = useMutation({
+    mutationFn: async ({ id, values }: { id: number; values: any }) =>
+      addOrUpdateMenuImage(id, values),
     onError: (error: unknown, variables, context) => {
       setLoading(false);
-      console.log(error);
+      if (axios.isAxiosError(error)) {
+        setError(error.response?.data.detail);
+        console.log(error.response?.data.detail);
+        setLoading(false);
+      } else {
+        console.log("An unexpected error occurred:", error);
+      }
     },
     onSuccess: async (data, variables, context) => {
       setLoading(false);
-      reset();
-      notify("Hero section added successfully !", "success");
       handleClose();
+      reset();
       refetch();
     },
   });
 
-  const submitData = (values: FormType) => {
+  const submitData = async (values: FormType) => {
     setError("");
     setLoading(true);
+    // console.log(values);
+
     let formdata = new FormData();
-    formdata.append("name", values.name);
+
     if (values.image && values.image[0]) {
       formdata.append("image", values.image[0]);
     }
-    AddLogo.mutate(formdata);
+    AddOrUpdateMenuImage.mutate({ id: menu.id, values: formdata });
   };
 
   return (
     <div>
-      <button
-        className="text-white bg-primary rounded-full px-4 py-2 flex items-center justify-center gap-x-2"
-        onClick={handleClickOpen}
-      >
-        <span>Add Logos</span>
-        <AddIcon fontSize="small" />
-      </button>
+      {menu.image ? (
+        <Tooltip title="Change Image" placement="top">
+          <Image
+            onClick={handleClickOpen}
+            loading="lazy"
+            height={1000}
+            width={1000}
+            src={menu._imageUrl}
+            alt={`${menu?.name}`}
+            className="h-12 w-12 object-cover rounded-md shadow-md"
+          />
+        </Tooltip>
+      ) : (
+        <Tooltip title="Add Image" placement="top">
+          <button className="text-primary" onClick={handleClickOpen}>
+            <AddPhotoAlternateIcon fontSize="large" />
+          </button>
+        </Tooltip>
+      )}
 
       <Dialog
         open={open}
@@ -98,45 +119,35 @@ const AddLogo: React.FC<PropType> = ({ refetch }) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Add Logo"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{"Menu Image"}</DialogTitle>
         <DialogContent>
+          <div className="">
+            {menu.image ? (
+              <Image
+                loading="lazy"
+                height={1000}
+                width={1000}
+                src={menu._imageUrl}
+                alt={`${menu?.name}`}
+                className="h-28 w-full object-contain rounded-md "
+              />
+            ) : null}
+          </div>
           <form
             onSubmit={handleSubmit(submitData)}
             className="max-w-sm"
             encType="multipart/form-data"
           >
             <section className="grid gap-x-5 gap-y-1">
-              <div>
-                <label
-                  htmlFor="name"
-                  className="capitalize pl-3 text-gray-600 text-sm"
-                >
-                  Name *
-                </label>
-                <input
-                  {...register("name")}
-                  placeholder="Name"
-                  name="name"
-                  id="name"
-                  className="w-full"
-                />
-                {errors?.name && (
-                  <small className="text-red-500 pl-2">
-                    {errors.name.message}
-                  </small>
-                )}
-              </div>
-
               <div className="grid gap-y-1 mt-2">
                 <label
                   htmlFor="account_number"
-                  className="capitalize pl-3 text-gray-600 text-sm"
+                  className="capitalize text-gray-600 text-sm"
                 >
-                  Logo *
+                  Image *
                 </label>
                 <input
                   {...register("image")}
-                  placeholder="Banner Image"
                   name="image"
                   id="image"
                   className="w-full"
@@ -167,4 +178,4 @@ const AddLogo: React.FC<PropType> = ({ refetch }) => {
   );
 };
 
-export default AddLogo;
+export default AddOrChangeImage;

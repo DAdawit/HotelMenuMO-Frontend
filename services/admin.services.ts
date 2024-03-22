@@ -2,6 +2,7 @@ import api from "@/services/axios";
 import { CategoryOut, SubCategoryOut } from "@/types/Category";
 import { HeroCreate, HeroOut } from "@/types/Hero";
 import { LogoOut } from "@/types/Logo";
+import { MenuOut } from "@/types/Menu";
 import { ILogin, UserI, UserOut } from "@/types/User";
 
 export async function fetchLogos(): Promise<LogoOut[]> {
@@ -151,6 +152,54 @@ export async function updateSubCategory(
 export async function deleteSubCategory(id: number): Promise<any> {
   try {
     const res = await api.delete(`/admin/sub-categories/${id}`);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function fetchMenus(): Promise<MenuOut[]> {
+  try {
+    const response = await api.get<MenuOut[]>("/admin/menus");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function addMenus(data: any): Promise<MenuOut[]> {
+  try {
+    const res = await api.post<MenuOut[]>("/admin/menus", data);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function addOrUpdateMenuImage(
+  id: number,
+  data: any
+): Promise<MenuOut[]> {
+  try {
+    const res = await api.put<MenuOut[]>(`/admin/add-menuImage/${id}`, data);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function updateMenus(id: number, data: any): Promise<MenuOut> {
+  try {
+    const res = await api.put(`/admin/menus/${id}`, data);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function deleteMenus(id: number): Promise<any> {
+  try {
+    const res = await api.delete(`/admin/menus/${id}`);
     return res.data;
   } catch (error) {
     throw error;

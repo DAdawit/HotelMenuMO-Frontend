@@ -2,26 +2,30 @@
 import React from "react";
 import { Spinner } from "@/assets/icons/Spinner";
 import PageTitle from "@/common/PageTitle";
-import AddLogo from "@/components/Admin/Logos/AddLogo";
-import { fetchCategories, fetchSubCategories } from "@/services/admin.services";
+import { fetchMenus } from "@/services/admin.services";
 import { useQuery } from "@tanstack/react-query";
-
-import CategoryLists from "@/components/Admin/Categories/CategoryLists";
-import AddCategory from "@/components/Admin/Categories/AddCategory";
-import SubCategoryLists from "@/components/Admin/SubCategories/SubCategoryLists";
-import AddSubCategory from "@/components/Admin/SubCategories/AddSubCategory";
+import AddMenu from "@/components/Admin/Menus/AddMenu";
+import MenusList from "@/components/Admin/Menus/MenusList";
+import Link from "next/link";
+import AddIcon from "@mui/icons-material/Add";
 
 const Page = () => {
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["fetchSubCategories"],
-    queryFn: fetchSubCategories,
+    queryKey: ["fetchMenus"],
+    queryFn: fetchMenus,
   });
   return (
     <div className="container mx-auto  p-5 ">
       {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
       <div className="flex justify-between items-center py-6">
-        <PageTitle title="SubCategories" />
-        <AddSubCategory refetch={() => refetch()} />
+        <PageTitle title="Menues" />
+        <Link
+          href="/admin/menus/add"
+          className="text-white bg-primary rounded-full px-4 py-2 flex items-center justify-center gap-x-2 h-max"
+        >
+          <span>Add Menu</span>
+          <AddIcon fontSize="small" />
+        </Link>
       </div>
       <div className="relative overflow-x-auto">
         <table className="w-full mt-8 overflow-x-auto">
@@ -43,7 +47,25 @@ const Page = () => {
                 scope="col"
                 className="px-6 py-3 whitespace-nowrap text-start"
               >
-                category
+                price
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3 whitespace-nowrap text-start"
+              >
+                ingridiants
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3 whitespace-nowrap text-start"
+              >
+                avaliable_all_day
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3 whitespace-nowrap text-start"
+              >
+                available_meal_times
               </th>
               <th
                 scope="col"
@@ -67,10 +89,10 @@ const Page = () => {
               )}
               {data &&
                 Array.isArray(data) &&
-                data.map((subCategory, index) => (
-                  <SubCategoryLists
+                data.map((menu, index) => (
+                  <MenusList
                     key={index}
-                    subCategory={subCategory && subCategory}
+                    menu={menu && menu}
                     index={index}
                     refetch={refetch}
                   />

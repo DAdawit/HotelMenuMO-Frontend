@@ -1,9 +1,11 @@
 import React from "react";
-
-const Approved = () => {
+type PropType = {
+  content: string;
+};
+const Approved: React.FC<PropType> = ({ content }) => {
   return (
-    <h3 className="px-5 py-2 border-2 border-green-500 text-green-500 w-max rounded-full">
-      Approved
+    <h3 className="px-5 py-1 border-2 border-green-500 text-green-500 w-max rounded-full">
+      {content}
     </h3>
   );
 };

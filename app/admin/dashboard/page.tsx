@@ -12,17 +12,8 @@ import useStore from "@/store/useStore";
 const Page = () => {
   const auth = useStore((state) => state.auth);
 
-  // const { data, isLoading, error, refetch } = useQuery({
-  //   queryKey: ["fetchStatistics"],
-  //   queryFn: fetchStatistics,
-  // });
-
   return (
     <>
-      {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
-      {/* <MyEditor /> */}
-      {/* <pre>{JSON.stringify(auth, null, 2)}</pre> */}
-
       <div className="container mx-auto px-5 pb-16 min-h-screen">
         <div className="px-7 py-5">
           <PageTitle title="Dashboard" />

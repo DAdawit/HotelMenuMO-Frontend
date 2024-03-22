@@ -13,6 +13,7 @@ import { Spinner } from "@/assets/icons/Spinner";
 import HomeMaxIcon from "@mui/icons-material/HomeMax";
 import { useMutation } from "@tanstack/react-query";
 import { addHeroSection } from "@/services/admin.services";
+import AddIcon from "@mui/icons-material/Add";
 
 type FormType = {
   slogan: string;
@@ -95,7 +96,7 @@ const AddHero: React.FC<PropType> = ({ refetch }) => {
         onClick={handleClickOpen}
       >
         <span>Add Hero Section</span>
-        <HomeMaxIcon fontSize="small" />
+        <AddIcon fontSize="small" />
       </button>
 
       <Dialog
