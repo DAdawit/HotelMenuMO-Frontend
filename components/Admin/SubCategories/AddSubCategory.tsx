@@ -24,13 +24,16 @@ type FormType = {
   name: string;
   image?: FileList;
 };
+const isBrowser = () => typeof window !== "undefined";
 
 const schema: ZodType<FormType> = z.object({
   categoryId: z.string().min(1, "category required!"),
   name: z.string().min(3, { message: "name is required" }),
-  image: z
-    .instanceof(FileList)
-    .refine((fileList) => fileList.length > 0, "Image is required"),
+  image: isBrowser()
+    ? z
+        .instanceof(FileList)
+        .refine((fileList) => fileList.length > 0, "Image is required")
+    : z.any(),
 });
 
 type PropType = {
