@@ -14,6 +14,9 @@ import Pending from "@/common/status/Pending";
 import Chip from "@/common/Chip";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import AddOrChangeImage from "./AddOrChangeImage";
+import EditIcon from "@mui/icons-material/Edit";
+
+import Link from "next/link";
 type PropType = {
   menu: MenuOut;
   index: number;
@@ -75,6 +78,9 @@ const MenusList: React.FC<PropType> = ({ menu, refetch }) => {
             text="Are you sure you went to delete !"
             loading={loading}
           />
+          <Link href={`/admin/menus/${menu.id}`} className="text-orange-500">
+            <EditIcon fontSize="small" />{" "}
+          </Link>
           {/* <EditCategory subCategory={menu} refetch={() => refetch()} /> */}
         </td>
       </tr>

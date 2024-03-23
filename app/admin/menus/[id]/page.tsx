@@ -1,24 +1,23 @@
 "use client";
-import * as React from "react";
-import { Controller, useForm } from "react-hook-form";
-import { z, ZodType } from "zod";
-import { useState, useEffect } from "react";
-import { notify } from "@/app/toast";
-import { Spinner } from "@/assets/icons/Spinner";
-import { useMutation, useQuery } from "@tanstack/react-query";
-
-import Select from "react-select";
 import {
   addMenus,
   fetchCategoriesWithSubcategory,
   fetchMealTimes,
+  fetchMenuById,
 } from "@/services/admin.services";
+import Select from "react-select";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { z, ZodType } from "zod";
+import { MenuInput } from "@/types/Menu";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { notify } from "@/app/toast";
+import { Spinner } from "@/assets/icons/Spinner";
 import Link from "next/link";
 import PageTitle from "@/common/PageTitle";
-import { zodResolver } from "@hookform/resolvers/zod";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import { MenuInput, MenuOut } from "@/types/Menu";
-import AddImage from "@/components/Admin/Menus/AddImage";
+
 type Option = {
   value: number;
   label?: string; // Include other properties as needed, like label
@@ -36,38 +35,22 @@ const schema: ZodType<MenuInput> = z.object({
   avaliable_all_day: z.boolean().optional(),
 });
 
-const Page = () => {
+export default function Page({ params }: { params: { id: string } }) {
+  const [selectedOption, setSelectedOption] = useState<Option[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [subCategories, setSubCategories] = useState<
     { id: number; name: string }[]
   >([]);
 
-  const [result, setResult] = useState<MenuOut>();
-  const [selectedOption, setSelectedOption] = useState<Option[]>([]);
-  const [open, setOpen] = React.useState(false);
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
+  // Fetch menu item data
   const {
-    register,
-    handleSubmit,
-    watch,
-    control,
-    setValue,
-    formState: { errors },
-    reset,
-  } = useForm<MenuInput>({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      available_meal_times: [],
-      avaliable_all_day: false,
-      special: false,
-    },
+    data: menuItem,
+    isLoading,
+    error: menuItemError,
+  } = useQuery({
+    queryKey: ["fetchMenuById", params.id],
+    queryFn: () => fetchMenuById(Number(params.id)),
   });
 
   const {
@@ -89,9 +72,43 @@ const Page = () => {
     queryFn: fetchMealTimes,
   });
 
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors },
+    reset,
+  } = useForm<MenuInput>({
+    resolver: zodResolver(schema),
+    defaultValues: {},
+  });
+
   const selectedCategoryId = watch("categoryId");
 
+  // Transform available_meal_times for react-select
   useEffect(() => {
+    if (menuItem) {
+      const transformedMealTimes = menuItem.available_meal_times.map(
+        (mealTime) => ({
+          label: mealTime.name,
+          value: mealTime.id,
+        })
+      );
+      setSelectedOption(transformedMealTimes);
+      reset({
+        name: menuItem.name,
+        description: menuItem.description,
+        price: menuItem.price,
+        ingredients: menuItem.ingridiants,
+        // available_meal_times:
+        //   menuItem.available_meal_times?.map((mt) => mt.id) || [],
+        avaliable_all_day: menuItem.avaliable_all_day,
+        special: menuItem.special,
+        categoryId: menuItem.category?.id.toString(),
+        subCategoryId: menuItem.subCategory?.id?.toString() || null,
+      });
+    }
     const category =
       categories &&
       categories.find((c) => c.id.toString() === selectedCategoryId);
@@ -100,7 +117,14 @@ const Page = () => {
     } else {
       setSubCategories([]);
     }
-  }, [categories, selectedCategoryId]);
+  }, [menuItem, categories, selectedCategoryId, reset]);
+
+  const mealtimeOptions =
+    mealtimes &&
+    mealtimes.map((mealtime) => ({
+      label: mealtime.name,
+      value: mealtime.id,
+    }));
 
   const AddMenu = useMutation({
     mutationFn: (data: MenuInput) => addMenus(data),
@@ -110,20 +134,13 @@ const Page = () => {
     },
     onSuccess: (data) => {
       console.log(data);
-      setResult(data);
-      setOpen(true);
+      // setResult(data);
+      // setOpen(true);
       notify("Menu added successfully!", "success");
       setLoading(false);
       reset();
     },
   });
-
-  const mealtimeOptions =
-    mealtimes &&
-    mealtimes.map((mealtime) => ({
-      label: mealtime.name,
-      value: mealtime.id,
-    }));
 
   const submitData = (values: MenuInput) => {
     setError("");
@@ -132,21 +149,17 @@ const Page = () => {
       values.available_meal_times?.push(item.value);
     });
     // setLoading(false);
-    // console.log(values);
-    // console.log(typeof values);
+    console.log(values);
+    console.log(typeof values);
 
-    AddMenu.mutate(values);
+    // AddMenu.mutate(values);
   };
+
+  if (isLoading) return <div>Loading...</div>;
+  // if (error) return <div>An error occurred: {error?.message}</div>;
 
   return (
     <div className="container mx-auto p-5">
-      <AddImage
-        menu={result && result}
-        open={open}
-        handleClickOpen={handleClickOpen}
-        handleClose={handleClose}
-      />
-
       <div className="flex items-center ">
         <Link
           href="/admin/menus"
@@ -162,7 +175,7 @@ const Page = () => {
         onSubmit={handleSubmit(submitData)}
         className="max-w-2xl mx-auto bg-white px-8 pb-8 rounded-lg shadow-lg"
       >
-        <PageTitle title="Add New" />
+        <PageTitle title="Update New" />
 
         <div className="grid gap-2">
           <div>
@@ -283,7 +296,7 @@ const Page = () => {
                 }),
               }}
               isMulti={true}
-              defaultValue={selectedOption}
+              value={selectedOption}
               onChange={(newValue) => setSelectedOption([...newValue] || [])}
               options={mealtimeOptions as any}
               required
@@ -350,6 +363,4 @@ const Page = () => {
       </form>
     </div>
   );
-};
-
-export default Page;
+}
