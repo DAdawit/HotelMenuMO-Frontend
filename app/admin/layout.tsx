@@ -4,6 +4,8 @@ import { Inter } from "next/font/google";
 import Link from "next/link";
 import Navbar from "@/common/Navbar";
 import Footer from "@/common/Footer";
+import AuthCheck from "@/common/AuthCheck";
+import AdminNavBar from "@/components/Navbars/Admin/AdminNavBar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,7 +24,11 @@ export default function RootLayout({
   };
   return (
     <html lang="en" style={{ scrollBehavior: "smooth" }}>
-      <body className={inter.className}>{children}</body>
+      <body className={`${inter.className} bg-gray-50`}>
+        {/* <AuthCheck /> */}
+        <AdminNavBar />
+        {children}
+      </body>
     </html>
   );
 }

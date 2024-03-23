@@ -2,7 +2,6 @@
 import Image from "next/image";
 import React, { useContext, useState } from "react";
 import UserLogin from "@/components/Auth/UserLogin";
-import ResetPassword from "@/components/Auth/ResetPassword";
 import { useRouter } from "next/navigation";
 
 export default function Login() {
@@ -25,15 +24,16 @@ export default function Login() {
         </div> */}
         <div className="grid grid-cols-1 md:grid-cols-2">
           <div className="h-full flex items-center justify-center w-full">
-            <UserLogin setLogin={() => setLogin(false)} />
+            <UserLogin />
           </div>
-          <div>
+          <div className="hidden md:flex">
             <Image
               src="/admin-login.jpg"
               width={1000}
               height={1000}
               alt="banner"
               className="h-screen object-cover"
+              priority
             />
           </div>
         </div>

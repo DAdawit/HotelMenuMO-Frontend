@@ -5,6 +5,7 @@ import Link from "next/link";
 import Navbar from "@/common/Navbar";
 import Footer from "@/common/Footer";
 import { ReactQueryProvider } from "./ReactQueryProvider";
+import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,6 +27,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ReactQueryProvider>
           <Navbar />
+          <Toaster />
           {children}
           <Footer />
         </ReactQueryProvider>
