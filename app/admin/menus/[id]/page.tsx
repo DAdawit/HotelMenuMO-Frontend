@@ -81,7 +81,9 @@ export default function Page({ params }: { params: { id: string } }) {
     reset,
   } = useForm<MenuInput>({
     resolver: zodResolver(schema),
-    defaultValues: {},
+    defaultValues: {
+      available_meal_times: [],
+    },
   });
 
   const selectedCategoryId = watch("categoryId");
@@ -145,11 +147,14 @@ export default function Page({ params }: { params: { id: string } }) {
   const submitData = (values: MenuInput) => {
     setError("");
     setLoading(true);
-    selectedOption.map((item) => {
-      values.available_meal_times?.push(item.value);
-    });
+    const updatedMealTimes = selectedOption.map((item) => item.value);
+    const updatedValues = {
+      ...values,
+      available_meal_times: updatedMealTimes,
+    };
+
     // setLoading(false);
-    console.log(values);
+    console.log(updatedValues, selectedOption);
     console.log(typeof values);
 
     // AddMenu.mutate(values);
