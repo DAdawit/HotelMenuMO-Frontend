@@ -13,6 +13,9 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { addOrUpdateMenuImage } from "@/services/admin.services";
 import { MenuOut } from "@/types/Menu";
 import { useRouter } from "next/navigation";
+import { notify } from "@/app/toast";
+import { Button, DialogActions } from "@mui/material";
+import Link from "next/link";
 
 type FormType = {
   image?: FileList;
@@ -52,6 +55,7 @@ const AddImage: React.FC<PropType> = ({
       addOrUpdateMenuImage(id, values),
     onError: (error: unknown, variables, context) => {
       setLoading(false);
+      notify("Something went wrong!", "error");
       if (axios.isAxiosError(error)) {
         setError(error.response?.data.detail);
         console.log(error.response?.data.detail);
@@ -65,7 +69,6 @@ const AddImage: React.FC<PropType> = ({
       handleClose();
       reset();
       notify("Menu added successfully!", "success");
-
       router.push("/admin/menus");
     },
   });
@@ -89,6 +92,7 @@ const AddImage: React.FC<PropType> = ({
 
   return (
     <div>
+      <button onClick={handleClickOpen}>open</button>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -126,12 +130,18 @@ const AddImage: React.FC<PropType> = ({
             </section>
             <small className="text-red-500 pl-2">{error}</small>
 
-            <div className="flex items-center justify-center mt-7">
+            <div className="flex items-center justify-between mt-7">
+              <Link
+                href="/admin/menus"
+                className="border-2 border-primary px-3 rounded-full py-1 text-primary "
+              >
+                Cancel
+              </Link>
               <button
                 type="submit"
-                className="px-10 py-2 bg-primary text-white rounded-full flex items-center gap-x-2"
+                className="px-8 py-1 bg-primary text-white rounded-full flex items-center gap-x-2"
               >
-                <span>Update</span>
+                <span>Submit</span>
                 <span>{loading ? <Spinner /> : null}</span>
               </button>
             </div>

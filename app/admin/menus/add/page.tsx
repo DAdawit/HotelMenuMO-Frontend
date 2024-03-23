@@ -132,9 +132,9 @@ const Page = () => {
     selectedOption.map((item) => {
       values.available_meal_times?.push(item.value);
     });
-    setLoading(false);
-    console.log(values);
-    console.log(typeof values);
+    // setLoading(false);
+    // console.log(values);
+    // console.log(typeof values);
 
     AddMenu.mutate(values);
   };
