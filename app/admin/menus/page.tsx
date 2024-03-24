@@ -14,6 +14,14 @@ const Page = () => {
     queryKey: ["fetchMenus"],
     queryFn: fetchMenus,
   });
+  if (error) {
+    const errorMessage = (error as any).response?.data?.detail || error.message;
+    return errorMessage === "Unauthorized" ? (
+      <span>Unauthorized</span>
+    ) : (
+      <span>{errorMessage}</span>
+    );
+  }
   return (
     <div className="container mx-auto  p-5 ">
       {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
