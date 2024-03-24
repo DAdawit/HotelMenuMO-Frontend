@@ -141,13 +141,13 @@ export default function AdminDrawer() {
                       </div>
                     </Link>
                     <Link
-                      href="/admin/social-media"
+                      href="/admin/menus"
                       className="mt-1 shadow-sm py-2 h-min"
                       onClick={toggleDrawer("left", false)}
                     >
                       <div className="flex gap-x-3 items-center border-b-[1] border-gray-400 px-7 gap-3">
                         <AddLinkIcon />
-                        <h3>Social Media</h3>
+                        <h3>Menus</h3>
                       </div>
                     </Link>
                     <Link

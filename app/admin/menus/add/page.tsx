@@ -28,7 +28,7 @@ const schema: ZodType<MenuInput> = z.object({
   name: z.string().min(3, "Name is required"),
   price: z.number().min(1, "Price is required"),
   description: z.string().optional(),
-  ingredients: z.string().min(3, "Ingredients is required"),
+  ingredients: z.string().optional().nullable(),
   categoryId: z.string().min(1, "Category required!"),
   available_meal_times: z.array(z.number()).optional(),
   subCategoryId: z.string().optional().nullable(),

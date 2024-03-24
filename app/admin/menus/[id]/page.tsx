@@ -4,6 +4,7 @@ import {
   fetchCategoriesWithSubcategory,
   fetchMealTimes,
   fetchMenuById,
+  updateMenus,
 } from "@/services/admin.services";
 import Select from "react-select";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -17,6 +18,7 @@ import { Spinner } from "@/assets/icons/Spinner";
 import Link from "next/link";
 import PageTitle from "@/common/PageTitle";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import { useRouter } from "next/navigation";
 
 type Option = {
   value: number;
@@ -27,7 +29,7 @@ const schema: ZodType<MenuInput> = z.object({
   name: z.string().min(3, "Name is required"),
   price: z.number().min(1, "Price is required"),
   description: z.string().optional(),
-  ingredients: z.string().min(3, "Ingredients is required"),
+  ingredients: z.string().optional().nullable(),
   categoryId: z.string().min(1, "Category required!"),
   available_meal_times: z.array(z.number()).optional(),
   subCategoryId: z.string().optional().nullable(),
@@ -36,6 +38,7 @@ const schema: ZodType<MenuInput> = z.object({
 });
 
 export default function Page({ params }: { params: { id: string } }) {
+  const router = useRouter();
   const [selectedOption, setSelectedOption] = useState<Option[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
@@ -128,19 +131,22 @@ export default function Page({ params }: { params: { id: string } }) {
       value: mealtime.id,
     }));
 
-  const AddMenu = useMutation({
-    mutationFn: (data: MenuInput) => addMenus(data),
+  const UpdateMenu = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: MenuInput }) =>
+      updateMenus(id, data),
     onError: (error: unknown) => {
       setLoading(false);
       console.log(error);
+      notify("something went wrong. try Again!", "error");
     },
     onSuccess: (data) => {
       console.log(data);
       // setResult(data);
       // setOpen(true);
-      notify("Menu added successfully!", "success");
+      notify("Menu updated successfully!", "success");
       setLoading(false);
       reset();
+      router.push("/admin/menus");
     },
   });
 
@@ -154,10 +160,10 @@ export default function Page({ params }: { params: { id: string } }) {
     };
 
     // setLoading(false);
-    console.log(updatedValues, selectedOption);
-    console.log(typeof values);
+    // console.log(updatedValues, selectedOption);
+    // console.log(typeof values);
 
-    // AddMenu.mutate(values);
+    UpdateMenu.mutate({ id: params.id, data: updatedValues });
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -231,11 +237,6 @@ export default function Page({ params }: { params: { id: string } }) {
               className="w-full rounded-md"
               type="text"
             />
-            {errors?.ingredients && (
-              <small className="text-red-500 pl-2">
-                {errors.ingredients.message}
-              </small>
-            )}
           </div>
 
           <div>

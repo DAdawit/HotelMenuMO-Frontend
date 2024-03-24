@@ -218,9 +218,13 @@ export async function addOrUpdateMenuImage(
   }
 }
 
-export async function updateMenus(id: number, data: any): Promise<MenuOut> {
+export async function updateMenus(id: string, data: any): Promise<MenuOut> {
   try {
-    const res = await api.put(`/admin/menus/${id}`, data);
+    const res = await api.put(`/admin/menu/${id}`, data, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     return res.data;
   } catch (error) {
     throw error;

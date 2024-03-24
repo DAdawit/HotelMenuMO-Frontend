@@ -25,7 +25,7 @@ export interface MenuInput {
   description?: string;
   price: number;
   special?: boolean;
-  ingredients: string;
+  ingredients?: string | null;
   avaliable_all_day?: boolean;
   categoryId: string;
   subCategoryId?: string | null;
