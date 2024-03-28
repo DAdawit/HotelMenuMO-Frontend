@@ -248,3 +248,32 @@ export async function fetchMealTimes(): Promise<MealTimeOut[]> {
     throw error;
   }
 }
+
+export async function addMealTime(data: any): Promise<MealTimeOut> {
+  try {
+    const res = await api.post<MealTimeOut>("/admin/mealTimes", data);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}
+export async function updateMealTime(
+  id: number,
+  data: any
+): Promise<SubCategoryOut> {
+  try {
+    const res = await api.put(`/admin/mealTimes/${id}`, data);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function deleteMealTime(id: number): Promise<any> {
+  try {
+    const res = await api.delete<MealTimeOut>(`/admin/mealTimes/${id}`);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}

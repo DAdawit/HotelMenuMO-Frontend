@@ -70,9 +70,7 @@ const Page = () => {
           <tbody className="gap-y-2">
             {isLoading ? <Spinner /> : null}
             <>
-              {data && data.length === 0 && (
-                <p>You have not added any Trainings yet!.</p>
-              )}
+              {data && data.length === 0 && <p>empty!.</p>}
               {data &&
                 Array.isArray(data) &&
                 data.map((subCategory, index) => (

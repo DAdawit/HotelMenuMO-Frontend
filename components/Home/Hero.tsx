@@ -5,7 +5,7 @@ import React from "react";
 
 export default async function Hero() {
   const data = await fetchHero();
-  console.log(data);
+  // console.log(data);
 
   return (
     <div className="overflow-x-hidden">

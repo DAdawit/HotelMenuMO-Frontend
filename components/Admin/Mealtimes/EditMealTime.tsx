@@ -8,39 +8,32 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { ZodType, z } from "zod";
 import { useState } from "react";
+import EditIcon from "@mui/icons-material/Edit";
+import { Tooltip } from "@mui/material";
 import { Spinner } from "@/assets/icons/Spinner";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { addOrUpdateMenuImage } from "@/services/admin.services";
-import { MenuOut } from "@/types/Menu";
-import { useRouter } from "next/navigation";
-import { notify } from "@/app/toast";
-import { Button, DialogActions } from "@mui/material";
-import Link from "next/link";
+import { useMutation } from "@tanstack/react-query";
+import { MealTimeOut } from "@/types/MealTime";
+import { updateMealTime } from "@/services/admin.services";
 
 type FormType = {
+  name: string;
   image?: FileList;
 };
 
 const schema: ZodType<FormType> = z.object({
+  name: z.string().min(3, { message: "name is required" }),
   image: z.any(),
 });
 
 type PropType = {
-  menu: MenuOut | undefined;
-  open: boolean;
-  handleClose: () => void;
-  handleClickOpen: () => void;
+  mealTime: MealTimeOut;
+  refetch: () => void;
 };
 
-const AddImage: React.FC<PropType> = ({
-  menu,
-  open,
-  handleClose,
-  handleClickOpen,
-}) => {
-  const router = useRouter();
+const EditMealTime: React.FC<PropType> = ({ refetch, mealTime }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
+  const [data, setData] = useState();
   const {
     register,
     handleSubmit,
@@ -48,14 +41,26 @@ const AddImage: React.FC<PropType> = ({
     reset,
   } = useForm<FormType>({
     resolver: zodResolver(schema),
+    defaultValues: {
+      name: mealTime?.name,
+    },
   });
 
-  const AddOrUpdateMenuImage = useMutation({
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const UpdateMealTime = useMutation({
     mutationFn: async ({ id, values }: { id: number; values: any }) =>
-      addOrUpdateMenuImage(id, values),
+      updateMealTime(id, values),
     onError: (error: unknown, variables, context) => {
       setLoading(false);
-      notify("Something went wrong!", "error");
       if (axios.isAxiosError(error)) {
         setError(error.response?.data.detail);
         console.log(error.response?.data.detail);
@@ -68,38 +73,40 @@ const AddImage: React.FC<PropType> = ({
       setLoading(false);
       handleClose();
       reset();
-      notify("Menu added successfully!", "success");
-      router.push("/admin/menus");
+      refetch();
     },
   });
 
   const submitData = async (values: FormType) => {
     setError("");
     setLoading(true);
-    // console.log(values);
+    console.log(values);
 
     let formdata = new FormData();
+
+    if (values.name) formdata.append("name", values.name);
 
     if (values.image && values.image[0]) {
       formdata.append("image", values.image[0]);
     }
-    if (menu?.id !== undefined) {
-      AddOrUpdateMenuImage.mutate({ id: menu.id, values: formdata });
-    } else {
-      console.error("Menu ID is undefined.");
-    }
+    UpdateMealTime.mutate({ id: mealTime.id, values: formdata });
   };
 
   return (
     <div>
-      {/* <button onClick={handleClickOpen}>open</button> */}
+      <Tooltip title="Edit" placement="top">
+        <button className="text-primary" onClick={handleClickOpen}>
+          <EditIcon fontSize="small" />
+        </button>
+      </Tooltip>
+
       <Dialog
         open={open}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Menu Image"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{"Edit Logo"}</DialogTitle>
         <DialogContent>
           <form
             onSubmit={handleSubmit(submitData)}
@@ -107,15 +114,37 @@ const AddImage: React.FC<PropType> = ({
             encType="multipart/form-data"
           >
             <section className="grid gap-x-5 gap-y-1">
+              <div>
+                <label
+                  htmlFor="name"
+                  className="capitalize pl-3 text-gray-600 text-sm"
+                >
+                  Name *
+                </label>
+                <input
+                  {...register("name")}
+                  placeholder="Name"
+                  name="name"
+                  id="name"
+                  className="w-full"
+                />
+                {errors?.name && (
+                  <small className="text-red-500 pl-2">
+                    {errors.name.message}
+                  </small>
+                )}
+              </div>
+
               <div className="grid gap-y-1 mt-2">
                 <label
                   htmlFor="account_number"
-                  className="capitalize text-gray-600 text-sm"
+                  className="capitalize pl-3 text-gray-600 text-sm"
                 >
                   Image *
                 </label>
                 <input
                   {...register("image")}
+                  placeholder="Banner Image"
                   name="image"
                   id="image"
                   className="w-full"
@@ -130,18 +159,12 @@ const AddImage: React.FC<PropType> = ({
             </section>
             <small className="text-red-500 pl-2">{error}</small>
 
-            <div className="flex items-center justify-between mt-7">
-              <Link
-                href="/admin/menus"
-                className="border-2 border-primary px-3 rounded-full py-1 text-primary "
-              >
-                Cancel
-              </Link>
+            <div className="flex items-center justify-center mt-7">
               <button
                 type="submit"
-                className="px-8 py-1 bg-primary text-white rounded-full flex items-center gap-x-2"
+                className="px-10 py-2 bg-primary text-white rounded-full flex items-center gap-x-2"
               >
-                <span>Submit</span>
+                <span>Update</span>
                 <span>{loading ? <Spinner /> : null}</span>
               </button>
             </div>
@@ -152,4 +175,4 @@ const AddImage: React.FC<PropType> = ({
   );
 };
 
-export default AddImage;
+export default EditMealTime;
