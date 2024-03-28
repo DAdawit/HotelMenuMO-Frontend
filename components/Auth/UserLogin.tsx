@@ -12,6 +12,7 @@ import { useMutation } from "@tanstack/react-query";
 import useStore from "@/store/useStore";
 import { ILogin } from "@/types/User";
 import { loginUser } from "@/services/auth.services";
+import Link from "next/link";
 
 // type PropType = {
 //   setLogin: () => void;
@@ -135,16 +136,19 @@ const UserLogin = () => {
             <span className="">Login</span>
             {loading ? <Spinner /> : <LoginIcon />}
           </button>
-          <div className="flex text-sm gap-1 mt-5">
-            {/* <button>
-              Forgot your password?
+          <div className="flex justify-between text-sm gap-1 mt-5">
+            <Link href="/" className="underline text-primary">
+              Home
+            </Link>
+            <button className="">
+              Forgot password?
               <span
                 className="text-primary cursor-pointer font-normal underline"
-                onClick={setLogin}
+                // onClick={setLogin}
               >
                 Click here.
               </span>
-            </button> */}
+            </button>
           </div>
         </form>
       </section>

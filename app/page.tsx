@@ -1,15 +1,15 @@
-"use client";
-import Box from "@mui/material/Box";
-import Tab from "@mui/material/Tab";
-import TabContext from "@mui/lab/TabContext";
-import TabList from "@mui/lab/TabList";
-import TabPanel from "@mui/lab/TabPanel";
+// "use client";
+// import Box from "@mui/material/Box";
+// import Tab from "@mui/material/Tab";
+// import TabContext from "@mui/lab/TabContext";
+// import TabList from "@mui/lab/TabList";
+// import TabPanel from "@mui/lab/TabPanel";
 
 import Menu from "@/components/Home/Mornning";
 import MenuTypes from "@/common/MenuTypes";
 import { url } from "inspector";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 import { morrning } from "@/data/foods";
 import Lunch from "@/components/Home/Lunch";
 import Dinner from "@/components/Home/Dinner";
@@ -27,11 +27,11 @@ import Hero from "@/components/Home/Hero";
 import Morrning from "@/components/Home/Mornning";
 
 export default function Home() {
-  const [value, setValue] = useState("1");
+  // const [value, setValue] = useState("1");
 
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    setValue(newValue);
-  };
+  // const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+  //   setValue(newValue);
+  // };
 
   const styles = {
     backgroundImage: `url('/banner8.jpg')`,
@@ -141,7 +141,7 @@ export default function Home() {
             </h1>
           </div>
           <div className=" pt-5">
-            <Box sx={{ width: "100%", typography: "body1" }} mt={3}>
+            {/* <Box sx={{ width: "100%", typography: "body1" }} mt={3}>
               <TabContext value={value}>
                 <Box sx={{ borderBottom: 1, borderColor: "divider" }} px={2}>
                   <TabList
@@ -174,7 +174,7 @@ export default function Home() {
                   <Drinks />
                 </TabPanel>
               </TabContext>
-            </Box>
+            </Box> */}
             <div className="flex justify-center pt-5 pb-10">
               <Link
                 href="/menu"
