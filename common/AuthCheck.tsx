@@ -1,46 +1,39 @@
 "use client";
-import React, { useContext, useEffect } from "react";
-import { useRouter, usePathname } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
-import { verifToken } from "@/services/auth.services";
-import OverlayLoader from "./OverlayLoader";
+import React, { useContext, useEffect, useCallback, useState } from "react";
+import { useRouter } from "next/navigation";
+import api from "@/services/axios";
 import useStore from "@/store/useStore";
-
+import OverlayLoader from "./OverlayLoader";
 const AuthCheck = () => {
-  const setUser = useStore((state) => state.setUser);
-  const setAuthTrue = useStore((state) => state.setAuthTrue);
-  const pathname = usePathname();
   const router = useRouter();
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["verifToken"],
-    queryFn: verifToken,
-  });
+  const setUser = useStore((state) => state.setUser);
+  const [loading, setLoadingFalse] = useState<boolean>(false);
+  const verifyToken = useCallback(() => {
+    api
+      .post("/verifyToken")
+      .then((res) => {
+        console.log(res.data.data);
+        setUser(res.data);
+        // router.push("/admin/dashboard");
+      })
+      .catch((err) => {
+        setLoadingFalse(false);
+        localStorage.removeItem("access_token");
+        api.defaults.headers.common["Authorization"] = "";
+        router.push("/admin/login");
+      })
+      .finally(() => {
+        setLoadingFalse(false);
+      });
+  }, [router, setLoadingFalse, setUser]);
 
   useEffect(() => {
-    if (data) {
-      setUser(data);
-      setAuthTrue();
-      if (data.role == "admin") {
-        if (pathname == "/admin/login") {
-          console.log(true);
-          router.push("/admin/dashboard");
-        }
-        // router.push(pathname);
-      }
-    } else if (error) {
-      if (error.response.data.detail === "Unauthorized") {
-        console.log(true);
+    verifyToken();
+  }, [verifyToken]);
 
-        router.push("/admin/login");
-      }
-      console.log();
-    }
-  }, [data, error, pathname, router, setUser, setAuthTrue]);
-
-  if (isLoading) {
+  if (loading) {
     return <OverlayLoader />;
   }
-
   return null;
 };
 

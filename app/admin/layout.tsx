@@ -25,8 +25,9 @@ export default function RootLayout({
   return (
     <html lang="en" style={{ scrollBehavior: "smooth" }}>
       <body className={`${inter.className} bg-gray-50`}>
-        {/* <AuthCheck /> */}
+        <AuthCheck />
         <AdminNavBar />
+
         {children}
       </body>
     </html>
