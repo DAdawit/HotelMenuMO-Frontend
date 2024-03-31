@@ -71,3 +71,26 @@ interface Availablemealtime {
   created_at: string;
   updated_at: string;
 }
+export interface MenusByMealTimeOUt {
+  id: number;
+  name: string;
+  image: string;
+  created_at: string;
+  updated_at: string;
+  imageUrl: string;
+  menues: Menues2[];
+}
+
+interface Menues2 {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  special: boolean;
+  ingridiants: string;
+  avaliable_all_day: boolean;
+  image: string;
+  created_at: string;
+  updated_at: string;
+  _imageUrl: string;
+}

@@ -1,10 +1,9 @@
-import { homeFetchCategories } from "@/services/main.services";
+import { homeFetchCategories, fetchMealtimes } from "@/services/main.services";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 export default async function Services() {
   const data = await homeFetchCategories();
-  console.log(data);
 
   return (
     <div className="bg-bgPrimary  mt-15">
@@ -30,22 +29,26 @@ export default async function Services() {
       <div className="grid  sm:flex sm:flex-row justify-evenly w-full mt-5">
         {data.map((item) => (
           <div className="py-3 grid items-center" key={item.id}>
-            <Image
-              src={item.imageUrl}
-              height={300}
-              width={200}
-              alt="breakfast"
-              className="w-full rounded-lg hover:scale-110 transition-all object-contain"
-            />
-            <h1 className="text-secondary text-center tracking-wider font-sans mt-5 text-2xl">
-              {item.name}
-            </h1>
-            <Link
-              href="/menu"
-              className="text-primary hover:underline transition-all underline-offset-4 text-center"
-            >
-              View Menu
-            </Link>
+            <div className="min-h-82 align-start">
+              <Image
+                src={item.imageUrl}
+                height={1000}
+                width={1000}
+                alt={item.name}
+                className="h-72 w-60 rounded-md  hover:scale-110 transition-all object-cover object-center"
+              />
+            </div>
+            <div className="grid justify-items-center align-end">
+              <h1 className="text-secondary text-center tracking-wider font-sans mt-5 text-2xl h-max">
+                {item.name}
+              </h1>
+              <Link
+                href={`/menus/category/${item.id}`}
+                className="text-primary hover:underline transition-all underline-offset-4 text-center h-max"
+              >
+                View Menu
+              </Link>
+            </div>
           </div>
         ))}
 
