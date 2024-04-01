@@ -52,9 +52,9 @@ export default async function MenuByMealTime() {
               <div className="flex justify-center items-center">
                 <Link
                   href={`/menus/mealtime/${menu?.id}`}
-                  className="py-4 px-6 text-center text-primary border-2 border-primary mt-4 hover:bg-primary hover:text-black transition-all tracking-wider font-medium font-mono w-max"
+                  className="py-2 px-6 text-center text-primary border-2 border-primary mt-4 hover:bg-primary hover:text-black transition-all tracking-wider font-medium w-max"
                 >
-                  View all menu
+                  More
                 </Link>
               </div>
             </div>

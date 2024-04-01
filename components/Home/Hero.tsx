@@ -45,7 +45,7 @@ export default async function Hero() {
             <p className="font-sans mt-2 text-center">{data.hero.content} </p>
             {/* <Link href="/menu" className="text-center w-full content-center"> */}
             <Link
-              href="/menu"
+              href="/menus"
               className="py-4 px-6 w-max self-center border-2 border-bgButton text-primary mt-4 hover:bg-bgButton  hover:text-white transition-all tracking-wider font-medium font-mono"
             >
               View our menu

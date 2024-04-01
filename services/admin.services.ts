@@ -7,7 +7,7 @@ import {
 import { HeroCreate, HeroOut } from "@/types/Hero";
 import { LogoOut } from "@/types/Logo";
 import { MealTimeOut } from "@/types/MealTime";
-import { MenuDetailOut, MenuInput, MenuOut } from "@/types/Menu";
+import { MenuDetailOut, MenuInput, MenuOut, AdminMenuOut } from "@/types/Menu";
 import { ILogin, UserI, UserOut } from "@/types/User";
 
 export async function fetchLogos(): Promise<LogoOut[]> {
@@ -176,9 +176,9 @@ export async function deleteSubCategory(id: number): Promise<any> {
   }
 }
 
-export async function fetchMenus(): Promise<MenuOut[]> {
+export async function fetchMenus(): Promise<AdminMenuOut[]> {
   try {
-    const response = await api.get<MenuOut[]>("/admin/menus");
+    const response = await api.get<AdminMenuOut[]>("/admin/menus");
     return response.data;
   } catch (error) {
     throw error;

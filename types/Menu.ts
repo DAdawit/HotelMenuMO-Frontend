@@ -94,3 +94,43 @@ interface Menues2 {
   updated_at: string;
   _imageUrl: string;
 }
+export interface SpecialFoodOut {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  special: boolean;
+  ingridiants: string;
+  avaliable_all_day: boolean;
+  image?: string;
+  created_at: string;
+  updated_at: string;
+  category: Category;
+  _imageUrl: string;
+}
+
+export interface AdminMenuOut {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  special: boolean;
+  ingridiants: string;
+  avaliable_all_day: boolean;
+  image: string;
+  created_at: string;
+  updated_at: string;
+  available_meal_times: Availablemealtime[];
+  category: Category;
+  subCategory?: SubCategory;
+  _imageUrl: string;
+}
+
+interface Availablemealtime {
+  id: number;
+  name: string;
+  image: string;
+  created_at: string;
+  updated_at: string;
+  imageUrl: string;
+}
