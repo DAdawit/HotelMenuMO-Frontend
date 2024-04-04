@@ -35,6 +35,7 @@ const schema: ZodType<MenuInput> = z.object({
   subCategoryId: z.string().optional().nullable(),
   special: z.boolean().optional(),
   avaliable_all_day: z.boolean().optional(),
+  mainDishes: z.boolean().optional(),
 });
 
 export default function Page({ params }: { params: { id: string } }) {
@@ -45,6 +46,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const [subCategories, setSubCategories] = useState<
     { id: number; name: string }[]
   >([]);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   // Fetch menu item data
   const {
@@ -93,6 +95,8 @@ export default function Page({ params }: { params: { id: string } }) {
 
   // Transform available_meal_times for react-select
   useEffect(() => {
+    console.log("Selected Category ID:", selectedCategoryId); // Debugging line
+
     if (menuItem) {
       const transformedMealTimes = menuItem.available_meal_times.map(
         (mealTime) => ({
@@ -106,23 +110,32 @@ export default function Page({ params }: { params: { id: string } }) {
         description: menuItem.description,
         price: menuItem.price,
         ingredients: menuItem.ingridiants,
-        // available_meal_times:
-        //   menuItem.available_meal_times?.map((mt) => mt.id) || [],
         avaliable_all_day: menuItem.avaliable_all_day,
+        mainDishes: menuItem.mainDishes,
         special: menuItem.special,
         categoryId: menuItem.category?.id.toString(),
         subCategoryId: menuItem.subCategory?.id?.toString() || null,
       });
     }
+    setIsInitialLoad(false); // Prevent further resets due to dependency changes
+
     const category =
       categories &&
       categories.find((c) => c.id.toString() === selectedCategoryId);
     if (category) {
+      setIsInitialLoad(false);
       setSubCategories(category.subCategory);
     } else {
       setSubCategories([]);
     }
-  }, [menuItem, categories, selectedCategoryId, reset]);
+  }, [
+    menuItem,
+    categories,
+    selectedCategoryId,
+    reset,
+    isInitialLoad,
+    isLoading,
+  ]);
 
   const mealtimeOptions =
     mealtimes &&
@@ -160,7 +173,7 @@ export default function Page({ params }: { params: { id: string } }) {
     };
 
     // setLoading(false);
-    // console.log(updatedValues, selectedOption);
+    // console.log(updatedValues);
     // console.log(typeof values);
 
     UpdateMenu.mutate({ id: params.id, data: updatedValues });
@@ -278,7 +291,7 @@ export default function Page({ params }: { params: { id: string } }) {
                 id="subCategoryId"
                 className="w-full rounded-md"
               >
-                <option value={0}>Select a subcategory</option>
+                <option value="">Select a subcategory</option>
                 {subCategories.map((subCategory) => (
                   <option key={subCategory.id} value={subCategory.id}>
                     {subCategory.name}
@@ -352,6 +365,21 @@ export default function Page({ params }: { params: { id: string } }) {
                 className="capitalize text-gray-600 text-sm"
               >
                 Avaliable All Day
+              </label>
+            </div>
+            <div className="flex items-center gap-2 mt-5">
+              <input
+                {...register("mainDishes")}
+                name="mainDishes"
+                id="mainDishes"
+                className="rounded-md"
+                type="checkbox"
+              />
+              <label
+                htmlFor="mainDishes"
+                className="capitalize text-gray-600 text-sm"
+              >
+                mainDishes
               </label>
             </div>
           </div>

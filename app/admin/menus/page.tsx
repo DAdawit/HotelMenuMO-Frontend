@@ -73,14 +73,13 @@ const Page = () => {
                 scope="col"
                 className="px-6 py-3 whitespace-nowrap text-start"
               >
-                avaliable_all_day
+                available_meal_times
               </th>
-
               <th
                 scope="col"
                 className="px-6 py-3 whitespace-nowrap text-start"
               >
-                available_meal_times
+                avaliable_all_day
               </th>
               <th
                 scope="col"
@@ -88,6 +87,13 @@ const Page = () => {
               >
                 special
               </th>
+              <th
+                scope="col"
+                className="px-6 py-3 whitespace-nowrap text-start"
+              >
+                Main Dishe
+              </th>
+
               <th
                 scope="col"
                 className="px-6 py-3 whitespace-nowrap text-start"

@@ -27,6 +27,7 @@ export interface MenuInput {
   special?: boolean;
   ingredients?: string | null;
   avaliable_all_day?: boolean;
+  mainDishes?: boolean;
   categoryId: string;
   subCategoryId?: string | null;
   available_meal_times?: number[];
@@ -44,6 +45,7 @@ export interface MenuDetailOut {
   updated_at: string;
   available_meal_times: Availablemealtime[];
   category: Category;
+  mainDishes: boolean;
   subCategory?: SubCategory;
   _imageUrl: string;
 }
@@ -120,6 +122,7 @@ export interface AdminMenuOut {
   image: string;
   created_at: string;
   updated_at: string;
+  mainDishes: boolean;
   available_meal_times: Availablemealtime[];
   category: Category;
   subCategory?: SubCategory;
@@ -133,4 +136,28 @@ interface Availablemealtime {
   created_at: string;
   updated_at: string;
   imageUrl: string;
+}
+
+export interface MenusByCategoryOut {
+  id: number;
+  name: string;
+  image: string;
+  created_at: string;
+  updated_at: string;
+  imageUrl: string;
+  menues: Menue[];
+}
+
+export interface Menue {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  special: boolean;
+  ingridiants: string;
+  avaliable_all_day: boolean;
+  image: string;
+  created_at: string;
+  updated_at: string;
+  _imageUrl: string;
 }

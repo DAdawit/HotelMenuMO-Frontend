@@ -59,6 +59,11 @@ const MenusList: React.FC<PropType> = ({ menu, refetch }) => {
           <h4>{menu?.subCategory?.name}</h4>
         </td>
         <td className="px-6 py-4 text-xs">{menu?.ingridiants}</td>
+        <td className="px-6 py-4 flex gap-x-2">
+          {menu?.available_meal_times.map((mealtime) => (
+            <Chip key={mealtime.id} content={mealtime.name} />
+          ))}
+        </td>
         <td className="px-6 py-4">
           {menu?.avaliable_all_day ? (
             <Approved content="Yes" />
@@ -66,13 +71,16 @@ const MenusList: React.FC<PropType> = ({ menu, refetch }) => {
             <Pending content="No" />
           )}
         </td>
-        <td className="px-6 py-4 flex gap-x-2">
-          {menu?.available_meal_times.map((mealtime) => (
-            <Chip key={mealtime.id} content={mealtime.name} />
-          ))}
-        </td>
+
         <td className="px-6 py-4">
           {menu?.special ? (
+            <Approved content="Yes" />
+          ) : (
+            <Pending content="No" />
+          )}
+        </td>
+        <td className="px-6 py-4">
+          {menu?.mainDishes ? (
             <Approved content="Yes" />
           ) : (
             <Pending content="No" />

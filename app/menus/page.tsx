@@ -1,4 +1,4 @@
-"use client";
+import MenuByMealTime from "@/components/Home/MenuByMealTime";
 import MoveToTop from "@/components/Home/MoveToTop";
 import Appetizers from "@/components/Menu/Appetizers";
 import ChefSpecial from "@/components/Menu/ChefSpecial";
@@ -9,12 +9,14 @@ import SpecialMenu from "@/components/Menu/SpecialMenu";
 
 const page = () => {
   return (
-    <>
+    <div className="bg-[#131415]">
       <section>
         <Hero />
       </section>
       <section>
-        <Appetizers />
+        <MenuByMealTime />
+
+        {/* <Appetizers /> */}
       </section>
       <section>
         <MainDishes />
@@ -29,7 +31,7 @@ const page = () => {
         <Reservations />
       </section>
       <MoveToTop />
-    </>
+    </div>
   );
 };
 

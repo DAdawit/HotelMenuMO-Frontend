@@ -2,6 +2,7 @@ import { FoodAndDrinkIcon } from "@/assets/icons/FoodAndDrinkIcon";
 import HeroMenuByCategoy from "@/common/Menu/HeroMenuByCategoy";
 import MealTimeHeroSection from "@/common/Menu/HeroMenuByCategoy";
 import HeroMenuByMealTime from "@/common/Menu/HeroMenuByMealTime";
+import MenuCard2 from "@/components/Menu/MenuCard2";
 import { lunchs } from "@/data/foods";
 import {
   MenuByMealtimeId,
@@ -27,33 +28,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           )}
 
           {data?.menus?.map((menu, index) => (
-            <div
-              key={index}
-              className="flex items-center gap-3 shadow-md py-3 px-2 rounded-lg bg-bgPrimary opacity-90"
-            >
-              <div className="text-white">
-                {menu.image ? (
-                  <Image
-                    src={`${menu?._imageUrl}`}
-                    alt="spector"
-                    width={100}
-                    height={200}
-                    className="rounded-2xl w-24 h-20 object-cover"
-                  />
-                ) : (
-                  <FoodAndDrinkIcon />
-                )}
-              </div>
-              <div className="w-full">
-                <h1 className="text-gray-400 text-lg font-medium capitalize">
-                  {menu?.name}
-                </h1>
-                <p className="text-gray-400 text-sm font-mono">
-                  {menu?.ingridiants}
-                </p>
-                <h1 className="text-primary">${menu?.price}</h1>
-              </div>
-            </div>
+            <MenuCard2 key={index} menu={menu} />
           ))}
         </div>
       </div>

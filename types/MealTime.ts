@@ -3,17 +3,19 @@ export interface MenuItemsByMealTimeOut {
   menus: Menu[];
 }
 
-interface Menu {
+export interface Menu {
   id: number;
   name: string;
   description: string;
   price: number;
   special: boolean;
+  mainDishes: boolean;
   ingridiants: string;
   avaliable_all_day: boolean;
   image: string;
   created_at: string;
   updated_at: string;
+  category: Category;
   _imageUrl: string;
 }
 
@@ -37,5 +39,20 @@ interface Category {
 
 export interface MenuByCategoryOut {
   category: Category;
-  menus: Menu[];
+  data: Menu[];
+  total: number;
+  totalPages: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+  perPage: number;
+  currentPage: number;
+}
+
+interface Category {
+  id: number;
+  name: string;
+  image: string;
+  created_at: string;
+  updated_at: string;
+  imageUrl: string;
 }

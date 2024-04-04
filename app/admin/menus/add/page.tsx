@@ -34,6 +34,7 @@ const schema: ZodType<MenuInput> = z.object({
   subCategoryId: z.string().optional().nullable(),
   special: z.boolean().optional(),
   avaliable_all_day: z.boolean().optional(),
+  mainDishes: z.boolean().optional(),
 });
 
 const Page = () => {
@@ -67,6 +68,7 @@ const Page = () => {
       available_meal_times: [],
       avaliable_all_day: false,
       special: false,
+      mainDishes: false,
     },
   });
 
@@ -259,7 +261,7 @@ const Page = () => {
                 id="subCategoryId"
                 className="w-full rounded-md"
               >
-                <option value={0}>Select a subcategory</option>
+                <option value="">Select a subcategory</option>
                 {subCategories.map((subCategory) => (
                   <option key={subCategory.id} value={subCategory.id}>
                     {subCategory.name}
@@ -333,6 +335,21 @@ const Page = () => {
                 className="capitalize text-gray-600 text-sm"
               >
                 Avaliable All Day
+              </label>
+            </div>
+            <div className="flex items-center gap-2 mt-5">
+              <input
+                {...register("mainDishes")}
+                name="mainDishes"
+                id="mainDishes"
+                className="rounded-md"
+                type="checkbox"
+              />
+              <label
+                htmlFor="mainDishes"
+                className="capitalize text-gray-600 text-sm"
+              >
+                mainDishes
               </label>
             </div>
           </div>

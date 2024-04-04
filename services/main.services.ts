@@ -15,7 +15,11 @@ import {
   MenuByCategoryOut,
   MenuItemsByMealTimeOut,
 } from "@/types/MealTime";
-import { MenusByMealTimeOUt, SpecialFoodOut } from "@/types/Menu";
+import {
+  MenusByCategoryOut,
+  MenusByMealTimeOUt,
+  SpecialFoodOut,
+} from "@/types/Menu";
 
 export async function fetchHero(): Promise<HeroSection> {
   const res = await fetch(`${prodBaseUrl}/heros`, {
@@ -81,6 +85,13 @@ export async function fetchMenuByMealtimes(): Promise<MenusByMealTimeOUt[]> {
 }
 export async function fetchSpecialFoods(): Promise<SpecialFoodOut[]> {
   const res = await fetch(`${prodBaseUrl}/menu/special-foods`, {
+    next: { revalidate: 10 },
+  });
+  const data = await res.json();
+  return data;
+}
+export async function fetchMenusByCategory(): Promise<MenusByCategoryOut[]> {
+  const res = await fetch(`${prodBaseUrl}/menus/menusbyCategory`, {
     next: { revalidate: 10 },
   });
   const data = await res.json();

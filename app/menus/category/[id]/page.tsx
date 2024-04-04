@@ -1,11 +1,9 @@
 import { FoodAndDrinkIcon } from "@/assets/icons/FoodAndDrinkIcon";
 import HeroMenuByCategoy from "@/common/Menu/HeroMenuByCategoy";
 import MealTimeHeroSection from "@/common/Menu/HeroMenuByCategoy";
+import MenuCard2 from "@/components/Menu/MenuCard2";
 import { lunchs } from "@/data/foods";
-import {
-  fetchMenuByCategory,
-  fetchMenuByMealtimes,
-} from "@/services/main.services";
+import { fetchMenuByCategory } from "@/services/main.services";
 import Image from "next/image";
 import React from "react";
 
@@ -20,38 +18,12 @@ export default async function Page({ params }: { params: { id: string } }) {
       {/* {params.id} */}
       <div className="min-h-96 container mx-auto px-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
-          {data && (data?.menus?.length ?? 0) == 0 && (
+          {data && (data?.data?.length ?? 0) == 0 && (
             <div className="text-white">empty !</div>
           )}
 
-          {data?.menus?.map((menu, index) => (
-            <div
-              key={index}
-              className="flex items-center gap-3 shadow-md py-3 px-2 rounded-lg bg-bgPrimary opacity-90"
-            >
-              <div className="text-white">
-                {menu?.image ? (
-                  <Image
-                    src={`${menu?._imageUrl}`}
-                    alt="spector"
-                    width={100}
-                    height={200}
-                    className="rounded-2xl w-24 h-20 object-cover"
-                  />
-                ) : (
-                  <FoodAndDrinkIcon />
-                )}
-              </div>
-              <div className="w-full">
-                <h1 className="text-gray-400 text-lg font-medium capitalize">
-                  {menu?.name}
-                </h1>
-                <p className="text-gray-400 text-sm font-mono">
-                  {menu?.ingridiants}
-                </p>
-                <h1 className="text-primary">{menu?.price} ETB</h1>
-              </div>
-            </div>
+          {data?.data?.map((menu, index) => (
+            <MenuCard2 key={index} menu={menu} />
           ))}
         </div>
       </div>
