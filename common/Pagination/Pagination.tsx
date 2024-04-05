@@ -15,20 +15,22 @@ const PaginationComponent: React.FC<PropType> = ({
 }) => {
   return (
     <div className="flex justify-center gap-2 items-center my-5">
-      <Typography>Page: {page}</Typography>
+      <h3 className="text-gray-200">Page: {page}</h3>
       <Pagination
         count={count}
         page={page}
         onChange={handleChange}
         sx={{
-          "& .MuiPaginationItem-page": {
-            color: "white",
-            backgroundColor: "#059669",
+          "& .MuiPaginationItem-root": {
+            color: "white", // Text color
+            borderColor: "white", // Border color for outlined variants
           },
           "& .Mui-selected": {
-            color: "#059669",
-            backgroundColor: "white",
-            border: "2px solid #059669 ",
+            backgroundColor: "white", // Background color for selected item
+            color: "black", // Text color for selected item
+          },
+          "& .MuiPaginationItem-ellipsis": {
+            color: "white", // Color for the ellipsis
           },
         }}
       />

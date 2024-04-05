@@ -51,7 +51,6 @@ interface Category {
 }
 
 export interface MenuItemsByMealTimeOut {
-  mealtime: Mealtime;
   data: Menu[];
   total: number;
   totalPages: number;
@@ -61,7 +60,7 @@ export interface MenuItemsByMealTimeOut {
   currentPage: number;
 }
 
-interface Mealtime {
+export interface Mealtime {
   id: number;
   name: string;
   image: string;
