@@ -8,7 +8,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   const data = await MealTimeById(params.id);
 
   return (
-    <div className="bg-[#131415] min-h-screen">
+    <div className="bg-[#131415] min-h-screen pb-8">
       <HeroMenuByMealTime mealTime={data} />
       {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
       <MenuItemsByMealTime />

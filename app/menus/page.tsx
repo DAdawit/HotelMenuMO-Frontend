@@ -15,8 +15,6 @@ const page = () => {
       </section>
       <section>
         <MenuByMealTime />
-
-        {/* <Appetizers /> */}
       </section>
       <section>
         <MainDishes />

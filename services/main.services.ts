@@ -17,6 +17,7 @@ import {
   MenuItemsByMealTimeOut,
 } from "@/types/MealTime";
 import {
+  MenuOut,
   MenusByCategoryOut,
   MenusByMealTimeOUt,
   SpecialFoodOut,
@@ -72,16 +73,6 @@ export async function CategoryById(id: string): Promise<CategoryOut> {
   return data;
 }
 
-export async function fetchMenuByCategory(
-  id: string
-): Promise<MenuByCategoryOut> {
-  const res = await fetch(`${prodBaseUrl}/menus/category/${id}`, {
-    next: { revalidate: 10 },
-  });
-  const data = await res.json();
-  return data;
-}
-
 export async function fetchMenuByMealtimes(): Promise<MenusByMealTimeOUt[]> {
   const res = await fetch(`${prodBaseUrl}/menus/mealtimes`, {
     next: { revalidate: 10 },
@@ -103,6 +94,13 @@ export async function fetchMenusByCategory(): Promise<MenusByCategoryOut[]> {
   const data = await res.json();
   return data;
 }
+export async function fetchMainDishes(): Promise<MenuOut[]> {
+  const res = await fetch(`${prodBaseUrl}/menus/main-dishes`, {
+    next: { revalidate: 10 },
+  });
+  const data = await res.json();
+  return data;
+}
 
 export async function MenuByMealtimeId(
   id: number,
@@ -111,6 +109,20 @@ export async function MenuByMealtimeId(
   try {
     const res = await api.get<MenuItemsByMealTimeOut>(
       `/menus/mealtime/${id}?page=${page}`
+    );
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function fetchMenuByCategory(
+  id: number,
+  page: number
+): Promise<MenuByCategoryOut> {
+  try {
+    const res = await api.get<MenuByCategoryOut>(
+      `/menus/category/${id}?page=${page}`
     );
     return res.data;
   } catch (error) {

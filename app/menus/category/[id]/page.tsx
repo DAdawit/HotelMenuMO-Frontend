@@ -12,22 +12,9 @@ export default async function Page({ params }: { params: { id: string } }) {
   const data = await CategoryById(params.id);
 
   return (
-    <div className="bg-[#131415] min-h-screen">
+    <div className="bg-[#131415] min-h-screen pb-8">
       <HeroMenuByCategoy category={data} />
-      {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
       <MenuItemsByCategory />
-      {/* {params.id} */}
-      {/* <div className="min-h-96 container mx-auto px-5">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
-          {data && (data?.data?.length ?? 0) == 0 && (
-            <div className="text-white">empty !</div>
-          )}
-
-          {data?.data?.map((menu, index) => (
-            <MenuCard2 key={index} menu={menu} />
-          ))}
-        </div>
-      </div> */}
     </div>
   );
 }

@@ -8,7 +8,6 @@ import { useQuery } from "@tanstack/react-query";
 
 import CategoryLists from "@/components/Admin/Categories/CategoryLists";
 import AddCategory from "@/components/Admin/Categories/AddCategory";
-
 const Page = () => {
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["fetchCategories"],
@@ -23,7 +22,7 @@ const Page = () => {
     );
   }
   return (
-    <div className="container mx-auto  p-5 ">
+    <div className="container mx-auto  ">
       {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
       <div className="flex justify-between items-center py-6">
         <PageTitle title="Categories" />

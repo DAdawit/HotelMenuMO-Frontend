@@ -5,20 +5,23 @@ import React, { Suspense, useState } from "react";
 import MenuCard2 from "./MenuCard2";
 import { Spinner } from "@/assets/icons/Spinner";
 import PaginationComponent from "@/common/Pagination/Pagination";
+import { useParams } from "next/navigation";
 
 const MenuItemsByMealTime = () => {
+  const { id } = useParams();
+
   const [page, setPage] = React.useState(1);
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["MenuByMealtimeId", page],
-    queryFn: () => MenuByMealtimeId(1, page as number),
+    queryFn: () => MenuByMealtimeId(+id, page as number),
   });
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
   return (
     <div>
-      {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
+      <pre>{JSON.stringify(page, null, 2)}</pre>
 
       <Suspense fallback={<Spinner />}>
         <div className="min-h-96 container mx-auto px-5">
@@ -39,8 +42,6 @@ const MenuItemsByMealTime = () => {
         page={data?.currentPage}
         handleChange={handleChange}
       />
-
-      <h1>hello</h1>
     </div>
   );
 };

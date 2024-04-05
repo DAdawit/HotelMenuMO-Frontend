@@ -31,7 +31,6 @@ interface Category {
 }
 
 export interface MenuByCategoryOut {
-  category: Category;
   data: Menu[];
   total: number;
   totalPages: number;
