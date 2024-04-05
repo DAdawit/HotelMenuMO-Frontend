@@ -1,5 +1,6 @@
 import { fetchMainDishes } from "@/services/main.services";
 import Image from "next/image";
+import Link from "next/link";
 
 export default async function MainDishes() {
   const data = await fetchMainDishes();
@@ -23,7 +24,7 @@ export default async function MainDishes() {
         </div>
 
         <div className="px-5 mt-10 w-full ">
-          <div className="grid grid-cols-1 md:flex md:justify-evenly  gap-2 md:flex-row-reverse gap-8">
+          <div className="grid grid-cols-1 md:flex md:justify-evenly md:flex-row-reverse gap-8">
             <div>
               {/* eslint-disable-next-line */}
               <Image
@@ -48,6 +49,14 @@ export default async function MainDishes() {
               ))}
             </div>
           </div>
+        </div>
+        <div className="flex flex-col justify-center items-center gap-5 pt-10">
+          <Link
+            href="/menus/main-dishes"
+            className="py-3 px-6 w-max self-center border-2 border-bgButton text-primary mt-4 hover:bg-bgButton rounded-lg  hover:text-white transition-all tracking-wider font-medium font-mono"
+          >
+            View more
+          </Link>
         </div>
       </div>
     </>

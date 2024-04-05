@@ -129,3 +129,16 @@ export async function fetchMenuByCategory(
     throw error;
   }
 }
+
+export async function fetchAllMainDishes(
+  page: number
+): Promise<MenuByCategoryOut> {
+  try {
+    const res = await api.get<MenuByCategoryOut>(
+      `/menus/all-main-dishes?page=${page}`
+    );
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}

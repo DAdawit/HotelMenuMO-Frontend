@@ -47,7 +47,6 @@ export default async function Home() {
       <main id="Home" className="overflow-hidden">
         <Hero />
         <Services />
-        {/* Menu */}
         <section id="Menu" className="bg-bgSecondary py-10">
           <div className="flex flex-col justify-center items-center gap-5 pt-10">
             <h1 className=" text-primary font-sans text-sm font-medium text-center ">
@@ -60,9 +59,6 @@ export default async function Home() {
               height={200}
               className="text-center"
             />
-            {/* <h1 className=" text-secondary text-4xl font-serif">
-              Delicious Menu
-            </h1> */}
           </div>
           <div className=" pt-5">
             {/* <MenuByMealTime /> */}
