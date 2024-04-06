@@ -4,7 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-const HeroMainDishes = () => {
+type PropType = {
+  title: string;
+};
+const HeroMainDishes: React.FC<PropType> = ({ title }) => {
   return (
     <>
       <div className="h-[70vh]  xl:max-h-[60vh] xll:max-h-[60vh] relative">
@@ -19,7 +22,7 @@ const HeroMainDishes = () => {
           <div className="flex flex-col justify-center w-full col-span-2 px-5">
             <div className="align-middle sm:pl-8">
               <h1 className="text-4xl ` xl:text-5xl  xxl:text-6xl font-bold text-center">
-                Main Dishes
+                {title}
               </h1>
               <h4 className="text-md mt-8 xxl:text-lg text-center">
                 Menu{" "}
