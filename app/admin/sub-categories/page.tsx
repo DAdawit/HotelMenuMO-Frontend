@@ -16,6 +16,14 @@ const Page = () => {
     queryKey: ["fetchSubCategories"],
     queryFn: fetchSubCategories,
   });
+  if (error) {
+    const errorMessage = (error as any).response?.data?.detail || error.message;
+    return errorMessage === "Unauthorized" ? (
+      <span>Unauthorized</span>
+    ) : (
+      <span>{errorMessage}</span>
+    );
+  }
   return (
     <div className="container mx-auto  p-5 ">
       {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
@@ -62,9 +70,7 @@ const Page = () => {
           <tbody className="gap-y-2">
             {isLoading ? <Spinner /> : null}
             <>
-              {data && data.length === 0 && (
-                <p>You have not added any Trainings yet!.</p>
-              )}
+              {data && data.length === 0 && <p>empty!.</p>}
               {data &&
                 Array.isArray(data) &&
                 data.map((subCategory, index) => (

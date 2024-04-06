@@ -24,7 +24,12 @@ import BadgeIcon from "@mui/icons-material/Badge";
 import { useQuery } from "@tanstack/react-query";
 import { fetchLogos } from "@/services/admin.services";
 import DiamondIcon from "@mui/icons-material/Diamond";
-
+import MenuBookIcon from "@mui/icons-material/MenuBook";
+import BentoIcon from "@mui/icons-material/Bento";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import VrpanoIcon from "@mui/icons-material/Vrpano";
+import WatchLaterIcon from "@mui/icons-material/WatchLater";
+import FitbitIcon from "@mui/icons-material/Fitbit";
 type Anchor = "left";
 export default function AdminDrawer() {
   const [state, setState] = React.useState({
@@ -106,7 +111,7 @@ export default function AdminDrawer() {
                       onClick={toggleDrawer("left", false)}
                     >
                       <div className="flex gap-x-3 items-center border-b-[1] border-gray-400 px-7 gap-3">
-                        <HomeMaxIcon />
+                        <VrpanoIcon />
                         <h3>Hero Section</h3>
                       </div>
                     </Link>
@@ -116,8 +121,18 @@ export default function AdminDrawer() {
                       onClick={toggleDrawer("left", false)}
                     >
                       <div className="flex gap-x-3 items-center border-b-[1] border-gray-400 px-7 gap-3">
-                        <DiamondIcon />
+                        <FitbitIcon />
                         <h3>Logos</h3>
+                      </div>
+                    </Link>
+                    <Link
+                      href="/admin/mealtimes"
+                      className="mt-1 shadow-sm py-2 h-min"
+                      onClick={toggleDrawer("left", false)}
+                    >
+                      <div className="flex gap-x-3 items-center border-b-[1] border-gray-400 px-7 gap-3">
+                        <WatchLaterIcon />
+                        <h3>Mealtimes</h3>
                       </div>
                     </Link>
                     <Link
@@ -126,111 +141,32 @@ export default function AdminDrawer() {
                       onClick={toggleDrawer("left", false)}
                     >
                       <div className="flex gap-x-3 items-center border-b-[1] border-gray-400 px-7 gap-3">
-                        <CategoryIcon />
+                        <BentoIcon />
                         <h3>Categories</h3>
                       </div>
                     </Link>
+
                     <Link
                       href="/admin/sub-categories"
                       className="mt-1 shadow-sm py-2 h-min"
                       onClick={toggleDrawer("left", false)}
                     >
                       <div className="flex gap-x-3 items-center border-b-[1] border-gray-400 px-7 gap-3">
-                        <CategoryIcon />
+                        <BentoIcon />
                         <h3>Sub Categories</h3>
                       </div>
                     </Link>
                     <Link
-                      href="/admin/social-media"
+                      href="/admin/menus"
                       className="mt-1 shadow-sm py-2 h-min"
                       onClick={toggleDrawer("left", false)}
                     >
                       <div className="flex gap-x-3 items-center border-b-[1] border-gray-400 px-7 gap-3">
-                        <AddLinkIcon />
-                        <h3>Social Media</h3>
-                      </div>
-                    </Link>
-                    <Link
-                      href="/admin/certificates"
-                      className="mt-1 shadow-sm py-2 h-min"
-                      onClick={toggleDrawer("left", false)}
-                    >
-                      <div className="flex gap-x-3 items-center border-b-[1] border-gray-400 px-7 gap-3">
-                        <BadgeIcon />
-                        <h3>certifications</h3>
-                      </div>
-                    </Link>
-                    <Link
-                      href="/admin/venues"
-                      className="mt-1 shadow-sm py-2 h-min"
-                      onClick={toggleDrawer("left", false)}
-                    >
-                      <div className="flex gap-x-3 items-center border-b-[1] border-gray-400 px-7 gap-3">
-                        <PlaceIcon />
-                        <h3>Venues</h3>
-                      </div>
-                    </Link>
-                    <Link
-                      href="/admin/training-formats"
-                      className="mt-1 shadow-sm py-2 h-min"
-                      onClick={toggleDrawer("left", false)}
-                    >
-                      <div className="flex gap-x-3 items-center border-b-[1] border-gray-400 px-7 gap-3">
-                        <FormatAlignCenterIcon />
-                        <h3>Training Formats</h3>
+                        <MenuBookIcon />
+                        <h3>Menus</h3>
                       </div>
                     </Link>
 
-                    <Link
-                      href="/admin/trainings"
-                      className="mt-1 shadow-sm py-2 h-min"
-                      onClick={toggleDrawer("left", false)}
-                    >
-                      <div className="flex gap-x-3 items-center border-b-[1] border-gray-400 px-7 gap-3">
-                        <ClassIcon />
-                        <h3>Trainings</h3>
-                      </div>
-                    </Link>
-                    <Link
-                      href="/admin/pending-booked-courses"
-                      className="mt-1 shadow-sm py-2 h-min"
-                      onClick={toggleDrawer("left", false)}
-                    >
-                      <div className="flex gap-x-3 items-center border-b-[1] border-gray-400 px-7 gap-3">
-                        <PendingActionsIcon />
-                        <h3>Pending Booked Courses</h3>
-                      </div>
-                    </Link>
-                    <Link
-                      href="/admin/approved-booked-courses"
-                      className="mt-1 shadow-sm py-2 h-min"
-                      onClick={toggleDrawer("left", false)}
-                    >
-                      <div className="flex gap-x-3 items-center border-b-[1] border-gray-400 px-7 gap-3">
-                        <AssignmentTurnedInIcon />
-                        <h3>Approved Booked Courses</h3>
-                      </div>
-                    </Link>
-                    <Link
-                      href="/admin/rejected-booked-courses"
-                      className="mt-1 shadow-sm py-2 h-min"
-                      onClick={toggleDrawer("left", false)}
-                    >
-                      <div className="flex gap-x-3 items-center border-b-[1] border-gray-400 px-7 gap-3">
-                        <RemoveDoneIcon />
-                        <h3>Rejected Booked Courses</h3>
-                      </div>
-                    </Link>
-                    <Link
-                      href="/admin/contact-us"
-                      className="mt-1 shadow-sm py-2 h-min"
-                      onClick={toggleDrawer("left", false)}
-                    >
-                      <div className="flex gap-x-3 items-center border-b-[1] border-gray-400 px-7 gap-3">
-                        <ContactPageIcon />
-                        <h3>Contact us</h3>
-                      </div>
-                    </Link>
                     <Link
                       href="/admin/change-password"
                       className="mt-1 shadow-sm py-2 h-min"

@@ -8,7 +8,7 @@ import { useMutation } from "@tanstack/react-query";
 import { deleteSubCategory } from "@/services/admin.services";
 import EditCategory from "./EditMenu";
 import { notify } from "@/app/toast";
-import { MenuOut } from "@/types/Menu";
+import { MenuOut, AdminMenuOut } from "@/types/Menu";
 import Approved from "@/common/status/Approved";
 import Pending from "@/common/status/Pending";
 import Chip from "@/common/Chip";
@@ -18,7 +18,7 @@ import EditIcon from "@mui/icons-material/Edit";
 
 import Link from "next/link";
 type PropType = {
-  menu: MenuOut;
+  menu: AdminMenuOut;
   index: number;
   refetch: () => void;
 };
@@ -54,7 +54,16 @@ const MenusList: React.FC<PropType> = ({ menu, refetch }) => {
         </td>
         <td className="px-6 py-4">{menu?.name}</td>
         <td className="px-6 py-4">{menu?.price}</td>
+        <td className="px-6 py-4 grid">
+          <h4>{menu?.category?.name}</h4>
+          <h4>{menu?.subCategory?.name}</h4>
+        </td>
         <td className="px-6 py-4 text-xs">{menu?.ingridiants}</td>
+        <td className="px-6 py-4 flex gap-x-2">
+          {menu?.available_meal_times.map((mealtime) => (
+            <Chip key={mealtime.id} content={mealtime.name} />
+          ))}
+        </td>
         <td className="px-6 py-4">
           {menu?.avaliable_all_day ? (
             <Approved content="Yes" />
@@ -62,12 +71,21 @@ const MenusList: React.FC<PropType> = ({ menu, refetch }) => {
             <Pending content="No" />
           )}
         </td>
-        <td className="px-6 py-4 flex gap-x-2">
-          {menu?.available_meal_times.map((mealtime) => (
-            <Chip key={mealtime.id} content={mealtime.name} />
-          ))}
-        </td>
 
+        <td className="px-6 py-4">
+          {menu?.special ? (
+            <Approved content="Yes" />
+          ) : (
+            <Pending content="No" />
+          )}
+        </td>
+        <td className="px-6 py-4">
+          {menu?.mainDishes ? (
+            <Approved content="Yes" />
+          ) : (
+            <Pending content="No" />
+          )}
+        </td>
         <td className="px-6 py-4">
           {dayjs(menu?.created_at).format("MMM-D-YYYY")}
         </td>

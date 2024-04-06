@@ -8,14 +8,21 @@ import { useQuery } from "@tanstack/react-query";
 
 import CategoryLists from "@/components/Admin/Categories/CategoryLists";
 import AddCategory from "@/components/Admin/Categories/AddCategory";
-
 const Page = () => {
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["fetchCategories"],
     queryFn: fetchCategories,
   });
+  if (error) {
+    const errorMessage = (error as any).response?.data?.detail || error.message;
+    return errorMessage === "Unauthorized" ? (
+      <span>Unauthorized</span>
+    ) : (
+      <span>{errorMessage}</span>
+    );
+  }
   return (
-    <div className="container mx-auto  p-5 ">
+    <div className="container mx-auto  ">
       {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
       <div className="flex justify-between items-center py-6">
         <PageTitle title="Categories" />
@@ -54,9 +61,7 @@ const Page = () => {
           <tbody className="gap-y-2">
             {isLoading ? <Spinner /> : null}
             <>
-              {data && data.length === 0 && (
-                <p>You have not added any Trainings yet!.</p>
-              )}
+              {data && data.length === 0 && <p>empty!.</p>}
               {data &&
                 Array.isArray(data) &&
                 data.map((category, index) => (

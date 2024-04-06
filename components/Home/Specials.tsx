@@ -5,7 +5,12 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Image from "next/image";
-export default class Specials extends Component {
+import { SpecialFoodOut } from "@/types/Menu";
+
+type PropsType = {
+  specials: SpecialFoodOut[];
+};
+export default class Specials extends Component<PropsType> {
   render() {
     const settings = {
       dots: true,
@@ -63,13 +68,13 @@ export default class Specials extends Component {
         </div>
         <div className="container mx-auto px-6">
           <Slider {...settings}>
-            {specials.map((special, index) => (
+            {this.props.specials.map((special, index) => (
               <div
                 key={index}
                 className="p-3 grid items-center justify-center "
               >
                 <Image
-                  src={`${special.image}`}
+                  src={`${special._imageUrl}`}
                   height={300}
                   width={200}
                   alt="breakfast"
@@ -79,9 +84,9 @@ export default class Specials extends Component {
                   {special.name}
                 </h1>
                 <p className="text-gray-400 text-sm font-mono text-center">
-                  {special.ingredients}
+                  {special?.ingridiants}
                 </p>
-                <h1 className="text-primary text-center">${special.price}</h1>
+                <h1 className="text-primary text-center">${special?.price}</h1>
               </div>
             ))}
           </Slider>

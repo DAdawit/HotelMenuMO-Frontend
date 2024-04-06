@@ -7,7 +7,7 @@ import {
 import { HeroCreate, HeroOut } from "@/types/Hero";
 import { LogoOut } from "@/types/Logo";
 import { MealTimeOut } from "@/types/MealTime";
-import { MenuDetailOut, MenuInput, MenuOut } from "@/types/Menu";
+import { MenuDetailOut, MenuInput, MenuOut, AdminMenuOut } from "@/types/Menu";
 import { ILogin, UserI, UserOut } from "@/types/User";
 
 export async function fetchLogos(): Promise<LogoOut[]> {
@@ -176,9 +176,9 @@ export async function deleteSubCategory(id: number): Promise<any> {
   }
 }
 
-export async function fetchMenus(): Promise<MenuOut[]> {
+export async function fetchMenus(): Promise<AdminMenuOut[]> {
   try {
-    const response = await api.get<MenuOut[]>("/admin/menus");
+    const response = await api.get<AdminMenuOut[]>("/admin/menus");
     return response.data;
   } catch (error) {
     throw error;
@@ -218,9 +218,13 @@ export async function addOrUpdateMenuImage(
   }
 }
 
-export async function updateMenus(id: number, data: any): Promise<MenuOut> {
+export async function updateMenus(id: string, data: any): Promise<MenuOut> {
   try {
-    const res = await api.put(`/admin/menus/${id}`, data);
+    const res = await api.put(`/admin/menu/${id}`, data, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     return res.data;
   } catch (error) {
     throw error;
@@ -240,6 +244,35 @@ export async function fetchMealTimes(): Promise<MealTimeOut[]> {
   try {
     const response = await api.get<MealTimeOut[]>("/admin/mealtimes");
     return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function addMealTime(data: any): Promise<MealTimeOut> {
+  try {
+    const res = await api.post<MealTimeOut>("/admin/mealTimes", data);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}
+export async function updateMealTime(
+  id: number,
+  data: any
+): Promise<SubCategoryOut> {
+  try {
+    const res = await api.put(`/admin/mealTimes/${id}`, data);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function deleteMealTime(id: number): Promise<any> {
+  try {
+    const res = await api.delete<MealTimeOut>(`/admin/mealTimes/${id}`);
+    return res.data;
   } catch (error) {
     throw error;
   }
