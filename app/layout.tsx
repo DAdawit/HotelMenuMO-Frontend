@@ -26,8 +26,8 @@ export default function RootLayout({
     <html lang="en" style={{ scrollBehavior: "smooth" }}>
       <body className={inter.className}>
         <ReactQueryProvider>
-          <Navbar />
           <Toaster />
+          <Navbar />
           {children}
           <Footer />
         </ReactQueryProvider>

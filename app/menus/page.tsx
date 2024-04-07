@@ -13,22 +13,24 @@ const page = () => {
       <section>
         <Hero />
       </section>
-      <section>
-        <MenuByMealTime />
-      </section>
-      <section>
-        <MainDishes />
-      </section>
-      <section>
-        <SpecialMenu />
-      </section>
-      <section>
-        <ChefSpecial />
-      </section>
-      <section>
-        <Reservations />
-      </section>
-      <MoveToTop />
+      <div className="container mx-auto px-5">
+        <section>
+          <MenuByMealTime />
+        </section>
+        <section>
+          <MainDishes />
+        </section>
+        <section>
+          <SpecialMenu />
+        </section>
+        <section>
+          <ChefSpecial />
+        </section>
+        <section>
+          <Reservations />
+        </section>
+        <MoveToTop />
+      </div>
     </div>
   );
 };

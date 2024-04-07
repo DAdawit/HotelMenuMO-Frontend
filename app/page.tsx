@@ -44,7 +44,7 @@ export default async function Home() {
     <>
       {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
 
-      <main id="Home" className="overflow-hidden">
+      <main id="" className="overflow-hidden">
         <Hero />
         <Services />
         <section id="Menu" className="bg-bgSecondary py-10">

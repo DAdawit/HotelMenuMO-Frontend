@@ -73,13 +73,23 @@ export default class Specials extends Component<PropsType> {
                 key={index}
                 className="p-3 grid items-center justify-center "
               >
-                <Image
-                  src={`${special._imageUrl}`}
-                  height={300}
-                  width={200}
-                  alt="breakfast"
-                  className="w-full rounded-md object-cover h-80"
-                />
+                {special.image ? (
+                  <Image
+                    src={`${special._imageUrl}`}
+                    height={300}
+                    width={200}
+                    alt="breakfast"
+                    className="w-full rounded-md object-cover h-80"
+                  />
+                ) : (
+                  <Image
+                    src="/menuPlaceholder.jpg"
+                    height={300}
+                    width={200}
+                    alt="breakfast"
+                    className="w-full rounded-md object-cover h-80 brightness-75 blur-sm"
+                  />
+                )}
                 <h1 className="text-secondary text-center tracking-wider font-sans mt-5 text-2xl">
                   {special.name}
                 </h1>
