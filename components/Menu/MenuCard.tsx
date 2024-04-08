@@ -9,7 +9,7 @@ const MenuCard: React.FC<PropType> = ({ menu }) => {
   return (
     <div>
       {" "}
-      <div className="grid items-center justify-center shadow-xl rounded-md p-2 ">
+      <div className="grid items-center justify-center shadow-xl rounded-md p-2 bg-[#111]">
         <div className="h-80">
           {menu.image ? (
             <Image

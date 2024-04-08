@@ -8,7 +8,7 @@ type PropType = {
 };
 const MenuCard2: React.FC<PropType> = ({ menu }) => {
   return (
-    <div className="flex items-center gap-3 shadow-md py-3 px-2 rounded-lg bg-bgPrimary opacity-90">
+    <div className="flex items-center gap-3 shadow-md py-3 px-2 rounded-lg bg-black opacity-90">
       <div className="text-white">
         {menu?.image ? (
           <Image
