@@ -1,13 +1,13 @@
-// export async function fetchLogos(): Promise<LogoOut[]> {
-//   try {
-//     const response = await api.get<LogoOut[]>("/admin/logos");
-//     return response.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// }
+export async function fetchLogos(): Promise<LogoOut[]> {
+  try {
+    const response = await api.get<LogoOut[]>("/admin/logos");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
 
-import { HeroSection } from "@/types/Hero";
+import { HeroOut, HeroSection } from "@/types/Hero";
 import api, { prodBaseUrl } from "./axios";
 import { CategoryOut } from "@/types/Category";
 import {
@@ -22,9 +22,17 @@ import {
   MenusByMealTimeOUt,
   SpecialFoodOut,
 } from "@/types/Menu";
+import { LogoOut } from "@/types/Logo";
 
 export async function fetchHero(): Promise<HeroSection> {
   const res = await fetch(`${prodBaseUrl}/heros`, {
+    next: { revalidate: 10 },
+  });
+  const data = await res.json();
+  return data;
+}
+export async function getAllHeroSection(): Promise<HeroOut[]> {
+  const res = await fetch(`${prodBaseUrl}/all-heros`, {
     next: { revalidate: 10 },
   });
   const data = await res.json();

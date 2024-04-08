@@ -26,7 +26,7 @@ const MenuByMealTime2: React.FC<PropType> = ({ menus }) => {
             <button
               key={index}
               onClick={() => handleTabClick(item.name)}
-              className="flex items-center md:justify-center flex-col md:flex-row gap-2 h-full text-primary"
+              className="flex items-center md:justify-center flex-col md:flex-row gap-2 h-full text-primary shadow-lg"
             >
               <span
                 className={
@@ -49,7 +49,7 @@ const MenuByMealTime2: React.FC<PropType> = ({ menus }) => {
             .map((item) => (
               <div key={item?.id} className="grid ">
                 {item?.menues.length > 0 ? (
-                  <div className="grid grid-cols-2 gap-5">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     {item?.menues.map((menu, index) => (
                       <div
                         key={index}

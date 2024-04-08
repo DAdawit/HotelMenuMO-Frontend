@@ -17,7 +17,7 @@ export interface HeroCreate {
 }
 
 export interface HeroSection {
-  hero: Hero;
+  hero: HeroOut;
   logo: Logo;
 }
 
@@ -30,7 +30,7 @@ interface Logo {
   _fullImagePath: string;
 }
 
-interface Hero {
+export interface HeroOut {
   id: number;
   slogan: string;
   title: string;
