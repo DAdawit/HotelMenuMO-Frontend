@@ -25,7 +25,7 @@ import {
   getAllHeroSection,
   fetchHero,
 } from "@/services/main.services";
-import MenuByMealTime2 from "@/components/Home/MenuByMealTime2";
+import MenuByMealTime2 from "@/components/Home/MenuByMealTime";
 import Carosole from "@/components/Home/Carosole";
 import { fetchLogos } from "@/services/admin.services";
 export default async function Home() {
@@ -60,7 +60,7 @@ export default async function Home() {
           </div>
           <div className=" pt-5">
             {/* <MenuByMealTime /> */}
-            <MenuByMealTime2 menus={menuByMealtime} />
+            <MenuByMealTime menus={menuByMealtime} />
             {/*  */}
           </div>
         </section>

@@ -9,7 +9,7 @@ export async function fetchLogos(): Promise<LogoOut[]> {
 
 import { HeroOut, HeroSection } from "@/types/Hero";
 import api, { prodBaseUrl } from "./axios";
-import { CategoryOut } from "@/types/Category";
+import { CategoryOut, SubCategory } from "@/types/Category";
 import {
   MealTimeOut,
   Mealtime,
@@ -23,6 +23,7 @@ import {
   SpecialFoodOut,
 } from "@/types/Menu";
 import { LogoOut } from "@/types/Logo";
+import { MenuBySubCategoryOut } from "@/types/SubCategory";
 
 export async function fetchHero(): Promise<HeroSection> {
   const res = await fetch(`${prodBaseUrl}/heros`, {
@@ -83,6 +84,15 @@ export async function CategoryById(id: string): Promise<CategoryOut> {
 
 export async function fetchMenuByMealtimes(): Promise<MenusByMealTimeOUt[]> {
   const res = await fetch(`${prodBaseUrl}/menus/mealtimes`, {
+    next: { revalidate: 10 },
+  });
+  const data = await res.json();
+  return data;
+}
+export async function fetchMenuBySubCategory(): Promise<
+  MenuBySubCategoryOut[]
+> {
+  const res = await fetch(`${prodBaseUrl}/menus/subcategories`, {
     next: { revalidate: 10 },
   });
   const data = await res.json();
@@ -157,6 +167,28 @@ export async function fetchAllSpecialDishes(
   try {
     const res = await api.get<MenuByCategoryOut>(
       `/menus/all-special-foods?page=${page}`
+    );
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function SubCategoryById(id: string): Promise<SubCategory> {
+  const res = await fetch(`${prodBaseUrl}/sub-category/${id}`, {
+    next: { revalidate: 10 },
+  });
+  const data = await res.json();
+  return data;
+}
+
+export async function fetchMenuBySubCategoryId(
+  id: number,
+  page: number
+): Promise<MenuByCategoryOut> {
+  try {
+    const res = await api.get<MenuByCategoryOut>(
+      `/menus/subCategory/${id}?page=${page}`
     );
     return res.data;
   } catch (error) {

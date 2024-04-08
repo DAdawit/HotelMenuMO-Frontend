@@ -4,10 +4,14 @@ import Appetizers from "@/components/Menu/Appetizers";
 import ChefSpecial from "@/components/Menu/ChefSpecial";
 import Hero from "@/components/Menu/Hero";
 import MainDishes from "@/components/Menu/MainDishes";
+import MenuBySubCategories from "@/components/Menu/MenuBySubCategories";
 import Reservations from "@/components/Menu/Reservations";
 import SpecialMenu from "@/components/Menu/SpecialMenu";
+import { fetchMenuBySubCategory } from "@/services/main.services";
 
-const page = () => {
+export default async function Page() {
+  const data = await fetchMenuBySubCategory();
+
   return (
     <div className="bg-[#131415]">
       <section>
@@ -15,7 +19,7 @@ const page = () => {
       </section>
       <div className="container mx-auto px-5">
         <section>
-          <MenuByMealTime />
+          <MenuBySubCategories menus={data} />
         </section>
         <section>
           <MainDishes />
@@ -33,6 +37,4 @@ const page = () => {
       </div>
     </div>
   );
-};
-
-export default page;
+}

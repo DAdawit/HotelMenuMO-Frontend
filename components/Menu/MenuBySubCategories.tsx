@@ -1,16 +1,15 @@
 "use client";
 import React, { useState } from "react";
-import { fetchMenuByMealtimes } from "@/services/main.services";
 import Image from "next/image";
 import Link from "next/link";
 import { MenusByMealTimeOUt } from "@/types/Menu";
 import { FoodAndDrinkIcon } from "@/assets/icons/FoodAndDrinkIcon";
-import MenuCard2 from "../Menu/MenuCard2";
+import MenuCard2 from "./MenuCard2";
 
 type PropType = {
   menus: MenusByMealTimeOUt[];
 };
-const MenuByMealTime: React.FC<PropType> = ({ menus }) => {
+const MenuBySubCategories: React.FC<PropType> = ({ menus }) => {
   const [activeTab, setActiveTab] = useState(menus && menus[0]?.name); // Set the initial active tab
 
   const handleTabClick = (tabName: string) => {
@@ -18,8 +17,21 @@ const MenuByMealTime: React.FC<PropType> = ({ menus }) => {
   };
   return (
     <div className="container mx-auto px-5">
-      {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
-      {/* MenuByMealTime */}
+      <div className="flex flex-col justify-center items-center gap-5 pt-10">
+        <h1 className=" text-primary font-sans text-sm font-medium uppercase tracking-wider">
+          Crafted Classics
+        </h1>
+        <Image
+          src="/separator.png"
+          alt="spector"
+          width={100}
+          height={200}
+          className=""
+        />
+        <h1 className=" text-secondary text-lg font-serif tracking-wider">
+          Choose from Our Selection of...
+        </h1>
+      </div>
       <div className="flex justify-center gap-5 flex-wrap">
         {menus &&
           Array.isArray(menus) &&
@@ -56,13 +68,13 @@ const MenuByMealTime: React.FC<PropType> = ({ menus }) => {
                     ))}
                   </div>
                 ) : (
-                  <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-6 gap-8 max-w-6xl mx-auto  xll:max-w-7xl xll:mx-auto ">
-                    <p>No trainings available for {item.name}</p>
+                  <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-6 gap-8 max-w-6xl mx-auto  xll:max-w-7xl xll:mx-auto text-white">
+                    <p> empty</p>
                   </div>
                 )}
                 <div className="flex justify-center mt-5">
                   <Link
-                    href={`/menus/mealtime/${item?.id}`}
+                    href={`/menus/subcategories/${item?.id}`}
                     className="py-2 px-6 text-center capitalize rounded-lg text-primary border-2 border-primary mt-4 hover:bg-primary hover:text-black transition-all tracking-wider font-medium w-max"
                   >
                     show More
@@ -75,4 +87,4 @@ const MenuByMealTime: React.FC<PropType> = ({ menus }) => {
   );
 };
 
-export default MenuByMealTime;
+export default MenuBySubCategories;

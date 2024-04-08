@@ -2,6 +2,7 @@
 import {
   MenuByMealtimeId,
   fetchMenuByCategory,
+  fetchMenuBySubCategoryId,
 } from "@/services/main.services";
 import { useQuery } from "@tanstack/react-query";
 import React, { Suspense, useState } from "react";
@@ -17,8 +18,8 @@ const MenuItemsByCategory = () => {
   const [page, setPage] = React.useState(1);
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["fetchMenuByCategory", page],
-    queryFn: () => fetchMenuByCategory(+id, page as number),
+    queryKey: ["fetchMenuBySubCategoryId", page],
+    queryFn: () => fetchMenuBySubCategoryId(+id, page as number),
   });
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
