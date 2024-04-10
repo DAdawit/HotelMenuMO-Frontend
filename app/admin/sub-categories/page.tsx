@@ -10,12 +10,16 @@ import CategoryLists from "@/components/Admin/Categories/CategoryLists";
 import AddCategory from "@/components/Admin/Categories/AddCategory";
 import SubCategoryLists from "@/components/Admin/SubCategories/SubCategoryLists";
 import AddSubCategory from "@/components/Admin/SubCategories/AddSubCategory";
+import AdminPagination from "@/common/Pagination/AdminPagination";
 
 const Page = () => {
+  const [page, setPage] = React.useState(1);
+
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["fetchSubCategories"],
-    queryFn: fetchSubCategories,
+    queryKey: ["fetchSubCategories", page],
+    queryFn: () => fetchSubCategories(page as number),
   });
+
   if (error) {
     const errorMessage = (error as any).response?.data?.detail || error.message;
     return errorMessage === "Unauthorized" ? (
@@ -24,6 +28,9 @@ const Page = () => {
       <span>{errorMessage}</span>
     );
   }
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
   return (
     <div className="container mx-auto  p-5 ">
       {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
@@ -70,10 +77,10 @@ const Page = () => {
           <tbody className="gap-y-2">
             {isLoading ? <Spinner /> : null}
             <>
-              {data && data.length === 0 && <p>empty!.</p>}
+              {data && data.data.length === 0 && <p>empty!.</p>}
               {data &&
-                Array.isArray(data) &&
-                data.map((subCategory, index) => (
+                Array.isArray(data.data) &&
+                data.data.map((subCategory, index) => (
                   <SubCategoryLists
                     key={index}
                     subCategory={subCategory && subCategory}
@@ -84,6 +91,13 @@ const Page = () => {
             </>
           </tbody>
         </table>
+      </div>
+      <div className="my-8">
+        <AdminPagination
+          count={data?.totalPages}
+          page={data?.currentPage}
+          handleChange={handleChange}
+        />
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import api from "@/services/axios";
 import {
+  AdimSubCategoryI,
   AdminCategoryI,
   CategoriesWithSubCategoriesOut,
   CategoryOut,
@@ -140,9 +141,13 @@ export async function deleteCategory(id: number): Promise<any> {
   }
 }
 
-export async function fetchSubCategories(): Promise<SubCategoryOut[]> {
+export async function fetchSubCategories(
+  page: number
+): Promise<AdimSubCategoryI> {
   try {
-    const response = await api.get<SubCategoryOut[]>("/admin/sub-categories");
+    const response = await api.get<AdimSubCategoryI>(
+      `/admin/sub-categories?page=${page}`
+    );
     return response.data;
   } catch (error) {
     throw error;

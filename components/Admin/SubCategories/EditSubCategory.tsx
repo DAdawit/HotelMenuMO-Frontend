@@ -33,6 +33,7 @@ type PropType = {
 };
 
 const EditSubCategory: React.FC<PropType> = ({ refetch, subCategory }) => {
+  const [page, setPage] = React.useState(1);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const {
@@ -64,8 +65,8 @@ const EditSubCategory: React.FC<PropType> = ({ refetch, subCategory }) => {
     error: subcatError,
     refetch: refetchSubcategory,
   } = useQuery({
-    queryKey: ["fetchCategories"],
-    queryFn: fetchCategories,
+    queryKey: ["fetchCategories", page],
+    queryFn: () => fetchCategories(page as number),
   });
 
   const UpdateSubCategory = useMutation({
@@ -165,7 +166,7 @@ const EditSubCategory: React.FC<PropType> = ({ refetch, subCategory }) => {
                     select option
                   </option>
                   {data &&
-                    data.map((category) => (
+                    data.data.map((category) => (
                       <option key={category?.id} value={category?.id}>
                         {category?.name}
                       </option>
