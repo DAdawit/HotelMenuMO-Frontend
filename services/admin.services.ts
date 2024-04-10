@@ -5,14 +5,14 @@ import {
   SubCategoryOut,
 } from "@/types/Category";
 import { HeroAdminOut, HeroCreate, HeroOut } from "@/types/Hero";
-import { LogoOut } from "@/types/Logo";
+import { AdminLogos, LogoOut } from "@/types/Logo";
 import { MealTimeOut } from "@/types/MealTime";
 import { MenuDetailOut, MenuInput, MenuOut, AdminMenuOut } from "@/types/Menu";
 import { ILogin, UserI, UserOut } from "@/types/User";
 
-export async function fetchLogos(): Promise<LogoOut[]> {
+export async function fetchLogos(page: number): Promise<AdminLogos> {
   try {
-    const response = await api.get<LogoOut[]>("/admin/logos");
+    const response = await api.get<AdminLogos>(`/admin/logos?page=${page}`);
     return response.data;
   } catch (error) {
     throw error;
