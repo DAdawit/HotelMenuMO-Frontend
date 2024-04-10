@@ -8,11 +8,20 @@ import AddMenu from "@/components/Admin/Menus/AddMenu";
 import MenusList from "@/components/Admin/Menus/MenusList";
 import Link from "next/link";
 import AddIcon from "@mui/icons-material/Add";
+import PaginationComponent from "@/common/Pagination/Pagination";
+import AdminPagination from "@/common/Pagination/AdminPagination";
 
 const Page = () => {
+  const [page, setPage] = React.useState(1);
+
+  // const { data, isLoading, error, refetch } = useQuery({
+  //   queryKey: ["fetchMenus"],
+  //   queryFn: fetchMenus,
+  // });
+
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["fetchMenus"],
-    queryFn: fetchMenus,
+    queryKey: ["fetchMenus", page],
+    queryFn: () => fetchMenus(page as number),
   });
   if (error) {
     const errorMessage = (error as any).response?.data?.detail || error.message;
@@ -22,6 +31,10 @@ const Page = () => {
       <span>{errorMessage}</span>
     );
   }
+
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
   return (
     <div className="container mx-auto  p-5 ">
       {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
@@ -111,10 +124,10 @@ const Page = () => {
           <tbody className="gap-y-2">
             {isLoading ? <Spinner /> : null}
             <>
-              {data && data.length === 0 && <p>empty!.</p>}
+              {data && data.data.length === 0 && <p>empty!.</p>}
               {data &&
-                Array.isArray(data) &&
-                data.map((menu, index) => (
+                Array.isArray(data.data) &&
+                data.data.map((menu, index) => (
                   <MenusList
                     key={index}
                     menu={menu && menu}
@@ -125,6 +138,13 @@ const Page = () => {
             </>
           </tbody>
         </table>
+      </div>
+      <div className="my-8">
+        <AdminPagination
+          count={data?.totalPages}
+          page={data?.currentPage}
+          handleChange={handleChange}
+        />
       </div>
     </div>
   );

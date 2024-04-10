@@ -11,17 +11,6 @@ export default function Login() {
   return (
     <>
       <div className="w-screen h-screen max-h-screen  flex justify-center bg-gray-50 ">
-        {/* <div className=" grid grid-cols-1 w-full">
-          <div className="h-screen flex  justify-center items-center">
-            <div className="px-8 h-fit shadow-xl py-5 max-w-lg bg-white rounded-lg mx-auto">
-              {login ? (
-                <UserLogin setLogin={() => setLogin(false)} />
-              ) : (
-                <ResetPassword setLogin={() => setLogin(true)} />
-              )}
-            </div>
-          </div>
-        </div> */}
         <div className="grid grid-cols-1 md:grid-cols-2">
           <div className="h-full flex items-center justify-center w-full">
             <UserLogin />

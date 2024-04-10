@@ -8,7 +8,7 @@ import { useMutation } from "@tanstack/react-query";
 import { deleteSubCategory } from "@/services/admin.services";
 import EditCategory from "./EditMenu";
 import { notify } from "@/app/toast";
-import { MenuOut, AdminMenuOut } from "@/types/Menu";
+import { MenuOut, AdminMenuOut, AdminMenu } from "@/types/Menu";
 import Approved from "@/common/status/Approved";
 import Pending from "@/common/status/Pending";
 import Chip from "@/common/Chip";
@@ -18,7 +18,7 @@ import EditIcon from "@mui/icons-material/Edit";
 
 import Link from "next/link";
 type PropType = {
-  menu: AdminMenuOut;
+  menu: AdminMenu;
   index: number;
   refetch: () => void;
 };
@@ -41,7 +41,6 @@ const MenusList: React.FC<PropType> = ({ menu, refetch }) => {
 
   const confirm = (id: number) => {
     console.log(id);
-
     setdeleteError("");
     setLoading(true);
     DeleteSubCategory.mutate(id);

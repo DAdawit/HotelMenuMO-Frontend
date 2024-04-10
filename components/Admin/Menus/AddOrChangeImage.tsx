@@ -18,7 +18,7 @@ import {
   updateSubCategory,
 } from "@/services/admin.services";
 import { SubCategoryOut } from "@/types/Category";
-import { MenuOut } from "@/types/Menu";
+import { AdminMenu, MenuOut } from "@/types/Menu";
 import Image from "next/image";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 
@@ -31,7 +31,7 @@ const schema: ZodType<FormType> = z.object({
 });
 
 type PropType = {
-  menu: MenuOut;
+  menu: AdminMenu;
   refetch: () => void;
 };
 

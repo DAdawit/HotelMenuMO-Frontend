@@ -176,9 +176,9 @@ export async function deleteSubCategory(id: number): Promise<any> {
   }
 }
 
-export async function fetchMenus(): Promise<AdminMenuOut[]> {
+export async function fetchMenus(page: number): Promise<AdminMenuOut> {
   try {
-    const response = await api.get<AdminMenuOut[]>("/admin/menus");
+    const response = await api.get<AdminMenuOut>(`/admin/menus?page=${page}`);
     return response.data;
   } catch (error) {
     throw error;
