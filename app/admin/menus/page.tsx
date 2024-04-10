@@ -14,11 +14,6 @@ import AdminPagination from "@/common/Pagination/AdminPagination";
 const Page = () => {
   const [page, setPage] = React.useState(1);
 
-  // const { data, isLoading, error, refetch } = useQuery({
-  //   queryKey: ["fetchMenus"],
-  //   queryFn: fetchMenus,
-  // });
-
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["fetchMenus", page],
     queryFn: () => fetchMenus(page as number),

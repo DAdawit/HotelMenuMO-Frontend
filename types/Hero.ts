@@ -40,3 +40,13 @@ export interface HeroOut {
   updated_at: string;
   imageUrl: string;
 }
+
+export interface HeroAdminOut {
+  data: HeroOut[];
+  total: number;
+  totalPages: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+  perPage: number;
+  currentPage: number;
+}

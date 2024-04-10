@@ -4,7 +4,7 @@ import {
   CategoryOut,
   SubCategoryOut,
 } from "@/types/Category";
-import { HeroCreate, HeroOut } from "@/types/Hero";
+import { HeroAdminOut, HeroCreate, HeroOut } from "@/types/Hero";
 import { LogoOut } from "@/types/Logo";
 import { MealTimeOut } from "@/types/MealTime";
 import { MenuDetailOut, MenuInput, MenuOut, AdminMenuOut } from "@/types/Menu";
@@ -55,9 +55,9 @@ export async function addHeroSection(data: any): Promise<HeroOut[]> {
   }
 }
 
-export async function fetchHeroSection(): Promise<HeroOut[]> {
+export async function fetchHeroSection(page: number): Promise<HeroAdminOut> {
   try {
-    const response = await api.get<HeroOut[]>("/admin/heros");
+    const response = await api.get<HeroAdminOut>(`/admin/heros?page=${page}`);
     return response.data;
   } catch (error) {
     throw error;
