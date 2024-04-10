@@ -33,3 +33,13 @@ export interface SubCategory {
   updated_at: string;
   imageUrl: string;
 }
+
+export interface AdminCategoryI {
+  data: CategoryOut[];
+  total: number;
+  totalPages: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+  perPage: number;
+  currentPage: number;
+}

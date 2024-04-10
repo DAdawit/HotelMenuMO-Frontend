@@ -1,5 +1,6 @@
 import api from "@/services/axios";
 import {
+  AdminCategoryI,
   CategoriesWithSubCategoriesOut,
   CategoryOut,
   SubCategoryOut,
@@ -85,9 +86,11 @@ export async function deleteHeroById(id: number): Promise<any> {
   }
 }
 
-export async function fetchCategories(): Promise<CategoryOut[]> {
+export async function fetchCategories(page: number): Promise<AdminCategoryI> {
   try {
-    const response = await api.get<CategoryOut[]>("/admin/categories");
+    const response = await api.get<AdminCategoryI>(
+      `/admin/categories?page=${page}`
+    );
     return response.data;
   } catch (error) {
     throw error;
