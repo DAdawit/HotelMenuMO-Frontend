@@ -1,17 +1,13 @@
 "use client";
 import * as React from "react";
-import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
 import { MenuOut } from "@/types/Menu";
 import SearchIcon from "@mui/icons-material/Search";
-import Search from "./search";
 import api from "@/services/axios";
 import { SearchResultI } from "@/types/SearchResultT";
-import { Spinner } from "@/assets/icons/Spinner";
 import CloseIcon from "@mui/icons-material/Close";
 import MenuCard2Skeleton from "@/components/Skeletons/MenuCard2Skeleton";
 import MenuCard2 from "@/components/Menu/MenuCard2";
@@ -63,7 +59,6 @@ const SearchResults = () => {
         .get(`/search?search=${data}&page=${pageNUmber}`)
         .then((res) => {
           setSearchResult(res.data);
-          console.log(res.data);
         })
         .catch((err) => {
           setLoading(false);
@@ -136,7 +131,7 @@ const SearchResults = () => {
                   )}
 
                   {searchResult?.data?.map((menu, index) => (
-                    <MenuCard2 key={index} menu={menu} />
+                    <MenuCard2 key={menu.id} menu={menu} />
                   ))}
                 </div>
               </div>
