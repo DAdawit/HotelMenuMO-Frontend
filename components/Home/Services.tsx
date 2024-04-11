@@ -30,13 +30,15 @@ export default async function Services() {
         {data.map((item) => (
           <div className="py-3 grid items-center" key={item.id}>
             <div className="min-h-82 align-start">
-              <Image
-                src={item.imageUrl}
-                height={1000}
-                width={1000}
-                alt={item.name}
-                className="h-72 w-60 rounded-md  hover:scale-110 transition-all object-cover object-center"
-              />
+              <Link href={`/menus/category/${item.id}`}>
+                <Image
+                  src={item.imageUrl}
+                  height={1000}
+                  width={1000}
+                  alt={item.name}
+                  className="h-72 w-60 rounded-md  hover:scale-110 transition-all object-cover object-center"
+                />
+              </Link>
             </div>
             <div className="grid justify-items-center align-end">
               <h1 className="text-secondary text-center tracking-wider font-sans mt-5 text-2xl h-max">
@@ -51,61 +53,6 @@ export default async function Services() {
             </div>
           </div>
         ))}
-
-        {/* <div className="py-3 grid items-center">
-          <Image
-            src="/breakfast.jpg"
-            height={300}
-            width={200}
-            alt="breakfast"
-            className="w-full rounded-lg hover:scale-110 transition-all object-contain"
-          />
-          <h1 className="text-secondary text-center tracking-wider font-sans mt-5 text-2xl">
-            Breakfast
-          </h1>
-          <Link
-            href="/menu"
-            className="text-primary hover:underline transition-all underline-offset-4 text-center"
-          >
-            View Menu
-          </Link>
-        </div>
-        <div className=" py-3 sm:mt-16 grid items-center">
-          <Image
-            src="/appetizers.jpg"
-            height={300}
-            width={200}
-            alt="appetizers"
-            className="w-full rounded-lg hover:scale-110 transition-all object-contain"
-          />
-          <h1 className="text-secondary text-center tracking-wider font-sans mt-5 text-2xl">
-            Appetizers
-          </h1>
-          <Link
-            href="/menu"
-            className="text-primary hover:underline transition-all underline-offset-4 text-center"
-          >
-            View Menu
-          </Link>
-        </div>
-        <div className="py-3 grid items-center">
-          <Image
-            src="/drinks.jpg"
-            height={300}
-            width={200}
-            alt="drinks"
-            className="w-full rounded-lg hover:scale-110 transition-all object-contain"
-          />
-          <h1 className="text-secondary text-center tracking-wider font-sans mt-5 text-2xl">
-            Drinks
-          </h1>
-          <Link
-            href="/menu"
-            className="text-primary hover:underline transition-all underline-offset-4 text-center"
-          >
-            View Menu
-          </Link>
-        </div> */}
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import Link from "next/link";
 import React from "react";
 import TemporaryDrawer from "./Drawer";
 import { usePathname } from "next/navigation";
+import SearchResults from "./search/searchResults";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -24,7 +25,12 @@ const Navbar = () => {
           />
         </Link>
         <div className="flex justify-evenly gap-3">
-          <TemporaryDrawer />
+          <div>
+            <SearchResults />
+          </div>
+          <div>
+            <TemporaryDrawer />
+          </div>
         </div>
       </div>
     </>

@@ -10,12 +10,7 @@ import { useState } from "react";
 import { notify } from "@/app/toast";
 import { Spinner } from "@/assets/icons/Spinner";
 import { useMutation } from "@tanstack/react-query";
-import {
-  addCategory,
-  addSubCategory,
-  fetchCategories,
-} from "@/services/admin.services";
-import DiamondIcon from "@mui/icons-material/Diamond";
+import { addSubCategory, fetchCategories } from "@/services/admin.services";
 import CategoryIcon from "@mui/icons-material/Category";
 import { useQuery } from "@tanstack/react-query";
 
