@@ -7,7 +7,7 @@ export default async function SpecialMenu() {
   const data = await fetchSpecialFoods();
   return (
     <div className="bg-[#131415]">
-      {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
+      <pre className="text-white">{JSON.stringify(data, null, 2)}</pre>
       <div className="container mx-auto px-5">
         <div className="flex flex-col justify-center items-center gap-5 pt-10">
           <h1 className=" text-primary font-sans text-sm font-medium ">
@@ -25,9 +25,9 @@ export default async function SpecialMenu() {
           </h1>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mt-5 gap-3 h-max">
-          {data?.map((special, index) => (
-            <MenuCard key={index} menu={special} />
-          ))}
+          {data &&
+            Array.isArray(data) &&
+            data.map((special) => <MenuCard key={special.id} menu={special} />)}
         </div>
         <div className="flex flex-col justify-center items-center gap-5 pt-10">
           <Link

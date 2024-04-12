@@ -3,14 +3,13 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { MenusByMealTimeOUt } from "@/types/Menu";
-import { FoodAndDrinkIcon } from "@/assets/icons/FoodAndDrinkIcon";
 import MenuCard2 from "./MenuCard2";
 
 type PropType = {
   menus: MenusByMealTimeOUt[];
 };
 const MenuBySubCategories: React.FC<PropType> = ({ menus }) => {
-  const [activeTab, setActiveTab] = useState(menus && menus[0]?.name); // Set the initial active tab
+  const [activeTab, setActiveTab] = useState(menus[0]?.name); // Set the initial active tab
 
   const handleTabClick = (tabName: string) => {
     setActiveTab(tabName);
@@ -37,7 +36,7 @@ const MenuBySubCategories: React.FC<PropType> = ({ menus }) => {
           Array.isArray(menus) &&
           menus.map((item, index) => (
             <button
-              key={index}
+              key={item.id}
               onClick={() => handleTabClick(item.name)}
               className="flex items-center md:justify-center flex-col md:flex-row gap-2 h-full text-primary shadow-lg"
             >
@@ -63,9 +62,11 @@ const MenuBySubCategories: React.FC<PropType> = ({ menus }) => {
               <div key={item?.id} className="grid ">
                 {item?.menues.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    {item?.menues.map((menu, index) => (
-                      <MenuCard2 menu={menu} key={index} />
-                    ))}
+                    {item.menues &&
+                      Array.isArray(item.menues) &&
+                      item.menues.map((menu) => (
+                        <MenuCard2 menu={menu} key={menu.id} />
+                      ))}
                   </div>
                 ) : (
                   <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-6 gap-8 max-w-6xl mx-auto  xll:max-w-7xl xll:mx-auto text-white">

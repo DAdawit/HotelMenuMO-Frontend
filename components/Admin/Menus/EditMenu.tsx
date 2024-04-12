@@ -61,18 +61,18 @@ const EditMenu: React.FC<PropType> = ({ refetch, menu }) => {
 
   const {
     data: categories,
-    isLoading: categoriesLoading,
-    error: CatError,
-    refetch: refetchcategories,
+    // isLoading: categoriesLoading,
+    // error: CatError,
+    // refetch: refetchcategories,
   } = useQuery({
     queryKey: ["fetchCategoriesWithSubcategory"],
     queryFn: fetchCategoriesWithSubcategory,
   });
   const {
     data: mealtimes,
-    isLoading: mealtimesLoading,
-    error: mealtimesError,
-    refetch: refetchMealtimes,
+    // isLoading: mealtimesLoading,
+    // error: mealtimesError,
+    // refetch: refetchMealtimes,
   } = useQuery({
     queryKey: ["fetchMealTimes"],
     queryFn: fetchMealTimes,
@@ -150,8 +150,6 @@ const EditMenu: React.FC<PropType> = ({ refetch, menu }) => {
   };
 
   useEffect(() => {
-    // console.log("Selected Category ID:", selectedCategoryId);
-
     if (menu) {
       const transformedMealTimes = menu?.available_meal_times.map(
         (mealTime) => ({
@@ -191,9 +189,6 @@ const EditMenu: React.FC<PropType> = ({ refetch, menu }) => {
             onSubmit={handleSubmit(submitData)}
             className="max-w-2xl mx-auto bg-white px-8 pb-8"
           >
-            {/* {menu.id} */}
-            {/* <PageTitle title="Update New" /> */}
-
             <div className="grid gap-2">
               <div>
                 <label

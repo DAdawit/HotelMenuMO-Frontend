@@ -8,25 +8,9 @@ import Drawer from "@mui/material/Drawer";
 import { IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter";
-import PlaceIcon from "@mui/icons-material/Place";
-import CategoryIcon from "@mui/icons-material/Category";
-import ClassIcon from "@mui/icons-material/Class";
 import SettingsIcon from "@mui/icons-material/Settings";
-import PendingActionsIcon from "@mui/icons-material/PendingActions";
-import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
-import RemoveDoneIcon from "@mui/icons-material/RemoveDone";
-import ContactPageIcon from "@mui/icons-material/ContactPage";
-import HomeMaxIcon from "@mui/icons-material/HomeMax";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import AddLinkIcon from "@mui/icons-material/AddLink";
-import BadgeIcon from "@mui/icons-material/Badge";
-import { useQuery } from "@tanstack/react-query";
-import { fetchLogos } from "@/services/admin.services";
-import DiamondIcon from "@mui/icons-material/Diamond";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import BentoIcon from "@mui/icons-material/Bento";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import VrpanoIcon from "@mui/icons-material/Vrpano";
 import WatchLaterIcon from "@mui/icons-material/WatchLater";
 import FitbitIcon from "@mui/icons-material/Fitbit";
@@ -35,23 +19,13 @@ export default function AdminDrawer() {
   const [state, setState] = React.useState({
     left: false,
   });
-  const [users, setUsers] = useState<boolean>(false);
-  const [members, setMemebers] = useState<boolean>(false);
-  const [account, setAccount] = useState<boolean>(false);
-  const [gifts, setGifts] = useState<boolean>(false);
-  const [serviceCharge, setServiceCharge] = useState<boolean>(false);
-  const [registrationFee, setRegistrationFee] = useState<boolean>(false);
-  const [Message, setMessages] = useState<boolean>(false);
-  const [adminFee, setAdminFee] = useState<boolean>(false);
+
   const toggleDrawer =
     (anchor: Anchor, open: boolean) =>
     (event: React.KeyboardEvent | React.MouseEvent) => {
       setState({ ...state, [anchor]: open });
     };
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["fetchLogos"],
-    queryFn: fetchLogos,
-  });
+
   // console.log(user?.level);
   return (
     <div>
@@ -83,7 +57,7 @@ export default function AdminDrawer() {
             >
               <div className="h-full w-full ">
                 <div className="w-fll flex justify-center mt-3">
-                  <Link href="/">
+                  {/* <Link href="/">
                     <Image
                       src={(data && data[1]?._fullImagePath) || ""}
                       alt="logo"
@@ -91,7 +65,7 @@ export default function AdminDrawer() {
                       height={1000}
                       className="h-12 w-24 xxl:h-24 xxl:w-32 object-contain"
                     />
-                  </Link>
+                  </Link> */}
                 </div>
                 <section className="">
                   <div className="grid gap-y-3 mt-5">

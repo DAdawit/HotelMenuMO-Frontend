@@ -76,8 +76,8 @@ const Page = () => {
     setSearch("");
   };
   return (
-    <div className=" p-5 ">
-      <button onClick={() => refetch()}>refetch</button>
+    <div className="container mx-auto p-5 ">
+      {/* <button onClick={() => refetch()}>refetch</button> */}
       {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
       <div className="flex justify-between items-center py-6">
         <PageTitle title="Menues" />

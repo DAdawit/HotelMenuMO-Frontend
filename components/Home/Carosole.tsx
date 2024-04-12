@@ -14,6 +14,9 @@ interface CarosoleProps {
 }
 export default class Carosole extends Component<CarosoleProps> {
   render() {
+    const { carosoles } = this.props;
+    const safeCarosoles = Array.isArray(carosoles) ? carosoles : [];
+
     const settings = {
       dots: true,
       infinite: true,
@@ -46,51 +49,47 @@ export default class Carosole extends Component<CarosoleProps> {
     };
 
     return (
-      <>
-        <div className=" overflow-x-hidden">
-          {/* <pre>{JSON.stringify(this.props.carosoles, null, 2)}</pre> */}
-
-          <Slider {...settings}>
-            {this.props.carosoles &&
-              Array.isArray(this.props.carosoles) &&
-              this.props.carosoles.map((carosole, index) => (
-                <div
-                  className="h-[90vh] relative xl:max-h-[90vh] xll:max-h-[60vh]"
-                  key={carosole?.id}
-                >
-                  <Image
-                    src={`${carosole?.imageUrl}`}
-                    alt="hero image"
-                    height={2000}
-                    width={2000}
-                    className="h-[90vh] xl:max-h-[90vh] xll:max-h-[60vh] w-screen object-cover  object-bottom brightness-50"
-                  />
-                  <div className="absolute h-full top-0 w-full flex text-white ">
-                    <div className="flex items-center justify-start w-full px-5 container mx-auto">
-                      <div className="max-w-3xl xxl:max-w-4xl grid ">
-                        <h1 className="text-3xl  xl:text-4xl  xxl:text-6xl font-bold mt-5">
-                          {carosole?.title}
-                        </h1>
-                        <h1 className="text-primary font-serif text-lg font-bold tracking-widest mt-2">
-                          {carosole.slogan}
-                        </h1>
-                        <p className=" mt-5 xxl:text-lg">{carosole?.content}</p>
-                        <div className="mt-5 align-bottom h-full flex items-end">
-                          <Link
-                            href="/menus"
-                            className="py-3 px-6 rounded-lg w-max bg-bgButton text-white mt-4 hover:bg-bgButton transition-all tracking-wider font-medium font-mono"
-                          >
-                            View our menu
-                          </Link>
-                        </div>
+      <div className=" overflow-x-hidden">
+        <Slider {...settings}>
+          {safeCarosoles &&
+            Array.isArray(safeCarosoles) &&
+            safeCarosoles.map((carosole, index) => (
+              <div
+                className="h-[90vh] relative xl:max-h-[90vh] xll:max-h-[60vh]"
+                key={carosole?.id}
+              >
+                <Image
+                  src={`${carosole?.imageUrl}`}
+                  alt="hero image"
+                  height={2000}
+                  width={2000}
+                  className="h-[90vh] xl:max-h-[90vh] xll:max-h-[60vh] w-screen object-cover  object-bottom brightness-50"
+                />
+                <div className="absolute h-full top-0 w-full flex text-white ">
+                  <div className="flex items-center justify-start w-full px-5 container mx-auto">
+                    <div className="max-w-3xl xxl:max-w-4xl grid ">
+                      <h1 className="text-3xl  xl:text-4xl  xxl:text-6xl font-bold mt-5">
+                        {carosole?.title}
+                      </h1>
+                      <h1 className="text-primary font-serif text-lg font-bold tracking-widest mt-2">
+                        {carosole.slogan}
+                      </h1>
+                      <p className=" mt-5 xxl:text-lg">{carosole?.content}</p>
+                      <div className="mt-5 align-bottom h-full flex items-end">
+                        <Link
+                          href="/menus"
+                          className="py-3 px-6 rounded-lg w-max bg-bgButton text-white mt-4 hover:bg-bgButton transition-all tracking-wider font-medium font-mono"
+                        >
+                          View our menu
+                        </Link>
                       </div>
                     </div>
                   </div>
                 </div>
-              ))}
-          </Slider>
-        </div>
-      </>
+              </div>
+            ))}
+        </Slider>
+      </div>
     );
   }
 }
