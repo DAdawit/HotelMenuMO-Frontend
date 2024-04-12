@@ -76,7 +76,8 @@ const Page = () => {
     setSearch("");
   };
   return (
-    <div className="container mx-auto  p-5 ">
+    <div className=" p-5 ">
+      <button onClick={() => refetch()}>refetch</button>
       {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
       <div className="flex justify-between items-center py-6">
         <PageTitle title="Menues" />
@@ -124,12 +125,12 @@ const Page = () => {
               >
                 name
               </th>
-              <th
+              {/* <th
                 scope="col"
                 className="px-6 py-3 whitespace-nowrap text-start"
               >
                 price
-              </th>
+              </th> */}
               <th
                 scope="col"
                 className="px-6 py-3 whitespace-nowrap text-start"
@@ -152,7 +153,7 @@ const Page = () => {
                 scope="col"
                 className="px-6 py-3 whitespace-nowrap text-start"
               >
-                avaliable_all_day
+                Avaliable
               </th>
               <th
                 scope="col"

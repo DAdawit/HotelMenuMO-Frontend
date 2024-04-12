@@ -195,6 +195,7 @@ export async function deleteSubCategory(id: number): Promise<any> {
     const res = await api.delete(`/admin/sub-categories/${id}`);
     return res.data;
   } catch (error) {
+    console.error("An error occurred:", error);
     throw error;
   }
 }

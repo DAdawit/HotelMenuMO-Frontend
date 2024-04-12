@@ -88,6 +88,15 @@ export default function Page({ params }: { params: { id: string } }) {
     resolver: zodResolver(schema),
     defaultValues: {
       available_meal_times: [],
+      name: menuItem?.name,
+      description: menuItem?.description,
+      price: menuItem?.price,
+      ingredients: menuItem?.ingridiants, // Assuming this is the correct field name
+      avaliable_all_day: menuItem?.avaliable_all_day,
+      mainDishes: menuItem?.mainDishes,
+      special: menuItem?.special,
+      categoryId: menuItem?.category?.id.toString() ?? "",
+      subCategoryId: menuItem?.subCategory?.id?.toString() ?? null,
     },
   });
 
@@ -105,23 +114,12 @@ export default function Page({ params }: { params: { id: string } }) {
         })
       );
       setSelectedOption(transformedMealTimes);
-      reset({
-        name: menuItem.name,
-        description: menuItem.description,
-        price: menuItem.price,
-        ingredients: menuItem.ingridiants,
-        avaliable_all_day: menuItem.avaliable_all_day,
-        mainDishes: menuItem.mainDishes,
-        special: menuItem.special,
-        categoryId: menuItem.category?.id.toString(),
-        subCategoryId: menuItem.subCategory?.id?.toString() || null,
-      });
     }
     setIsInitialLoad(false); // Prevent further resets due to dependency changes
 
-    const category =
-      categories &&
-      categories.find((c) => c.id.toString() === selectedCategoryId);
+    const category = categories?.find(
+      (c) => c.id.toString() === selectedCategoryId
+    );
     if (category) {
       setIsInitialLoad(false);
       setSubCategories(category.subCategory);

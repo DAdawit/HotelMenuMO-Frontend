@@ -130,6 +130,7 @@ export async function MenuByMealtimeId(
     );
     return res.data;
   } catch (error) {
+    console.error("An error occurred:", error);
     throw error;
   }
 }
@@ -144,6 +145,7 @@ export async function fetchMenuByCategory(
     );
     return res.data;
   } catch (error) {
+    console.error("An error occurred:", error);
     throw error;
   }
 }
@@ -157,6 +159,7 @@ export async function fetchAllMainDishes(
     );
     return res.data;
   } catch (error) {
+    console.error("An error occurred:", error);
     throw error;
   }
 }
@@ -170,6 +173,7 @@ export async function fetchAllSpecialDishes(
     );
     return res.data;
   } catch (error) {
+    console.error("An error occurred:", error);
     throw error;
   }
 }
@@ -192,6 +196,7 @@ export async function fetchMenuBySubCategoryId(
     );
     return res.data;
   } catch (error) {
+    console.error("An error occurred:", error);
     throw error;
   }
 }
