@@ -14,7 +14,7 @@ const AuthCheck = () => {
       .then((res) => {
         console.log(res.data.data);
         setUser(res.data);
-        // router.push("/admin/dashboard");
+        router.push("/admin/dashboard");
       })
       .catch((err) => {
         setLoadingFalse(false);

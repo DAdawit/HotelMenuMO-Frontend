@@ -1,4 +1,5 @@
 import api from "@/services/axios";
+import { SatatesMenuI, StatesI } from "@/types";
 import {
   AdimSubCategoryI,
   AdminCategoryI,
@@ -305,6 +306,46 @@ export async function updateMealTime(
 export async function deleteMealTime(id: number): Promise<any> {
   try {
     const res = await api.delete<MealTimeOut>(`/admin/mealTimes/${id}`);
+    return res.data;
+  } catch (error) {
+    console.error("An error occurred:", error);
+    throw error;
+  }
+}
+
+export async function getStates(): Promise<StatesI> {
+  try {
+    const res = await api.get<StatesI>(`admin/states`);
+    return res.data;
+  } catch (error) {
+    console.error("An error occurred:", error);
+    throw error;
+  }
+}
+
+export async function getStatesCountByMealtime(): Promise<SatatesMenuI[]> {
+  try {
+    const res = await api.get<SatatesMenuI[]>(`admin/states/mealtime`);
+    return res.data;
+  } catch (error) {
+    console.error("An error occurred:", error);
+    throw error;
+  }
+}
+
+export async function getStatesCountByCategory(): Promise<SatatesMenuI[]> {
+  try {
+    const res = await api.get<SatatesMenuI[]>(`admin/states/menuByCategory`);
+    return res.data;
+  } catch (error) {
+    console.error("An error occurred:", error);
+    throw error;
+  }
+}
+
+export async function getStatesCountBySubCategory(): Promise<SatatesMenuI[]> {
+  try {
+    const res = await api.get<SatatesMenuI[]>(`admin/states/menuBysubCategory`);
     return res.data;
   } catch (error) {
     console.error("An error occurred:", error);
