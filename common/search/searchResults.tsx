@@ -136,11 +136,13 @@ const SearchResults = () => {
                 </div>
               </div>
             </div>
-            <PaginationComponent
-              count={searchResult?.totalPages}
-              page={searchResult?.currentPage}
-              handleChange={handleChange}
-            />
+            {searchResult?.hasNext || searchResult?.hasPrev ? (
+              <PaginationComponent
+                count={searchResult?.totalPages}
+                page={searchResult?.currentPage}
+                handleChange={handleChange}
+              />
+            ) : null}
           </div>
         </DialogContent>
       </BootstrapDialog>

@@ -36,8 +36,6 @@ export default async function Home() {
 
   return (
     <>
-      {/* <pre>{JSON.stringify(logos, null, 2)}</pre> */}
-
       <main id="" className="overflow-hidden bg-bgPrimary">
         <div>
           <Carosole carosoles={heroSections} />

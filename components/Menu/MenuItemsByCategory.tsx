@@ -45,11 +45,13 @@ const MenuItemsByCategory = () => {
         </div>
       </div>
 
-      <PaginationComponent
-        count={data?.totalPages}
-        page={data?.currentPage}
-        handleChange={handleChange}
-      />
+      {data?.hasNext || data?.hasPrev ? (
+        <PaginationComponent
+          count={data?.totalPages}
+          page={data?.currentPage}
+          handleChange={handleChange}
+        />
+      ) : null}
     </div>
   );
 };

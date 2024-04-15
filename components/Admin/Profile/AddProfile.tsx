@@ -8,19 +8,25 @@ import { useForm } from "react-hook-form";
 import { ZodType, z } from "zod";
 import { useState } from "react";
 import { notify } from "@/app/toast";
+import { Tooltip } from "@mui/material";
 import { Spinner } from "@/assets/icons/Spinner";
+import HomeMaxIcon from "@mui/icons-material/HomeMax";
 import { useMutation } from "@tanstack/react-query";
-import { addCategory } from "@/services/admin.services";
+import { addHeroSection } from "@/services/admin.services";
 import AddIcon from "@mui/icons-material/Add";
 
 type FormType = {
-  name: string;
+  slogan: string;
+  title: string;
+  content: string;
   image?: FileList;
 };
 const isBrowser = () => typeof window !== "undefined";
 
 const schema: ZodType<FormType> = z.object({
-  name: z.string().min(3, { message: "name is required" }),
+  slogan: z.string().min(3, { message: "Slogan is required" }),
+  title: z.string().min(3, { message: "Title is required" }),
+  content: z.string().min(3, { message: "Content is required" }),
   image: isBrowser()
     ? z
         .instanceof(FileList)
@@ -29,10 +35,12 @@ const schema: ZodType<FormType> = z.object({
 });
 
 type PropType = {
+  open: boolean;
+
   refetch: () => void;
 };
 
-const AddCategory: React.FC<PropType> = ({ refetch }) => {
+const AddProfile: React.FC<PropType> = ({ refetch }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
@@ -45,26 +53,16 @@ const AddCategory: React.FC<PropType> = ({ refetch }) => {
     resolver: zodResolver(schema),
   });
 
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const AddCategory = useMutation({
-    mutationFn: (data: any) => addCategory(data),
+  const AddHeroSection = useMutation({
+    mutationFn: (data: any) => addHeroSection(data),
     onError: (error: unknown, variables, context) => {
       setLoading(false);
       console.log(error);
     },
     onSuccess: async (data, variables, context) => {
-      notify("Category added successfully !", "success");
       setLoading(false);
       reset();
+      notify("Hero section added successfully !", "success");
       handleClose();
       refetch();
     },
@@ -74,11 +72,13 @@ const AddCategory: React.FC<PropType> = ({ refetch }) => {
     setError("");
     setLoading(true);
     let formdata = new FormData();
-    formdata.append("name", values.name);
+    formdata.append("slogan", values.slogan);
+    formdata.append("title", values.title);
+    formdata.append("content", values.content);
     if (values.image && values.image[0]) {
       formdata.append("image", values.image[0]);
     }
-    AddCategory.mutate(formdata);
+    AddHeroSection.mutate(formdata);
   };
 
   return (
@@ -87,7 +87,7 @@ const AddCategory: React.FC<PropType> = ({ refetch }) => {
         className="text-white bg-primary rounded-full px-4 py-2 flex items-center justify-center gap-x-2"
         onClick={handleClickOpen}
       >
-        <span>Add Category</span>
+        <span>Add Hero Section</span>
         <AddIcon fontSize="small" />
       </button>
 
@@ -97,7 +97,7 @@ const AddCategory: React.FC<PropType> = ({ refetch }) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Add Logo"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{"Add Hero Section"}</DialogTitle>
         <DialogContent>
           <form
             onSubmit={handleSubmit(submitData)}
@@ -107,31 +107,64 @@ const AddCategory: React.FC<PropType> = ({ refetch }) => {
             <section className="grid gap-x-5 gap-y-1">
               <div>
                 <label
-                  htmlFor="name"
+                  htmlFor="slogan"
                   className="capitalize pl-3 text-gray-600 text-sm"
                 >
-                  Name *
+                  Slogan *
                 </label>
                 <input
-                  {...register("name")}
-                  placeholder="Name"
-                  name="name"
-                  id="name"
+                  {...register("slogan")}
+                  placeholder="Slogan"
+                  name="slogan"
+                  id="slogan"
                   className="w-full"
                 />
-                {errors?.name && (
+                {errors?.slogan && (
                   <small className="text-red-500 pl-2">
-                    {errors.name.message}
+                    {errors.slogan.message}
                   </small>
                 )}
               </div>
-
+              <div>
+                <label
+                  htmlFor="title"
+                  className="capitalize pl-3 text-gray-600 text-sm"
+                >
+                  Title *
+                </label>
+                <input
+                  {...register("title")}
+                  placeholder="Title"
+                  name="title"
+                  id="title"
+                  className="w-full"
+                />
+                {errors?.title && (
+                  <small className="text-red-500 pl-2">
+                    {errors.title.message}
+                  </small>
+                )}
+              </div>
+              <div className="grid gap-y-1 mt-2">
+                <label
+                  htmlFor="content"
+                  className="capitalize pl-3 text-gray-600 text-sm"
+                >
+                  Content *
+                </label>
+                <textarea id="description" {...register("content")}></textarea>
+                {errors?.content && (
+                  <small className="text-red-500 pl-2">
+                    {errors.content.message}
+                  </small>
+                )}
+              </div>
               <div className="grid gap-y-1 mt-2">
                 <label
                   htmlFor="account_number"
                   className="capitalize pl-3 text-gray-600 text-sm"
                 >
-                  Image *
+                  Hero Image *
                 </label>
                 <input
                   {...register("image")}
@@ -166,4 +199,4 @@ const AddCategory: React.FC<PropType> = ({ refetch }) => {
   );
 };
 
-export default AddCategory;
+export default AddProfile;

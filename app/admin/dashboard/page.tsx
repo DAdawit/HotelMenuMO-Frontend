@@ -1,6 +1,7 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
 import PageTitle from "@/common/PageTitle";
+import { useState } from "react";
 
 import CategoryIcon from "@mui/icons-material/Category";
 
@@ -14,11 +15,21 @@ import MenuBookIcon from "@mui/icons-material/MenuBook";
 import BentoIcon from "@mui/icons-material/Bento";
 
 import StatesChart from "@/components/Dashboard/StatesChart";
+import { fetchProfile } from "@/services/main.services";
 const Page = () => {
+  const [open, setOpen] = useState(false);
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["getStates"],
     queryFn: () => getStates(),
   });
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const {
     data: categoriesMenuCount,
@@ -48,6 +59,15 @@ const Page = () => {
     queryFn: () => getStatesCountBySubCategory(),
   });
 
+  const {
+    data: profile,
+    isLoading: profileLoading,
+    error: prorileError,
+    refetch: refetchProfile,
+  } = useQuery({
+    queryKey: ["fetchProfile"],
+    queryFn: () => fetchProfile(),
+  });
   return (
     <div className="container mx-auto px-5 pb-16 min-h-screen">
       <div className="py-5">

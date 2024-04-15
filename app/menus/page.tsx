@@ -17,10 +17,10 @@ export default async function Page() {
       </section>
       <div className="container mx-auto px-5">
         <section>
-          <MenuBySubCategories menus={data} />
-        </section>
-        <section>
           <MainDishes />
+        </section>
+        <section className="py-8">
+          <MenuBySubCategories menus={data} />
         </section>
         <section>
           <SpecialMenu />
@@ -28,9 +28,7 @@ export default async function Page() {
         <section>
           <ChefSpecial />
         </section>
-        <section>
-          <Reservations />
-        </section>
+
         <MoveToTop />
       </div>
     </div>

@@ -7,7 +7,7 @@ export default async function SpecialMenu() {
   const data = await fetchSpecialFoods();
   return (
     <div className="bg-[#131415]">
-      <pre className="text-white">{JSON.stringify(data, null, 2)}</pre>
+      {/* <pre className="text-white">{JSON.stringify(data, null, 2)}</pre> */}
       <div className="container mx-auto px-5">
         <div className="flex flex-col justify-center items-center gap-5 pt-10">
           <h1 className=" text-primary font-sans text-sm font-medium ">
