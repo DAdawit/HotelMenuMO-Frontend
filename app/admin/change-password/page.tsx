@@ -58,7 +58,7 @@ const Page = () => {
     },
   });
   const submitData = (values: FormValues) => {
-    console.log(values);
+    // console.log(values);
     setLoading(true);
     changePassword.mutate(values);
   };
