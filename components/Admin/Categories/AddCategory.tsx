@@ -11,8 +11,6 @@ import { notify } from "@/app/toast";
 import { Spinner } from "@/assets/icons/Spinner";
 import { useMutation } from "@tanstack/react-query";
 import { addCategory } from "@/services/admin.services";
-import DiamondIcon from "@mui/icons-material/Diamond";
-import CategoryIcon from "@mui/icons-material/Category";
 import AddIcon from "@mui/icons-material/Add";
 
 type FormType = {

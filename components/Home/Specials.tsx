@@ -1,6 +1,5 @@
 "use client";
 import React, { Component } from "react";
-import { specials } from "@/data/foods";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -12,6 +11,9 @@ type PropsType = {
 };
 export default class Specials extends Component<PropsType> {
   render() {
+    const { specials } = this.props;
+    const safeSpecials = Array.isArray(specials) ? specials : [];
+
     const settings = {
       dots: true,
       infinite: true,
@@ -68,18 +70,28 @@ export default class Specials extends Component<PropsType> {
         </div>
         <div className="container mx-auto px-6">
           <Slider {...settings}>
-            {this.props.specials.map((special, index) => (
+            {safeSpecials.map((special, index) => (
               <div
-                key={index}
+                key={special.id}
                 className="p-3 grid items-center justify-center "
               >
-                <Image
-                  src={`${special._imageUrl}`}
-                  height={300}
-                  width={200}
-                  alt="breakfast"
-                  className="w-full rounded-md object-cover h-80"
-                />
+                {special.image ? (
+                  <Image
+                    src={`${special._imageUrl}`}
+                    height={300}
+                    width={200}
+                    alt="breakfast"
+                    className="w-full rounded-md object-cover h-80"
+                  />
+                ) : (
+                  <Image
+                    src="/menuPlaceholder.jpg"
+                    height={300}
+                    width={200}
+                    alt="breakfast"
+                    className="w-full rounded-md object-cover h-80 brightness-75 blur-sm"
+                  />
+                )}
                 <h1 className="text-secondary text-center tracking-wider font-sans mt-5 text-2xl">
                   {special.name}
                 </h1>

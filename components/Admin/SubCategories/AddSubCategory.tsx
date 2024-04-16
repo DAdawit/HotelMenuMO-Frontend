@@ -10,12 +10,7 @@ import { useState } from "react";
 import { notify } from "@/app/toast";
 import { Spinner } from "@/assets/icons/Spinner";
 import { useMutation } from "@tanstack/react-query";
-import {
-  addCategory,
-  addSubCategory,
-  fetchCategories,
-} from "@/services/admin.services";
-import DiamondIcon from "@mui/icons-material/Diamond";
+import { addSubCategory, fetchCategories } from "@/services/admin.services";
 import CategoryIcon from "@mui/icons-material/Category";
 import { useQuery } from "@tanstack/react-query";
 
@@ -41,6 +36,8 @@ type PropType = {
 };
 
 const AddSubCategory: React.FC<PropType> = ({ refetch }) => {
+  const [page, setPage] = React.useState(1);
+
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
@@ -69,8 +66,8 @@ const AddSubCategory: React.FC<PropType> = ({ refetch }) => {
     error: subcatError,
     refetch: refetchSubcategory,
   } = useQuery({
-    queryKey: ["fetchCategories"],
-    queryFn: fetchCategories,
+    queryKey: ["fetchCategories", page],
+    queryFn: () => fetchCategories(page as number),
   });
 
   const AddSubCategory = useMutation({
@@ -162,7 +159,7 @@ const AddSubCategory: React.FC<PropType> = ({ refetch }) => {
                     select option
                   </option>
                   {data &&
-                    data.map((category) => (
+                    data.data.map((category) => (
                       <option key={category?.id} value={category?.id}>
                         {category?.name}
                       </option>

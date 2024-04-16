@@ -1,7 +1,5 @@
-import Image from "next/image";
 import "./globals.css";
 import { Inter } from "next/font/google";
-import Link from "next/link";
 import Navbar from "@/common/Navbar";
 import Footer from "@/common/Footer";
 import { ReactQueryProvider } from "./ReactQueryProvider";
@@ -19,15 +17,12 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const styles = {
-    scrollBehavior: "smooth",
-  };
   return (
     <html lang="en" style={{ scrollBehavior: "smooth" }}>
       <body className={inter.className}>
         <ReactQueryProvider>
-          <Navbar />
           <Toaster />
+          <Navbar />
           {children}
           <Footer />
         </ReactQueryProvider>

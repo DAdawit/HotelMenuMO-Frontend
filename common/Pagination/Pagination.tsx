@@ -14,7 +14,7 @@ const PaginationComponent: React.FC<PropType> = ({
   count,
 }) => {
   return (
-    <div className="flex justify-center gap-2 items-center">
+    <div className="flex justify-center gap-2 items-center mt-3">
       <h3 className="text-gray-200">Page: {page}</h3>
       <Pagination
         count={count}

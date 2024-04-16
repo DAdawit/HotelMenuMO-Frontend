@@ -1,13 +1,12 @@
 "use client";
 import Image from "next/image";
-import React from "react";
 import { useState } from "react";
 import ConfirmDelete from "@/common/Alerts/ConfirmDelete";
 import dayjs from "dayjs";
 import { useMutation } from "@tanstack/react-query";
-import { deleteCategory, deleteSubCategory } from "@/services/admin.services";
+import { deleteSubCategory } from "@/services/admin.services";
 import EditCategory from "./EditSubCategory";
-import { CategoryOut, SubCategoryOut } from "@/types/Category";
+import { SubCategoryOut } from "@/types/Category";
 import { notify } from "@/app/toast";
 type PropType = {
   subCategory: SubCategoryOut;
@@ -39,35 +38,33 @@ const SubCategoryLists: React.FC<PropType> = ({ subCategory, refetch }) => {
     DeleteSubCategory.mutate(id);
   };
   return (
-    <>
-      <tr className="border-b text-gray-500 text-sm mb-2 bg-white text-start">
-        <td className="px-6 py-4 gap-2 ">
-          <Image
-            loading="lazy"
-            height={1000}
-            width={1000}
-            src={`${subCategory?.imageUrl}`}
-            alt={`${subCategory?.name}`}
-            className="h-12 w-12 object-cover rounded-md shadow-md"
-          />
-        </td>
-        <td className="px-6 py-4">{subCategory?.name}</td>
-        <td className="px-6 py-4">{subCategory?.category.name}</td>
+    <tr className="border-b text-gray-500 text-sm mb-2 bg-white text-start">
+      <td className="px-6 py-4 gap-2 ">
+        <Image
+          loading="lazy"
+          height={1000}
+          width={1000}
+          src={`${subCategory?.imageUrl}`}
+          alt={`${subCategory?.name}`}
+          className="h-12 w-12 object-cover rounded-md shadow-md"
+        />
+      </td>
+      <td className="px-6 py-4">{subCategory?.name}</td>
+      <td className="px-6 py-4">{subCategory?.category.name}</td>
 
-        <td className="px-6 py-4">
-          {dayjs(subCategory?.created_at).format("MMM-D-YYYY")}
-        </td>
-        <td className="px-6 py-4 text-start   gap-2 flex items-center gap-x-3">
-          <ConfirmDelete
-            confirm={confirm}
-            id={subCategory && subCategory?.id}
-            text="Are you sure you went to delete !"
-            loading={loading}
-          />
-          <EditCategory subCategory={subCategory} refetch={() => refetch()} />
-        </td>
-      </tr>
-    </>
+      <td className="px-6 py-4">
+        {dayjs(subCategory?.created_at).format("MMM-D-YYYY")}
+      </td>
+      <td className="px-6 py-4 text-start   gap-2 flex items-center gap-x-3">
+        <ConfirmDelete
+          confirm={confirm}
+          id={subCategory && subCategory?.id}
+          text="Are you sure you went to delete !"
+          loading={loading}
+        />
+        <EditCategory subCategory={subCategory} refetch={() => refetch()} />
+      </td>
+    </tr>
   );
 };
 

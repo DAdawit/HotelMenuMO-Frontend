@@ -11,7 +11,11 @@ import HomeIcon from "@mui/icons-material/Home";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
 import ReadMoreIcon from "@mui/icons-material/ReadMore";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
-export default function TemporaryDrawer() {
+import { ProfileI } from "@/types";
+type PropType = {
+  profile: ProfileI | undefined;
+};
+const TemporaryDrawer: React.FC<PropType> = ({ profile }) => {
   const [state, setState] = React.useState({
     right: false,
   });
@@ -78,7 +82,7 @@ export default function TemporaryDrawer() {
                     Home
                   </Link>
                   <Link
-                    href="/menu"
+                    href="/menus"
                     className="font-medium font-sans tracking-wider flex justify-start items-center gap-2 text-primary  border-2 border-primary rounded-lg px-2"
                   >
                     <RestaurantIcon className="text-2xl" />
@@ -105,16 +109,16 @@ export default function TemporaryDrawer() {
                     Visit Us
                   </h1>
                   <h3 className="text-gray-300 text-center text-sm font-medium tracking-wide">
-                    Restaurant St, Delicious City,
+                    {profile?.name},
                   </h3>
                   <h3 className="text-gray-300 text-center text-sm font-medium tracking-wide">
-                    London 9578, UK
+                    {profile?.city}, {profile?.address}
                   </h3>
                   <h3 className="text-gray-300 text-center text-sm font-medium tracking-wide">
-                    Open: 9.30 am - 2.30pm
+                    Open: {profile?.openTime}
                   </h3>
                   <h3 className="text-gray-300 text-center text-sm font-medium tracking-wide">
-                    booking@domainame.com
+                    {profile?.email}
                   </h3>
                 </section>
 
@@ -123,7 +127,10 @@ export default function TemporaryDrawer() {
                     Booking Request
                   </h2>
                   <h2 className="text-center text-primary font-bold text-2xl">
-                    +88-123-123456
+                    {profile?.phone}
+                  </h2>
+                  <h2 className="text-center text-primary font-bold text-2xl">
+                    {profile?.secondaryPhone}
                   </h2>
                 </section>
               </div>
@@ -133,4 +140,6 @@ export default function TemporaryDrawer() {
       ))}
     </div>
   );
-}
+};
+
+export default TemporaryDrawer;

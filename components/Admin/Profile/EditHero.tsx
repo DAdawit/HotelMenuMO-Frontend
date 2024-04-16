@@ -1,5 +1,6 @@
 "use client";
 import * as React from "react";
+import axios, { AxiosError } from "axios";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -8,43 +9,37 @@ import { useForm } from "react-hook-form";
 import { ZodType, z } from "zod";
 import { useState } from "react";
 import { notify } from "@/app/toast";
+import EditIcon from "@mui/icons-material/Edit";
+import { Tooltip } from "@mui/material";
 import { Spinner } from "@/assets/icons/Spinner";
+import api from "@/services/axios";
+import { HeroCreate, HeroOut } from "@/types/Hero";
 import { useMutation } from "@tanstack/react-query";
-import {
-  addCategory,
-  addSubCategory,
-  fetchCategories,
-} from "@/services/admin.services";
-import DiamondIcon from "@mui/icons-material/Diamond";
-import CategoryIcon from "@mui/icons-material/Category";
-import { useQuery } from "@tanstack/react-query";
-import AddIcon from "@mui/icons-material/Add";
+import { updateHeroSection } from "@/services/admin.services";
 
 type FormType = {
-  categoryId: string;
-  name: string;
+  slogan: string;
+  title: string;
+  content: string;
   image?: FileList;
 };
-const isBrowser = () => typeof window !== "undefined";
 
 const schema: ZodType<FormType> = z.object({
-  categoryId: z.string().min(1, "category required!"),
-  name: z.string().min(3, { message: "name is required" }),
-  image: isBrowser()
-    ? z
-        .instanceof(FileList)
-        .refine((fileList) => fileList.length > 0, "Image is required")
-    : z.any(),
+  slogan: z.string().min(3, { message: "Slogan is required" }),
+  title: z.string().min(3, { message: "Title is required" }),
+  content: z.string().min(3, { message: "Content is required" }),
+  image: z.any(),
 });
 
 type PropType = {
+  hero: HeroOut;
   refetch: () => void;
 };
 
-const AddMenu: React.FC<PropType> = ({ refetch }) => {
+const EditHero: React.FC<PropType> = ({ refetch, hero }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-
+  const [data, setData] = useState();
   const {
     register,
     handleSubmit,
@@ -52,6 +47,11 @@ const AddMenu: React.FC<PropType> = ({ refetch }) => {
     reset,
   } = useForm<FormType>({
     resolver: zodResolver(schema),
+    defaultValues: {
+      slogan: hero?.slogan,
+      title: hero?.title,
+      content: hero?.content,
+    },
   });
 
   const [open, setOpen] = React.useState(false);
@@ -64,52 +64,50 @@ const AddMenu: React.FC<PropType> = ({ refetch }) => {
     setOpen(false);
   };
 
-  const {
-    data,
-    isLoading,
-    error: subcatError,
-    refetch: refetchSubcategory,
-  } = useQuery({
-    queryKey: ["fetchCategories"],
-    queryFn: fetchCategories,
-  });
-
-  const AddSubCategory = useMutation({
-    mutationFn: (data: any) => addSubCategory(data),
+  const updateHero = useMutation({
+    mutationFn: async ({ id, values }: { id: number; values: any }) =>
+      updateHeroSection(id, values),
     onError: (error: unknown, variables, context) => {
-      setLoading(false);
-      console.log(error);
+      if (axios.isAxiosError(error)) {
+        setError(error.response?.data.detail);
+        console.log(error.response?.data.detail);
+        setLoading(false);
+      } else {
+        console.log("An unexpected error occurred:", error);
+      }
     },
     onSuccess: async (data, variables, context) => {
-      notify("SubCategory added successfully !", "success");
       setLoading(false);
-      reset();
       handleClose();
+      reset();
       refetch();
     },
   });
 
-  const submitData = (values: FormType) => {
+  const submitData = async (values: FormType) => {
     setError("");
     setLoading(true);
+    console.log(values);
+
     let formdata = new FormData();
-    formdata.append("name", values.name);
-    formdata.append("categoryId", values.categoryId);
+
+    if (values.slogan) formdata.append("slogan", values.slogan);
+    if (values.title) formdata.append("title", values.title);
+    if (values.content) formdata.append("description", values.content);
+
     if (values.image && values.image[0]) {
       formdata.append("image", values.image[0]);
     }
-    AddSubCategory.mutate(formdata);
+    updateHero.mutate({ id: hero.id, values: formdata });
   };
 
   return (
     <div>
-      <button
-        className="text-white bg-primary rounded-full px-4 py-2 flex items-center justify-center gap-x-2"
-        onClick={handleClickOpen}
-      >
-        <span>Add Menu</span>
-        <AddIcon fontSize="small" />
-      </button>
+      <Tooltip title="Edit" placement="top">
+        <button className="text-primary" onClick={handleClickOpen}>
+          <EditIcon fontSize="small" />
+        </button>
+      </Tooltip>
 
       <Dialog
         open={open}
@@ -117,7 +115,7 @@ const AddMenu: React.FC<PropType> = ({ refetch }) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Add Menu"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{"Edit Hero Section"}</DialogTitle>
         <DialogContent>
           <form
             onSubmit={handleSubmit(submitData)}
@@ -127,60 +125,64 @@ const AddMenu: React.FC<PropType> = ({ refetch }) => {
             <section className="grid gap-x-5 gap-y-1">
               <div>
                 <label
-                  htmlFor="name"
+                  htmlFor="slogan"
                   className="capitalize pl-3 text-gray-600 text-sm"
                 >
-                  Name *
+                  Slogan *
                 </label>
-
                 <input
-                  {...register("name")}
-                  placeholder="Name"
-                  name="name"
-                  id="name"
+                  {...register("slogan")}
+                  placeholder="Slogan"
+                  name="slogan"
+                  id="slogan"
                   className="w-full"
                 />
-                {errors?.name && (
+                {errors?.slogan && (
                   <small className="text-red-500 pl-2">
-                    {errors.name.message}
+                    {errors.slogan.message}
                   </small>
                 )}
               </div>
-              <div className="grid gap-y-1">
+              <div>
                 <label
-                  htmlFor="categoryId"
-                  className="capitalize pl-3 font-semibold"
+                  htmlFor="title"
+                  className="capitalize pl-3 text-gray-600 text-sm"
                 >
-                  Category *
+                  Title *
                 </label>
-
-                <select
-                  id="categoryId"
-                  {...register("categoryId")}
+                <input
+                  {...register("title")}
+                  placeholder="Title"
+                  name="title"
+                  id="title"
                   className="w-full"
-                >
-                  <option value="" selected disabled>
-                    select option
-                  </option>
-                  {data &&
-                    data.map((category) => (
-                      <option key={category?.id} value={category?.id}>
-                        {category?.name}
-                      </option>
-                    ))}
-                </select>
-                {errors?.categoryId && (
+                />
+                {errors?.title && (
                   <small className="text-red-500 pl-2">
-                    {errors.categoryId.message}
+                    {errors.title.message}
+                  </small>
+                )}
+              </div>
+              <div className="grid gap-y-1 mt-2">
+                <label
+                  htmlFor="content"
+                  className="capitalize pl-3 text-gray-600 text-sm"
+                >
+                  Content *
+                </label>
+                <textarea id="description" {...register("content")}></textarea>
+                {errors?.content && (
+                  <small className="text-red-500 pl-2">
+                    {errors.content.message}
                   </small>
                 )}
               </div>
               <div className="grid gap-y-1 mt-2">
                 <label
                   htmlFor="account_number"
-                  className="capitalize text-gray-600 text-sm"
+                  className="capitalize pl-3 text-gray-600 text-sm"
                 >
-                  Image *
+                  Hero Image *
                 </label>
                 <input
                   {...register("image")}
@@ -215,4 +217,4 @@ const AddMenu: React.FC<PropType> = ({ refetch }) => {
   );
 };
 
-export default AddMenu;
+export default EditHero;

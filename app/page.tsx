@@ -22,31 +22,27 @@ import MenuByMealTime from "@/components/Home/MenuByMealTime";
 import {
   fetchSpecialFoods,
   fetchMenuByMealtimes,
+  getAllHeroSection,
+  fetchHero,
 } from "@/services/main.services";
-import MenuByMealTime2 from "@/components/Home/MenuByMealTime2";
+import MenuByMealTime2 from "@/components/Home/MenuByMealTime";
+import Carosole from "@/components/Home/Carosole";
+import { fetchLogos } from "@/services/admin.services";
 export default async function Home() {
   const data = await fetchSpecialFoods();
   const menuByMealtime = await fetchMenuByMealtimes();
-
-  // const [value, setValue] = useState("1");
-
-  // const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-  //   setValue(newValue);
-  // };
-
-  const styles = {
-    backgroundImage: `url('/banner8.jpg')`,
-    backgroundSize: "cover",
-    postion: "relative",
-  };
+  const heroSections = await getAllHeroSection();
+  // const logos = await fetchLogos();
 
   return (
     <>
-      {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
-
-      <main id="Home" className="overflow-hidden">
-        <Hero />
-        <Services />
+      <main id="" className="overflow-hidden bg-bgPrimary">
+        <div>
+          <Carosole carosoles={heroSections} />
+        </div>
+        <div>
+          <Services />
+        </div>
         <section id="Menu" className="bg-bgSecondary py-10">
           <div className="flex flex-col justify-center items-center gap-5 pt-10">
             <h1 className=" text-primary font-sans text-sm font-medium text-center ">
@@ -62,7 +58,7 @@ export default async function Home() {
           </div>
           <div className=" pt-5">
             {/* <MenuByMealTime /> */}
-            <MenuByMealTime2 menus={menuByMealtime} />
+            <MenuByMealTime menus={menuByMealtime} />
             {/*  */}
           </div>
         </section>

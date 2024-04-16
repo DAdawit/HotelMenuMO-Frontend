@@ -2,8 +2,14 @@
 import Image from "next/image";
 import React from "react";
 import { usePathname } from "next/navigation";
+import { fetchProfile } from "@/services/main.services";
+import { useQuery } from "@tanstack/react-query";
 
 const Footer = () => {
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ["fetchProfile"],
+    queryFn: () => fetchProfile(),
+  });
   const pathname = usePathname();
   if (pathname.startsWith("/admin")) {
     return null;
@@ -20,16 +26,16 @@ const Footer = () => {
         />
         <div className="text-primary">
           <h1 className="text-center tracking-widest text-sm font-medium font-sans">
-            Addis Ababa, Ethiopia
+            {data?.city}, {data?.address}
           </h1>
           <h1 className="text-center tracking-widest text-sm font-medium font-sans">
-            dawitccnt@gmail.com
+            {data?.email}
           </h1>
           <h1 className="text-center tracking-widest text-sm font-medium font-sans">
-            Booking Request : +251936207512
+            Booking Request : {data?.phone}
           </h1>
           <h1 className="text-center tracking-widest text-sm font-medium font-sans">
-            Open : 09:00 am - 01:00 pm
+            Open : {data?.openTime}
           </h1>
         </div>
         <div className="flex flex-col pb-8">

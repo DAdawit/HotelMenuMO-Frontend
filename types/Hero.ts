@@ -17,7 +17,7 @@ export interface HeroCreate {
 }
 
 export interface HeroSection {
-  hero: Hero;
+  hero: HeroOut;
   logo: Logo;
 }
 
@@ -30,7 +30,7 @@ interface Logo {
   _fullImagePath: string;
 }
 
-interface Hero {
+export interface HeroOut {
   id: number;
   slogan: string;
   title: string;
@@ -39,4 +39,14 @@ interface Hero {
   created_at: string;
   updated_at: string;
   imageUrl: string;
+}
+
+export interface HeroAdminOut {
+  data: HeroOut[];
+  total: number;
+  totalPages: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+  perPage: number;
+  currentPage: number;
 }

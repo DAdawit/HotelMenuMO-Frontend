@@ -10,11 +10,14 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import LogoLists from "@/components/Admin/Logos/LogoLists";
 import { Span } from "next/dist/trace";
+import AdminPagination from "@/common/Pagination/AdminPagination";
 
 const Page = () => {
+  const [page, setPage] = React.useState(1);
+
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["fetchLogos"],
-    queryFn: fetchLogos,
+    queryKey: ["fetchLogos", page],
+    queryFn: () => fetchLogos(page as number),
   });
 
   if (error) {
@@ -27,6 +30,10 @@ const Page = () => {
       <span>{errorMessage}</span>
     );
   }
+
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
   return (
     <div className="container mx-auto  p-5 ">
       {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
@@ -67,10 +74,10 @@ const Page = () => {
           <tbody className="gap-y-2">
             {isLoading ? <Spinner /> : null}
             <>
-              {data && data.length === 0 && <p>empty!.</p>}
+              {data && data.data.length === 0 && <p>empty!.</p>}
               {data &&
-                Array.isArray(data) &&
-                data.map((logo, index) => (
+                Array.isArray(data.data) &&
+                data.data.map((logo, index) => (
                   <LogoLists
                     key={index}
                     logo={logo && logo}
@@ -81,6 +88,13 @@ const Page = () => {
             </>
           </tbody>
         </table>
+      </div>
+      <div className="my-8">
+        <AdminPagination
+          count={data?.totalPages}
+          page={data?.currentPage}
+          handleChange={handleChange}
+        />
       </div>
     </div>
   );

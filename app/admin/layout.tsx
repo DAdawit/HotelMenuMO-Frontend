@@ -1,9 +1,5 @@
-import Image from "next/image";
 import "../globals.css";
 import { Inter } from "next/font/google";
-import Link from "next/link";
-import Navbar from "@/common/Navbar";
-import Footer from "@/common/Footer";
 import AuthCheck from "@/common/AuthCheck";
 import AdminNavBar from "@/components/Navbars/Admin/AdminNavBar";
 
@@ -27,7 +23,6 @@ export default function RootLayout({
       <body className={`${inter.className} bg-gray-50`}>
         <AuthCheck />
         <AdminNavBar />
-
         {children}
       </body>
     </html>

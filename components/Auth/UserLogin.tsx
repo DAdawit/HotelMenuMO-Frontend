@@ -49,7 +49,7 @@ const UserLogin = () => {
 
       if (axios.isAxiosError(error)) {
         setError(error.response?.data.detail);
-        console.log(error.response?.data.detail);
+        // console.log(error.response?.data.detail);
         setLoading(false);
       } else {
         console.log("An unexpected error occurred:", error);

@@ -27,7 +27,7 @@ const HeroSectionLists: React.FC<PropType> = ({ hero, refetch }) => {
       setLoading(false);
     },
     onSuccess: async (data) => {
-      setLoading(true);
+      setLoading(false);
       refetch();
     },
   });

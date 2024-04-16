@@ -1,15 +1,15 @@
-// export async function fetchLogos(): Promise<LogoOut[]> {
-//   try {
-//     const response = await api.get<LogoOut[]>("/admin/logos");
-//     return response.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// }
+export async function fetchLogos(): Promise<LogoOut[]> {
+  try {
+    const response = await api.get<LogoOut[]>("/admin/logos");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
 
-import { HeroSection } from "@/types/Hero";
+import { HeroOut, HeroSection } from "@/types/Hero";
 import api, { prodBaseUrl } from "./axios";
-import { CategoryOut } from "@/types/Category";
+import { CategoryOut, SubCategory } from "@/types/Category";
 import {
   MealTimeOut,
   Mealtime,
@@ -22,9 +22,19 @@ import {
   MenusByMealTimeOUt,
   SpecialFoodOut,
 } from "@/types/Menu";
+import { LogoOut } from "@/types/Logo";
+import { MenuBySubCategoryOut } from "@/types/SubCategory";
+import { ProfileI } from "@/types";
 
 export async function fetchHero(): Promise<HeroSection> {
   const res = await fetch(`${prodBaseUrl}/heros`, {
+    next: { revalidate: 10 },
+  });
+  const data = await res.json();
+  return data;
+}
+export async function getAllHeroSection(): Promise<HeroOut[]> {
+  const res = await fetch(`${prodBaseUrl}/all-heros`, {
     next: { revalidate: 10 },
   });
   const data = await res.json();
@@ -80,6 +90,15 @@ export async function fetchMenuByMealtimes(): Promise<MenusByMealTimeOUt[]> {
   const data = await res.json();
   return data;
 }
+export async function fetchMenuBySubCategory(): Promise<
+  MenuBySubCategoryOut[]
+> {
+  const res = await fetch(`${prodBaseUrl}/menus/subcategories`, {
+    next: { revalidate: 10 },
+  });
+  const data = await res.json();
+  return data;
+}
 export async function fetchSpecialFoods(): Promise<SpecialFoodOut[]> {
   const res = await fetch(`${prodBaseUrl}/menu/special-foods`, {
     next: { revalidate: 10 },
@@ -112,6 +131,7 @@ export async function MenuByMealtimeId(
     );
     return res.data;
   } catch (error) {
+    console.error("An error occurred:", error);
     throw error;
   }
 }
@@ -126,6 +146,7 @@ export async function fetchMenuByCategory(
     );
     return res.data;
   } catch (error) {
+    console.error("An error occurred:", error);
     throw error;
   }
 }
@@ -139,6 +160,7 @@ export async function fetchAllMainDishes(
     );
     return res.data;
   } catch (error) {
+    console.error("An error occurred:", error);
     throw error;
   }
 }
@@ -152,6 +174,40 @@ export async function fetchAllSpecialDishes(
     );
     return res.data;
   } catch (error) {
+    console.error("An error occurred:", error);
+    throw error;
+  }
+}
+
+export async function SubCategoryById(id: string): Promise<SubCategory> {
+  const res = await fetch(`${prodBaseUrl}/sub-category/${id}`, {
+    next: { revalidate: 10 },
+  });
+  const data = await res.json();
+  return data;
+}
+
+export async function fetchMenuBySubCategoryId(
+  id: number,
+  page: number
+): Promise<MenuByCategoryOut> {
+  try {
+    const res = await api.get<MenuByCategoryOut>(
+      `/menus/subCategory/${id}?page=${page}`
+    );
+    return res.data;
+  } catch (error) {
+    console.error("An error occurred:", error);
+    throw error;
+  }
+}
+
+export async function fetchProfile(): Promise<ProfileI> {
+  try {
+    const res = await api.get<ProfileI>(`/profile`);
+    return res.data;
+  } catch (error) {
+    console.error("An error occurred:", error);
     throw error;
   }
 }

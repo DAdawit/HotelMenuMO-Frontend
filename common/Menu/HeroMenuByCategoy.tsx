@@ -15,7 +15,7 @@ const HeroMenuByCategoy: React.FC<PropType> = ({ category }) => {
           alt="hero image"
           height={2000}
           width={2000}
-          className="h-[70vh] xl:max-h-[60vh] xll:max-h-[60vh] w-screen object-cover object-center brightness-50"
+          className="h-[70vh] xl:max-h-[60vh] xll:max-h-[60vh] w-screen object-cover brightness-50"
         />
         <div className="absolute h-full top-0 w-full flex  text-white ">
           <div className="flex flex-col justify-center w-full col-span-2 px-5">
