@@ -1,14 +1,12 @@
 import { StateCreator } from "zustand";
-import api from "../../services/axios";
-import { ErrorWithBody, IUser } from "../types";
-import { any } from "zod";
-import { loginUser } from "@/services/auth.services";
+import { IUser } from "../types";
 
 export const CreateAuthSlice: StateCreator<IUser> = (set, get) => ({
   user: null,
   token: null,
   error: null,
   organizations: null,
+  profile: {},
   pageLoade: true,
   auth: false,
   loading: false,
@@ -20,7 +18,9 @@ export const CreateAuthSlice: StateCreator<IUser> = (set, get) => ({
   },
   async setAuthFalse() {
     console.log(false);
-
     set((state) => ({ ...state, auth: false }));
+  },
+  async setProfile(data) {
+    set((state) => ({ ...state, profile: data }));
   },
 });

@@ -14,6 +14,7 @@ import HomeMaxIcon from "@mui/icons-material/HomeMax";
 import { useMutation } from "@tanstack/react-query";
 import { addHeroSection } from "@/services/admin.services";
 import AddIcon from "@mui/icons-material/Add";
+import { ProfileInput } from "@/types";
 
 type FormType = {
   slogan: string;
@@ -23,24 +24,28 @@ type FormType = {
 };
 const isBrowser = () => typeof window !== "undefined";
 
-const schema: ZodType<FormType> = z.object({
-  slogan: z.string().min(3, { message: "Slogan is required" }),
-  title: z.string().min(3, { message: "Title is required" }),
-  content: z.string().min(3, { message: "Content is required" }),
-  image: isBrowser()
-    ? z
-        .instanceof(FileList)
-        .refine((fileList) => fileList.length > 0, "Image is required")
-    : z.any(),
+const schema: ZodType<ProfileInput> = z.object({
+  name: z.string().min(3, { message: "Name is required" }),
+  address: z.string().min(3, { message: "Address is required" }),
+  city: z.string().min(3, { message: "City is required" }),
+  openTime: z.string().min(3, { message: "Open Time is required" }),
+  open: z.string().min(3, { message: "State is required" }),
+  email: z.string().min(3, { message: "Email is required" }),
+  Phone: z.string().min(9, { message: "Phone is required" }),
+  secondaryPhone: z.string().min(9, { message: "SecondaryPhone is required" }),
 });
 
 type PropType = {
   open: boolean;
-
-  refetch: () => void;
+  handleClickOpen: () => void;
+  handleClose: () => void;
 };
 
-const AddProfile: React.FC<PropType> = ({ refetch }) => {
+const AddProfile: React.FC<PropType> = ({
+  open,
+  handleClickOpen,
+  handleClose,
+}) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
@@ -49,7 +54,7 @@ const AddProfile: React.FC<PropType> = ({ refetch }) => {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<FormType>({
+  } = useForm<ProfileInput>({
     resolver: zodResolver(schema),
   });
 
@@ -64,7 +69,7 @@ const AddProfile: React.FC<PropType> = ({ refetch }) => {
       reset();
       notify("Hero section added successfully !", "success");
       handleClose();
-      refetch();
+      // refetch();
     },
   });
 
@@ -83,14 +88,6 @@ const AddProfile: React.FC<PropType> = ({ refetch }) => {
 
   return (
     <div>
-      <button
-        className="text-white bg-primary rounded-full px-4 py-2 flex items-center justify-center gap-x-2"
-        onClick={handleClickOpen}
-      >
-        <span>Add Hero Section</span>
-        <AddIcon fontSize="small" />
-      </button>
-
       <Dialog
         open={open}
         onClose={handleClose}
@@ -107,76 +104,101 @@ const AddProfile: React.FC<PropType> = ({ refetch }) => {
             <section className="grid gap-x-5 gap-y-1">
               <div>
                 <label
-                  htmlFor="slogan"
+                  htmlFor="name"
                   className="capitalize pl-3 text-gray-600 text-sm"
                 >
                   Slogan *
                 </label>
                 <input
-                  {...register("slogan")}
-                  placeholder="Slogan"
-                  name="slogan"
-                  id="slogan"
+                  {...register("name")}
+                  placeholder="name"
+                  name="name"
+                  id="name"
                   className="w-full"
                 />
-                {errors?.slogan && (
+                {errors?.name && (
                   <small className="text-red-500 pl-2">
-                    {errors.slogan.message}
+                    {errors.name.message}
                   </small>
                 )}
               </div>
               <div>
                 <label
-                  htmlFor="title"
+                  htmlFor="email"
                   className="capitalize pl-3 text-gray-600 text-sm"
                 >
-                  Title *
+                  Email *
                 </label>
                 <input
-                  {...register("title")}
-                  placeholder="Title"
-                  name="title"
-                  id="title"
+                  {...register("email")}
+                  placeholder="email"
+                  name="email"
+                  id="email"
                   className="w-full"
                 />
-                {errors?.title && (
+                {errors?.email && (
                   <small className="text-red-500 pl-2">
-                    {errors.title.message}
+                    {errors.email.message}
                   </small>
                 )}
               </div>
               <div className="grid gap-y-1 mt-2">
                 <label
-                  htmlFor="content"
+                  htmlFor="address"
                   className="capitalize pl-3 text-gray-600 text-sm"
                 >
-                  Content *
+                  Eddress *
                 </label>
-                <textarea id="description" {...register("content")}></textarea>
-                {errors?.content && (
+                <input type="text" id="address" {...register("address")} />
+                {errors?.address && (
                   <small className="text-red-500 pl-2">
-                    {errors.content.message}
+                    {errors.address.message}
                   </small>
                 )}
               </div>
               <div className="grid gap-y-1 mt-2">
                 <label
-                  htmlFor="account_number"
+                  htmlFor="city"
                   className="capitalize pl-3 text-gray-600 text-sm"
                 >
-                  Hero Image *
+                  City *
+                </label>
+                <input type="text" id="city" {...register("city")} />
+                {errors?.city && (
+                  <small className="text-red-500 pl-2">
+                    {errors.city.message}
+                  </small>
+                )}
+              </div>
+              <div className="grid gap-y-1 mt-2">
+                <label
+                  htmlFor="phone"
+                  className="capitalize pl-3 text-gray-600 text-sm"
+                >
+                  Phone *
+                </label>
+                <input type="text" id="phone" {...register("phone")} />
+                {errors?.phone && (
+                  <small className="text-red-500 pl-2">
+                    {errors.phone.message}
+                  </small>
+                )}
+              </div>
+              <div className="grid gap-y-1 mt-2">
+                <label
+                  htmlFor="phone"
+                  className="capitalize pl-3 text-gray-600 text-sm"
+                >
+                  Secondary Phone
                 </label>
                 <input
-                  {...register("image")}
-                  placeholder="Banner Image"
-                  name="image"
-                  id="image"
-                  className="w-full"
-                  type="file"
+                  type="text"
+                  id="secondaryPhone"
+                  {...register("secondaryPhone")}
                 />
-                {errors?.image && (
+                {errors?.secondaryPhone && (
                   <small className="text-red-500 pl-2">
-                    {errors?.image?.message || ""}
+                    {errors.secondaryPhone.message}
                   </small>
                 )}
               </div>

@@ -28,7 +28,7 @@ const LogoLists: React.FC<PropType> = ({ logo, refetch }) => {
       setLoading(false);
     },
     onSuccess: async (data) => {
-      setLoading(true);
+      setLoading(false);
       refetch();
     },
   });

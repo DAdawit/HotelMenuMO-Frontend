@@ -2,7 +2,7 @@
 import { useQuery } from "@tanstack/react-query";
 import PageTitle from "@/common/PageTitle";
 import { useState } from "react";
-
+import useStore from "@/store/useStore";
 import CategoryIcon from "@mui/icons-material/Category";
 
 import {
@@ -16,20 +16,15 @@ import BentoIcon from "@mui/icons-material/Bento";
 
 import StatesChart from "@/components/Dashboard/StatesChart";
 import { fetchProfile } from "@/services/main.services";
+import AddProfile from "@/components/Admin/Profile/AddProfile";
+import { set } from "zod";
 const Page = () => {
-  const [open, setOpen] = useState(false);
+  const profile = useStore((state) => state.profile);
+
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["getStates"],
     queryFn: () => getStates(),
   });
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   const {
     data: categoriesMenuCount,
@@ -59,17 +54,9 @@ const Page = () => {
     queryFn: () => getStatesCountBySubCategory(),
   });
 
-  const {
-    data: profile,
-    isLoading: profileLoading,
-    error: prorileError,
-    refetch: refetchProfile,
-  } = useQuery({
-    queryKey: ["fetchProfile"],
-    queryFn: () => fetchProfile(),
-  });
   return (
     <div className="container mx-auto px-5 pb-16 min-h-screen">
+      {/* <pre>{JSON.stringify(profile, null, 2)}</pre> */}
       <div className="py-5">
         <PageTitle title="Dashboard" />
       </div>

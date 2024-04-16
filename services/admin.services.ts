@@ -1,5 +1,5 @@
 import api from "@/services/axios";
-import { SatatesMenuI, StatesI } from "@/types";
+import { ProfileI, SatatesMenuI, StatesI } from "@/types";
 import {
   AdimSubCategoryI,
   AdminCategoryI,
@@ -346,6 +346,26 @@ export async function getStatesCountByCategory(): Promise<SatatesMenuI[]> {
 export async function getStatesCountBySubCategory(): Promise<SatatesMenuI[]> {
   try {
     const res = await api.get<SatatesMenuI[]>(`admin/states/menuBysubCategory`);
+    return res.data;
+  } catch (error) {
+    console.error("An error occurred:", error);
+    throw error;
+  }
+}
+
+export async function addProfile(data: any): Promise<ProfileI> {
+  try {
+    const res = await api.post<ProfileI>("/admin/profile", data);
+    return res.data;
+  } catch (error) {
+    console.error("An error occurred:", error);
+    throw error;
+  }
+}
+
+export async function EditProfile(id: number, data: any): Promise<ProfileI> {
+  try {
+    const res = await api.put<ProfileI>(`/admin/profile/${id}`, data);
     return res.data;
   } catch (error) {
     console.error("An error occurred:", error);

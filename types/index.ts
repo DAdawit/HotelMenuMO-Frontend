@@ -22,3 +22,13 @@ export interface ProfileI {
   created_at: string;
   updated_at: string;
 }
+
+export interface ProfileInput {
+  name: string;
+  address: string;
+  city: string;
+  openTime: string;
+  email: string;
+  phone: string;
+  secondaryPhone?: any;
+}

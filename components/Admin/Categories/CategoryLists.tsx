@@ -26,7 +26,7 @@ const CategoryLists: React.FC<PropType> = ({ category, refetch }) => {
     },
     onSuccess: async (data) => {
       notify("Category deleted successfully !", "success");
-      setLoading(true);
+      setLoading(false);
       refetch();
     },
   });
@@ -37,34 +37,32 @@ const CategoryLists: React.FC<PropType> = ({ category, refetch }) => {
     DeleteCategory.mutate(id);
   };
   return (
-    <>
-      <tr className="border-b text-gray-500 text-sm mb-2 bg-white text-start">
-        <td className="px-6 py-4 gap-2 ">
-          <Image
-            loading="lazy"
-            height={1000}
-            width={1000}
-            src={`${category?.imageUrl}`}
-            alt={`${category?.name}`}
-            className="h-12 w-12 object-cover rounded-md shadow-md"
-          />
-        </td>
-        <td className="px-6 py-4">{category?.name}</td>
+    <tr className="border-b text-gray-500 text-sm mb-2 bg-white text-start">
+      <td className="px-6 py-4 gap-2 ">
+        <Image
+          loading="lazy"
+          height={1000}
+          width={1000}
+          src={`${category?.imageUrl}`}
+          alt={`${category?.name}`}
+          className="h-12 w-12 object-cover rounded-md shadow-md"
+        />
+      </td>
+      <td className="px-6 py-4">{category?.name}</td>
 
-        <td className="px-6 py-4">
-          {dayjs(category?.created_at).format("MMM-D-YYYY")}
-        </td>
-        <td className="px-6 py-4 text-start   gap-2 flex items-center gap-x-3">
-          <ConfirmDelete
-            confirm={confirm}
-            id={category && category?.id}
-            text="Are you sure you went to delete !"
-            loading={loading}
-          />
-          <EditCategory category={category} refetch={() => refetch()} />
-        </td>
-      </tr>
-    </>
+      <td className="px-6 py-4">
+        {dayjs(category?.created_at).format("MMM-D-YYYY")}
+      </td>
+      <td className="px-6 py-4 text-start   gap-2 flex items-center gap-x-3">
+        <ConfirmDelete
+          confirm={confirm}
+          id={category && category?.id}
+          text="Are you sure you went to delete !"
+          loading={loading}
+        />
+        <EditCategory category={category} refetch={() => refetch()} />
+      </td>
+    </tr>
   );
 };
 

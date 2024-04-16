@@ -14,6 +14,7 @@ import BentoIcon from "@mui/icons-material/Bento";
 import VrpanoIcon from "@mui/icons-material/Vrpano";
 import WatchLaterIcon from "@mui/icons-material/WatchLater";
 import FitbitIcon from "@mui/icons-material/Fitbit";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 type Anchor = "left";
 export default function AdminDrawer() {
   const [state, setState] = React.useState({
@@ -140,7 +141,16 @@ export default function AdminDrawer() {
                         <h3>Menus</h3>
                       </div>
                     </Link>
-
+                    <Link
+                      href="/admin/profile"
+                      className="mt-1 shadow-sm py-2 h-min"
+                      onClick={toggleDrawer("left", false)}
+                    >
+                      <div className="flex gap-x-3 items-center border-b-[1] border-gray-400 px-7 gap-3">
+                        <AccountCircleIcon />
+                        <h3>Profile</h3>
+                      </div>
+                    </Link>
                     <Link
                       href="/admin/change-password"
                       className="mt-1 shadow-sm py-2 h-min"
