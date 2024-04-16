@@ -372,3 +372,12 @@ export async function EditProfile(id: number, data: any): Promise<ProfileI> {
     throw error;
   }
 }
+export async function ChangePassword(data: any): Promise<ProfileI> {
+  try {
+    const res = await api.post<ProfileI>(`/admin/changePassword`, data);
+    return res.data;
+  } catch (error) {
+    console.error("An error occurred:", error);
+    throw error;
+  }
+}
